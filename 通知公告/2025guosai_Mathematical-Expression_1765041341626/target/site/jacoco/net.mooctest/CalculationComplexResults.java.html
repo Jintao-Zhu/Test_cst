@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CalculationComplexResults.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Mathematical-Expression</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">CalculationComplexResults.java</span></div><h1>CalculationComplexResults.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+
+import io.github.beardedManZhao.algorithmStar.operands.ComplexNumber;
+
+/**
+ * 数值计算结果存储对象，在该类中存储的都是来自计算组件的计算结果，以及运算级别层数等信息
+ * &lt;p&gt;
+ * Numerical calculation result storage object. In this class, the calculation results from calculation components, as well as the number of operation levels and other information are stored
+ *
+ * @author zhao
+ */
+public class CalculationComplexResults extends CalculationNumberResults {
+
+    private final ComplexNumber complexNumber;
+
+    /**
+     * @param layers  结果的计算层数
+     *                &lt;p&gt;
+     *                Calculation level of results
+     * @param result1 复数的实部
+     *                &lt;p&gt;
+     *                The real part of a complex number
+     * @param result2 复数的虚部
+     *                &lt;p&gt;
+     *                The imaginary part of complex numbers
+     * @param source  来源，表明该结果对象的计算来源。
+     *                &lt;p&gt;
+     *                Source indicates the calculation source of the result object.
+     */
+    public CalculationComplexResults(int layers, double result1, double result2, String source) {
+<span class="nc" id="L32">        super(layers, result1, source);</span>
+<span class="nc" id="L33">        this.complexNumber = ComplexNumber.parse(result1, result2);</span>
+<span class="nc" id="L34">    }</span>
+
+    /**
+     * 转换为复数对象!
+     *
+     * @return 当前表达式对被转换玩的复数对象 此函数返回的对象可以进行计算！
+     */
+    public ComplexNumber toComplexNumber() {
+<span class="nc" id="L42">        return complexNumber;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L47">        return this.complexNumber.toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

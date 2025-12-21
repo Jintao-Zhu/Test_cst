@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FunctionExpression.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Mathematical-Expression</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">FunctionExpression.java</span></div><h1>FunctionExpression.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import java.util.ArrayList;
+import java.util.Stack;
+
+/**
+ * 函数表达式的表达式对象，其解析了函数的位置，提供了表达式中函数修改的功能！
+ * &lt;p&gt;
+ * The expression object of a function expression, which parses the position of the function and provides the function modification function in the expression!
+ *
+ * @author zhao
+ */
+public class FunctionExpression extends SubCompileExpression {
+
+<span class="nc" id="L15">    private final static FunctionFormulaCalculation2 functionFormulaCalculation2 = FunctionFormulaCalculation2.getInstance(CalculationManagement.FUNCTION_FORMULA_CALCULATION_2_NAME);</span>
+    private final Stack&lt;Integer&gt; start, end;
+    private final Stack&lt;String&gt; funNames;
+
+    /**
+     * 将一个函数表达式 转换为函数表达式的对象
+     * &lt;p&gt;
+     * Object that converts a function expression into a function expression
+     *
+     * @param expression      表达式的字符串形式
+     *                        &lt;p&gt;
+     *                        The string form of an expression
+     * @param calculationName 函数表达式的名称
+     *                        &lt;p&gt;
+     *                        The name of the function expression
+     * @param stack1          表达式中所有的函数的表达式起始索引标记栈，如果在外界有了更好的解析，并有了结果，可以直接传入，不需要在其中进行解析
+     *                        &lt;p&gt;
+     *                        The starting index marker stack for all functions in the expression can be passed in directly without the need for parsing if there is better parsing outside and results are available
+     * @param stack2          表达式中所有的函数的表达式结束索引标记栈，如果在外界有了更好的解析，并有了结果，可以直接传入，不需要在其中进行解析
+     *                        &lt;p&gt;
+     *                        The ending index marker stack for all functions in the expression can be passed in directly without the need for parsing if there is better parsing outside and results are available
+     * @param stack3          表达式中所有的函数的表达式名称标记栈，如果在外界有了更好的解析，并有了结果，可以直接传入，不需要在其中进行解析
+     *                        &lt;p&gt;
+     *                        The name marker stack for all functions in the expression can be passed in directly without the need for parsing if there is better parsing outside and results are available
+     */
+    public FunctionExpression(String expression, String calculationName, Stack&lt;Integer&gt; stack1, Stack&lt;Integer&gt; stack2, Stack&lt;String&gt; stack3) {
+<span class="nc" id="L41">        super(expression, calculationName);</span>
+<span class="nc" id="L42">        this.start = stack1;</span>
+<span class="nc" id="L43">        this.end = stack2;</span>
+<span class="nc" id="L44">        this.funNames = stack3;</span>
+<span class="nc" id="L45">    }</span>
+
+    public static FunctionExpression compile(String expression, String calculationName) {
+<span class="nc" id="L48">        final Stack&lt;Integer&gt; start = new Stack&lt;&gt;();</span>
+<span class="nc" id="L49">        final Stack&lt;Integer&gt; end = new Stack&lt;&gt;();</span>
+<span class="nc" id="L50">        final Stack&lt;String&gt; funNames = new Stack&lt;&gt;();</span>
+<span class="nc" id="L51">        FunctionFormulaCalculation2.FunctionParameterExtraction(expression, start, end, funNames);</span>
+<span class="nc" id="L52">        return new FunctionExpression(expression, calculationName, start, end, funNames);</span>
+    }
+
+    /**
+     * 此函数用于将当前函数表达式进行深层编译，经过深层编译操作之后返回的表达式将可以直接被用来进行括号表达式计算！
+     * &lt;p&gt;
+     * This function is used to deeply compile the current function expression, and the expression returned after the deep compilation operation can be directly used for parenthesis expression calculation!
+     *
+     * @param expression 表达式的字符串形式
+     *                   &lt;p&gt;
+     *                   The string form of an expression
+     * @param start      表达式中所有的函数的表达式起始索引标记栈，如果在外界有了更好的解析，并有了结果，可以直接传入，不需要在其中进行解析
+     *                   &lt;p&gt;
+     *                   The starting index marker stack for all functions in the expression can be passed in directly without the need for parsing if there is better parsing outside and results are available
+     * @param end        表达式中所有的函数的表达式结束索引标记栈，如果在外界有了更好的解析，并有了结果，可以直接传入，不需要在其中进行解析
+     *                   &lt;p&gt;
+     *                   The ending index marker stack for all functions in the expression can be passed in directly without the need for parsing if there is better parsing outside and results are available
+     * @param funNames   表达式中所有的函数的表达式名称标记栈，如果在外界有了更好的解析，并有了结果，可以直接传入，不需要在其中进行解析
+     *                   &lt;p&gt;
+     *                   The name marker stack for all functions in the expression can be passed in directly without the need for parsing if there is better parsing outside and results are available
+     * @return 函数表达式被编译为括号表达式的字符串
+     * &lt;p&gt;
+     * The string object that the function expression is compiled into a bracket expression
+     */
+    public static StringBuilder subCompile(String expression, Stack&lt;Integer&gt; start, Stack&lt;Integer&gt; end, Stack&lt;String&gt; funNames) {
+        // 准备进行表达式编译操作
+<span class="nc" id="L78">        final StringBuilder stringBuilder = new StringBuilder(expression);</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">        if (StrUtils.IsANumber(expression)) {</span>
+<span class="nc" id="L80">            return stringBuilder;</span>
+        }
+<span class="nc bnc" id="L82" title="All 2 branches missed.">        if (funNames.isEmpty()) {</span>
+<span class="nc" id="L83">            return stringBuilder;</span>
+        }
+        // 开始计算，首先迭代所有函数的公式与函数的名字，计算出来函数的结果
+<span class="nc bnc" id="L86" title="All 2 branches missed.">        while (!start.isEmpty()) {</span>
+<span class="nc" id="L87">            int pop1 = start.pop();</span>
+<span class="nc" id="L88">            int pop2 = end.pop();</span>
+<span class="nc" id="L89">            String pop = funNames.pop();</span>
+<span class="nc" id="L90">            final ManyToOneNumberFunction functionByName = CalculationManagement.getFunctionByName(pop);</span>
+            // 通过函数索引获取实参
+            // 提前计算substring，避免重复计算
+<span class="nc" id="L93">            String subFormula = expression.substring(pop1, pop2);</span>
+
+            // 使用ArrayList收集结果，以便于添加和转换为数组
+<span class="nc" id="L96">            ArrayList&lt;Double&gt; results = new ArrayList&lt;&gt;();</span>
+
+<span class="nc bnc" id="L98" title="All 2 branches missed.">            for (String s : StrUtils.splitByCharWhereNoB(subFormula, ConstantRegion.COMMA)) {</span>
+<span class="nc" id="L99">                double result = functionFormulaCalculation2.calculation(s).getResult();</span>
+<span class="nc" id="L100">                results.add(result);</span>
+<span class="nc" id="L101">            }</span>
+            // 将ArrayList转换为double[]数组，这一步在内部已经优化过
+<span class="nc" id="L103">            double[] resultArray = results.stream().mapToDouble(Double::doubleValue).toArray();</span>
+
+            // 最后替换字符串内容 functionByName
+<span class="nc" id="L106">            stringBuilder.replace(pop1 - pop.length() - 1, pop2 + 1, String.valueOf(functionByName.run(resultArray)));</span>
+<span class="nc" id="L107">        }</span>
+        // 表达式字符串准备就绪 可以进行计算
+<span class="nc" id="L109">        return stringBuilder;</span>
+    }
+
+    @Override
+    public boolean isBigDecimal() {
+<span class="nc" id="L114">        return true;</span>
+    }
+
+    @Override
+    public boolean isUnBigDecimal() {
+<span class="nc" id="L119">        return true;</span>
+    }
+
+    @Override
+    public void convertToMultiPrecisionSupported() {
+
+<span class="nc" id="L125">    }</span>
+
+    /**
+     * @return 获取到当前表达式中，所有参与运算的表达式的栈，您可以在栈中查询到函数的名称和计算顺序，您可以使用 `setFunName` 来修改您表达式对象中的一些函数，它允许您干涉计算过程的函数调用。
+     * &lt;p&gt;
+     * Retrieve the stack of all expressions participating in the current expression, where you can query the names and calculation order of functions. You can use 'setFunName' to modify some functions in your expression object, which allows you to interfere with function calls during the calculation process
+     */
+    public Stack&lt;String&gt; getFunNames() {
+<span class="nc" id="L133">        return this.getFunNames(true);</span>
+    }
+
+    public void setFunName(int index, String name) {
+        // 获取到当前指定函数名字
+<span class="nc" id="L138">        final String s = this.funNames.get(index);</span>
+<span class="nc" id="L139">        this.funNames.set(index, name);</span>
+        // 找到当前函数名字的结束位置 栈存储的是表达式 不包含函数名字 因此在这里先获取到函数名字的结束位置
+<span class="nc" id="L141">        int end = this.start.get(index) - 1;</span>
+        // 获取到当前指定函数名字的起始位置
+<span class="nc" id="L143">        int start = end - s.length();</span>
+        // 通过引用修改表达式
+<span class="nc" id="L145">        this.getExpressionStrBuilder().replace(start, end, name);</span>
+<span class="nc" id="L146">    }</span>
+
+    @Override
+    public NameExpression subCompile(boolean isCopy) {
+<span class="nc bnc" id="L150" title="All 2 branches missed.">        if (this.notNeedSubCompile()) {</span>
+<span class="nc" id="L151">            throw new UnsupportedOperationException(&quot;此表达式不需要深度编译了！&quot; + this.getExpressionStr());</span>
+        }
+<span class="nc" id="L153">        return functionFormulaCalculation2.compile(</span>
+<span class="nc" id="L154">                FunctionExpression.subCompile(this.getExpressionStr(), this.getStart(isCopy), this.getEnd(isCopy), this.getFunNames(isCopy)).toString(), true</span>
+        );
+    }
+
+    @Override
+    public NameExpression subCompileBigDecimals(boolean isCopy) {
+<span class="nc bnc" id="L160" title="All 2 branches missed.">        if (this.notNeedSubCompile()) {</span>
+<span class="nc" id="L161">            throw new UnsupportedOperationException(&quot;此表达式不需要深度编译了！&quot; + this.getExpressionStr());</span>
+        }
+<span class="nc" id="L163">        return functionFormulaCalculation2.compileBigDecimal(</span>
+<span class="nc" id="L164">                FunctionExpression.subCompile(this.getExpressionStr(), this.getStart(isCopy), this.getEnd(isCopy), this.getFunNames(isCopy)).toString(), true</span>
+        );
+    }
+
+    /**
+     * @return 该表达式是否需要深度编译！
+     */
+    @Override
+    public boolean notNeedSubCompile() {
+<span class="nc" id="L173">        return this.funNames.isEmpty();</span>
+    }
+
+    @SuppressWarnings(&quot;unchecked&quot;)
+    protected Stack&lt;Integer&gt; getStart(boolean isCopy) {
+<span class="nc bnc" id="L178" title="All 2 branches missed.">        if (isAvailable()) {</span>
+<span class="nc bnc" id="L179" title="All 2 branches missed.">            return isCopy ? (Stack&lt;Integer&gt;) start.clone() : start;</span>
+        }
+<span class="nc" id="L181">        throw new UnsupportedOperationException(&quot;此计算表达式组件将不再可用，因为您在上一次计算的时候 isCopy 设置为了 false，导致计算表达式将不存在可复用性!\nThis calculation expression component will no longer be available because isCopy was set to false during the last calculation, resulting in the calculation expression being no longer reusable!\nerror =&gt; &quot; + this.getExpressionStr());</span>
+    }
+
+    @SuppressWarnings(&quot;unchecked&quot;)
+    protected Stack&lt;Integer&gt; getEnd(boolean isCopy) {
+<span class="nc bnc" id="L186" title="All 2 branches missed.">        if (isAvailable()) {</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">            return isCopy ? (Stack&lt;Integer&gt;) end.clone() : end;</span>
+        }
+<span class="nc" id="L189">        throw new UnsupportedOperationException(&quot;此计算表达式组件将不再可用，因为您在上一次计算的时候 isCopy 设置为了 false，导致计算表达式将不存在可复用性!\nThis calculation expression component will no longer be available because isCopy was set to false during the last calculation, resulting in the calculation expression being no longer reusable!\nerror =&gt; &quot; + this.getExpressionStr());</span>
+    }
+
+    @SuppressWarnings(&quot;unchecked&quot;)
+    protected Stack&lt;String&gt; getFunNames(boolean isCopy) {
+<span class="nc bnc" id="L194" title="All 2 branches missed.">        if (isAvailable()) {</span>
+<span class="nc bnc" id="L195" title="All 2 branches missed.">            return isCopy ? (Stack&lt;String&gt;) funNames.clone() : funNames;</span>
+        }
+<span class="nc" id="L197">        throw new UnsupportedOperationException(&quot;此计算表达式组件将不再可用，因为您在上一次计算的时候 isCopy 设置为了 false，导致计算表达式将不存在可复用性!\nThis calculation expression component will no longer be available because isCopy was set to false during the last calculation, resulting in the calculation expression being no longer reusable!\nerror =&gt; &quot; + this.getExpressionStr());</span>
+    }
+
+    @Override
+    public CalculationNumberResults calculationCache(boolean isCopy) {
+<span class="nc" id="L202">        final CalculationNumberResults calculationNumberResults = (CalculationNumberResults) super.calculationCache(isCopy);</span>
+<span class="nc" id="L203">        calculationNumberResults.setSource(this.getCalculationName());</span>
+<span class="nc" id="L204">        return calculationNumberResults;</span>
+    }
+
+    @Override
+    public CalculationNumberResults calculationBigDecimalsCache(boolean isCopy) {
+<span class="nc" id="L209">        final CalculationNumberResults calculationNumberResults = (CalculationNumberResults) super.calculationBigDecimalsCache(isCopy);</span>
+<span class="nc" id="L210">        calculationNumberResults.setSource(this.getCalculationName());</span>
+<span class="nc" id="L211">        return calculationNumberResults;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

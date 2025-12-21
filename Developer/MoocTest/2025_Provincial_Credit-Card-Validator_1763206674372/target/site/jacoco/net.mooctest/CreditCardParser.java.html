@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CreditCardParser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Credit-Card-Validator</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">CreditCardParser.java</span></div><h1>CreditCardParser.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/*
+ * Credit card parser used to parse credit card Number and IIN
+ */
+
+<span class="nc" id="L10">public class CreditCardParser {</span>
+
+    /*
+     * @param credit card number as a String
+     * @return credit card number as a List of Integers
+     */
+    public static List&lt;Integer&gt; parseNumber(String creditCardNumber) {
+<span class="fc" id="L17">        List&lt;Integer&gt; creditCardNumberList = new ArrayList&lt;&gt;();</span>
+
+<span class="fc bfc" id="L19" title="All 2 branches covered.">        for (char number : creditCardNumber.toCharArray()) {</span>
+<span class="fc" id="L20">            int tempNumber = Character.getNumericValue(number);</span>
+<span class="fc" id="L21">            creditCardNumberList.add(tempNumber);</span>
+        }
+
+<span class="fc" id="L24">        return creditCardNumberList;</span>
+    }
+
+    /*
+     * @param credit card number as a List of Integers and
+     * the IIN range to test
+     * @return the IIN value to test
+     */
+    public static int parseIIN(List&lt;Integer&gt; creditCardNumberList, int range) {
+<span class="fc" id="L33">        StringBuilder IINString = new StringBuilder(range);</span>
+        int IIN;
+
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        for (int i = 0; i &lt; range; i++) {</span>
+<span class="fc" id="L37">            IINString.append(creditCardNumberList.get(i));</span>
+        }
+<span class="fc" id="L39">        IIN = Integer.parseInt(IINString.toString());</span>
+
+<span class="fc" id="L41">        return IIN;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Task.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Research-Project-Management-System</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">Task.java</span></div><h1>Task.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import java.util.*;
+
+public class Task {
+<span class="fc" id="L6">    public enum Status { PLANNED, IN_PROGRESS, BLOCKED, DONE, CANCELLED }</span>
+<span class="fc" id="L7">    public enum Priority { LOW, MEDIUM, HIGH, CRITICAL }</span>
+
+    private final long id;
+    private String name;
+    private int duration;
+    private Status status;
+    private Priority priority;
+    private final Set&lt;Task&gt; dependencies;
+    private final Map&lt;String, Integer&gt; requiredSkills;
+    private int est;
+    private int eft;
+    private int lst;
+    private int lft;
+    private double progress;
+    private Long assignedResearcherId;
+
+<span class="fc" id="L23">    public Task(String name, int duration, Priority priority) {</span>
+<span class="fc" id="L24">        this.id = IdGenerator.nextId();</span>
+<span class="fc bfc" id="L25" title="All 2 branches covered.">        this.name = name == null ? &quot;&quot; : name;</span>
+<span class="fc" id="L26">        this.duration = Math.max(0, duration);</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">        this.priority = priority == null ? Priority.MEDIUM : priority;</span>
+<span class="fc" id="L28">        this.status = Status.PLANNED;</span>
+<span class="fc" id="L29">        this.dependencies = new HashSet&lt;&gt;();</span>
+<span class="fc" id="L30">        this.requiredSkills = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L31">    }</span>
+
+<span class="fc" id="L33">    public long getId() { return id; }</span>
+<span class="fc" id="L34">    public String getName() { return name; }</span>
+<span class="fc" id="L35">    public int getDuration() { return duration; }</span>
+<span class="fc" id="L36">    public Status getStatus() { return status; }</span>
+<span class="fc" id="L37">    public Priority getPriority() { return priority; }</span>
+<span class="fc" id="L38">    public Set&lt;Task&gt; getDependencies() { return new HashSet&lt;&gt;(dependencies); }</span>
+<span class="fc" id="L39">    public Map&lt;String, Integer&gt; getRequiredSkills() { return new HashMap&lt;&gt;(requiredSkills); }</span>
+<span class="fc" id="L40">    public int getEst() { return est; }</span>
+<span class="fc" id="L41">    public int getEft() { return eft; }</span>
+<span class="fc" id="L42">    public int getLst() { return lst; }</span>
+<span class="fc" id="L43">    public int getLft() { return lft; }</span>
+<span class="fc" id="L44">    public double getProgress() { return progress; }</span>
+<span class="fc" id="L45">    public Long getAssignedResearcherId() { return assignedResearcherId; }</span>
+
+<span class="fc bfc" id="L47" title="All 2 branches covered.">    public void setName(String n) { this.name = n == null ? &quot;&quot; : n; }</span>
+<span class="fc" id="L48">    public void setDuration(int d) { this.duration = Math.max(0, d); }</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">    public void setPriority(Priority p) { this.priority = p == null ? Priority.MEDIUM : p; }</span>
+
+    public void requireSkill(String skill, int level) {
+<span class="fc bfc" id="L52" title="All 4 branches covered.">        if (skill == null || skill.isEmpty()) return;</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        if (level &lt; 0) level = 0;</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        if (level &gt; 10) level = 10;</span>
+<span class="fc" id="L55">        Integer old = requiredSkills.get(skill);</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        if (old == null) requiredSkills.put(skill, level);</span>
+<span class="fc" id="L57">        else requiredSkills.put(skill, Math.max(level, old));</span>
+<span class="fc" id="L58">    }</span>
+
+    public boolean addDependency(Task t) {
+<span class="fc bfc" id="L61" title="All 4 branches covered.">        if (t == null || t == this) return false;</span>
+<span class="fc" id="L62">        return dependencies.add(t);</span>
+    }
+
+    public boolean dependsOn(Task t) {
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        if (t == null) return false;</span>
+<span class="fc" id="L67">        return dependencies.contains(t);</span>
+    }
+
+    public void setSchedule(int est, int eft, int lst, int lft) {
+<span class="fc" id="L71">        this.est = Math.max(0, est);</span>
+<span class="fc" id="L72">        this.eft = Math.max(this.est, eft);</span>
+<span class="fc" id="L73">        this.lft = Math.max(this.eft, lft);</span>
+<span class="fc" id="L74">        this.lst = Math.max(0, lst);</span>
+<span class="fc" id="L75">    }</span>
+
+<span class="fc" id="L77">    public int slack() { return Math.max(0, lst - est); }</span>
+
+<span class="fc bfc" id="L79" title="All 2 branches covered.">    public void start() { if (status == Status.PLANNED) status = Status.IN_PROGRESS; }</span>
+<span class="fc" id="L80">    public void cancel() { status = Status.CANCELLED; }</span>
+<span class="fc" id="L81">    public void complete() { status = Status.DONE; }</span>
+
+    public void updateProgress(double p) {
+<span class="fc bfc" id="L84" title="All 2 branches covered.">        if (p &lt; 0) p = 0;</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        if (p &gt; 1) p = 1;</span>
+<span class="fc" id="L86">        progress = p;</span>
+<span class="fc" id="L87">    }</span>
+
+    public void assignTo(Long researcherId) {
+<span class="fc" id="L90">        this.assignedResearcherId = researcherId;</span>
+<span class="fc" id="L91">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

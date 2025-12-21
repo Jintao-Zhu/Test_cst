@@ -1,0 +1,76 @@
+{
+    "version": 4,
+    "data": {
+        "kind": "protocol",
+        "alignment": "right",
+        "title": "名称",
+        "items": [
+            {
+                "id": "A6QLKzXU_",
+                "kind": "seg_integer",
+                "name": "header",
+                "title": "名称",
+                "autoValue": "0xAA55",
+                "signed": "false",
+                "bitCount": "16",
+                "bigOrder": "true",
+                "encode": "complement"
+            },
+            {
+                "id": "FAzfKi8vtU",
+                "kind": "seg_integer",
+                "name": "data_length",
+                "title": "名称",
+                "autoValue": "0x02",
+                "signed": "false",
+                "bitCount": "8",
+                "bigOrder": "false",
+                "encode": "complement"
+            },
+            {
+                "id": "!R6WI$.Z/i/J70Q%N-mu",
+                "kind": "seg_integer",
+                "name": "cmd_type",
+                "title": "名称",
+                "autoValue": "0x01",
+                "signed": "false",
+                "bitCount": "8",
+                "bigOrder": "false",
+                "encode": "complement"
+            },
+            {
+                "id": "B9nKl61@B}H:j_UoIXi2",
+                "kind": "seg_integer",
+                "name": "data_flag",
+                "title": "名称",
+                "autoValue": "0xFF",
+                "signed": "false",
+                "bitCount": "8",
+                "bigOrder": "false",
+                "encode": "complement"
+            },
+            {
+                "id": "B%kz]ov9?G$)s!g{ta=-",
+                "kind": "seg_integer",
+                "name": "check_code",
+                "title": "名称",
+                "autoValue": "CheckCode(XOR_8,this.data_length,this.data_flag)",
+                "signed": "false",
+                "bitCount": "8",
+                "bigOrder": "false",
+                "encode": "complement"
+            },
+            {
+                "id": "cXMXzop70B",
+                "kind": "seg_integer",
+                "name": "tail",
+                "title": "名称",
+                "autoValue": "0x55AA",
+                "signed": "false",
+                "bitCount": "16",
+                "bigOrder": "true",
+                "encode": "complement"
+            }
+        ]
+    }
+}

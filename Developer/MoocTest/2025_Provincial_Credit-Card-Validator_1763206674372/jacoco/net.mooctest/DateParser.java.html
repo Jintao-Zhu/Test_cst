@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DateParser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Credit-Card-Validator</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">DateParser.java</span></div><h1>DateParser.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+/*
+ * Date parser used to standardize date format for
+ * date comparison
+ */
+<span class="nc" id="L7">public class DateParser {</span>
+
+    /*
+     * @param StringBuilder representation of the expiration date
+     * @return expiration date StringBuilder without a backslash
+     */
+    public static StringBuilder parseDate(StringBuilder expirationDate) {
+<span class="fc bfc" id="L14" title="All 2 branches covered.">        if (expirationDate.toString().contains(&quot;/&quot;)) {</span>
+<span class="fc" id="L15">            expirationDate.deleteCharAt(expirationDate.indexOf(&quot;/&quot;));</span>
+        }
+
+<span class="fc" id="L18">        return expirationDate;</span>
+    }
+
+    /*
+     * @param a StringBuilder representation of the expiration date,
+     * start &amp; end location to be parsed
+     * @return the parsed date
+     */
+    public static int parseDate(StringBuilder expirationDate, int startLocation, int endLocation) {
+<span class="fc" id="L27">        int date = Integer.parseInt(expirationDate.substring(startLocation, endLocation));</span>
+
+<span class="fc" id="L29">        return date;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

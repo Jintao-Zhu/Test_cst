@@ -1,0 +1,751 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1720165710851" clover="4.4.1">
+   <project name="PauselessHashMap 0.0.1-SNAPSHOT" timestamp="1720165709064">
+      <metrics coveredelements="0" complexity="230" loc="1468" methods="101" classes="10" statements="482" packages="1" coveredconditionals="0" coveredmethods="0" elements="809" ncloc="958" files="1" conditionals="226" coveredstatements="0"/>
+      <package name="net.mooctest">
+         <metrics coveredelements="0" complexity="230" loc="1468" methods="101" classes="10" statements="482" coveredconditionals="0" coveredmethods="0" elements="809" ncloc="958" files="1" conditionals="226" coveredstatements="0"/>
+         <file path="C:\Work\Java_practice\PauselessHashMap\src\main\java\net\mooctest\PauselessHashMap.java" name="PauselessHashMap.java">
+            <metrics coveredelements="0" coveredconditionals="0" complexity="230" loc="1468" coveredmethods="0" methods="101" elements="809" classes="10" ncloc="958" statements="482" conditionals="226" coveredstatements="0"/>
+            <class name="PauselessHashMap">
+               <metrics coveredelements="0" coveredconditionals="0" complexity="146" coveredmethods="0" methods="59" elements="516" statements="311" conditionals="146" coveredstatements="0"/>
+            </class>
+            <class name="PauselessHashMap.Entry">
+               <metrics coveredelements="0" coveredconditionals="0" complexity="8" coveredmethods="0" methods="6" elements="21" statements="11" conditionals="4" coveredstatements="0"/>
+            </class>
+            <class name="PauselessHashMap.AbstractMapIterator">
+               <metrics coveredelements="0" coveredconditionals="0" complexity="15" coveredmethods="0" methods="5" elements="62" statements="37" conditionals="20" coveredstatements="0"/>
+            </class>
+            <class name="PauselessHashMap.EntryIterator">
+               <metrics coveredelements="0" coveredconditionals="0" complexity="2" coveredmethods="0" methods="2" elements="5" statements="3" conditionals="0" coveredstatements="0"/>
+            </class>
+            <class name="PauselessHashMap.KeyIterator">
+               <metrics coveredelements="0" coveredconditionals="0" complexity="2" coveredmethods="0" methods="2" elements="5" statements="3" conditionals="0" coveredstatements="0"/>
+            </class>
+            <class name="PauselessHashMap.ValueIterator">
+               <metrics coveredelements="0" coveredconditionals="0" complexity="2" coveredmethods="0" methods="2" elements="5" statements="3" conditionals="0" coveredstatements="0"/>
+            </class>
+            <class name="PauselessHashMap.HashMapEntrySet">
+               <metrics coveredelements="0" coveredconditionals="0" complexity="14" coveredmethods="0" methods="9" elements="42" statements="23" conditionals="10" coveredstatements="0"/>
+            </class>
+            <class name="PauselessHashMap.InternalMapEntry">
+               <metrics coveredelements="0" coveredconditionals="0" complexity="16" coveredmethods="0" methods="9" elements="40" statements="19" conditionals="12" coveredstatements="0"/>
+            </class>
+            <class name="PauselessHashMap.EntryArrayHelper">
+               <metrics coveredelements="0" coveredconditionals="0" complexity="7" coveredmethods="0" methods="4" elements="23" statements="15" conditionals="4" coveredstatements="0"/>
+            </class>
+            <class name="PauselessHashMap.Resizer">
+               <metrics coveredelements="0" coveredconditionals="0" complexity="18" coveredmethods="0" methods="3" elements="90" statements="57" conditionals="30" coveredstatements="0"/>
+            </class>
+            <line complexity="1" visibility="package" signature="Entry(K,int)" num="145" count="0" type="method"/>
+            <line num="146" count="0" type="stmt"/>
+            <line num="147" count="0" type="stmt"/>
+            <line complexity="2" visibility="package" signature="Entry(K,V)" num="150" count="0" type="method"/>
+            <line num="151" count="0" type="stmt"/>
+            <line num="152" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="152" type="cond"/>
+            <line complexity="1" visibility="package" signature="setInvalid() : void" num="155" count="0" type="method"/>
+            <line num="156" count="0" type="stmt"/>
+            <line complexity="1" visibility="package" signature="setValid() : void" num="159" count="0" type="method"/>
+            <line num="160" count="0" type="stmt"/>
+            <line complexity="1" visibility="package" signature="isValid() : boolean" num="163" count="0" type="method"/>
+            <line num="164" count="0" type="stmt"/>
+            <line complexity="2" visibility="public" signature="clone() : Object" num="167" count="0" type="method"/>
+            <line num="170" count="0" type="stmt"/>
+            <line num="171" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="171" type="cond"/>
+            <line num="172" count="0" type="stmt"/>
+            <line num="174" count="0" type="stmt"/>
+            <line complexity="1" visibility="package" signature="AbstractMapIterator(PauselessHashMap&lt;K, V&gt;)" num="188" count="0" type="method"/>
+            <line num="189" count="0" type="stmt"/>
+            <line num="190" count="0" type="stmt"/>
+            <line num="191" count="0" type="stmt"/>
+            <line num="193" count="0" type="stmt"/>
+            <line complexity="4" visibility="public" signature="hasNext() : boolean" num="196" count="0" type="method"/>
+            <line num="197" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="197" type="cond"/>
+            <line num="198" count="0" type="stmt"/>
+            <line num="200" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="200" type="cond"/>
+            <line num="201" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="201" type="cond"/>
+            <line num="202" count="0" type="stmt"/>
+            <line num="204" count="0" type="stmt"/>
+            <line num="207" count="0" type="stmt"/>
+            <line complexity="3" visibility="package" signature="checkConcurrentMod() : void" num="210" count="0" type="method"/>
+            <line num="211" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="211" type="cond"/>
+            <line num="212" count="0" type="stmt"/>
+            <line num="214" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="214" type="cond"/>
+            <line num="215" count="0" type="stmt"/>
+            <line complexity="4" visibility="package" signature="makeNext() : void" num="219" count="0" type="method"/>
+            <line num="221" count="0" type="stmt"/>
+            <line num="222" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="222" type="cond"/>
+            <line num="223" count="0" type="stmt"/>
+            <line num="225" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="225" type="cond"/>
+            <line num="226" count="0" type="stmt"/>
+            <line num="227" count="0" type="stmt"/>
+            <line num="228" count="0" type="stmt"/>
+            <line num="230" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="230" type="cond"/>
+            <line num="231" count="0" type="stmt"/>
+            <line num="233" count="0" type="stmt"/>
+            <line num="234" count="0" type="stmt"/>
+            <line complexity="3" visibility="public" signature="remove() : void" num="238" count="0" type="method"/>
+            <line num="239" count="0" type="stmt"/>
+            <line num="240" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="240" type="cond"/>
+            <line num="241" count="0" type="stmt"/>
+            <line num="243" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="243" type="cond"/>
+            <line num="244" count="0" type="stmt"/>
+            <line num="245" count="0" type="stmt"/>
+            <line num="247" count="0" type="stmt"/>
+            <line num="249" count="0" type="stmt"/>
+            <line num="250" count="0" type="stmt"/>
+            <line num="251" count="0" type="stmt"/>
+            <line num="252" count="0" type="stmt"/>
+            <line complexity="1" visibility="package" signature="EntryIterator(PauselessHashMap&lt;K, V&gt;)" num="260" count="0" type="method"/>
+            <line num="261" count="0" type="stmt"/>
+            <line complexity="1" visibility="public" signature="next() : Map.Entry&lt;K, V&gt;" num="264" count="0" type="method"/>
+            <line num="265" count="0" type="stmt"/>
+            <line num="266" count="0" type="stmt"/>
+            <line complexity="1" visibility="package" signature="KeyIterator(PauselessHashMap&lt;K, V&gt;)" num="272" count="0" type="method"/>
+            <line num="273" count="0" type="stmt"/>
+            <line complexity="1" visibility="public" signature="next() : K" num="276" count="0" type="method"/>
+            <line num="277" count="0" type="stmt"/>
+            <line num="278" count="0" type="stmt"/>
+            <line complexity="1" visibility="package" signature="ValueIterator(PauselessHashMap&lt;K, V&gt;)" num="284" count="0" type="method"/>
+            <line num="285" count="0" type="stmt"/>
+            <line complexity="1" visibility="public" signature="next() : V" num="288" count="0" type="method"/>
+            <line num="289" count="0" type="stmt"/>
+            <line num="290" count="0" type="stmt"/>
+            <line complexity="1" visibility="public" signature="HashMapEntrySet(PauselessHashMap&lt;KT, VT&gt;)" num="297" count="0" type="method"/>
+            <line num="298" count="0" type="stmt"/>
+            <line complexity="1" visibility="package" signature="hashMap() : PauselessHashMap&lt;KT, VT&gt;" num="301" count="0" type="method"/>
+            <line num="302" count="0" type="stmt"/>
+            <line complexity="1" visibility="public" signature="size() : int" num="305" count="0" type="method"/>
+            <line num="307" count="0" type="stmt"/>
+            <line complexity="1" visibility="public" signature="clear() : void" num="310" count="0" type="method"/>
+            <line num="312" count="0" type="stmt"/>
+            <line complexity="2" visibility="public" signature="remove(Object) : boolean" num="315" count="0" type="method"/>
+            <line num="317" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="317" type="cond"/>
+            <line num="318" count="0" type="stmt"/>
+            <line num="320" count="0" type="stmt"/>
+            <line num="321" count="0" type="stmt"/>
+            <line num="322" count="0" type="stmt"/>
+            <line complexity="3" visibility="public" signature="removeImpl(Object) : boolean" num="326" count="0" type="method"/>
+            <line num="327" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="327" type="cond"/>
+            <line num="328" count="0" type="stmt"/>
+            <line num="329" count="0" type="stmt"/>
+            <line num="330" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="330" type="cond"/>
+            <line num="331" count="0" type="stmt"/>
+            <line num="332" count="0" type="stmt"/>
+            <line num="335" count="0" type="stmt"/>
+            <line complexity="2" visibility="public" signature="contains(Object) : boolean" num="338" count="0" type="method"/>
+            <line num="340" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="340" type="cond"/>
+            <line num="341" count="0" type="stmt"/>
+            <line num="342" count="0" type="stmt"/>
+            <line num="343" count="0" type="stmt"/>
+            <line num="345" count="0" type="stmt"/>
+            <line complexity="2" visibility="public" signature="valuesEq(Entry,Map.Entry&lt;?, ?&gt;) : boolean" num="348" count="0" type="method"/>
+            <line num="349" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="350" type="cond"/>
+            <line complexity="1" visibility="public" signature="iterator() : Iterator&lt;Map.Entry&lt;KT, VT&gt;&gt;" num="355" count="0" type="method"/>
+            <line num="357" count="0" type="stmt"/>
+            <line complexity="1" visibility="package" signature="newElementArray(int) : Entry&lt;K, V&gt;[]" num="367" count="0" type="method"/>
+            <line num="369" count="0" type="stmt"/>
+            <line complexity="1" visibility="public" signature="PauselessHashMap()" num="375" count="0" type="method"/>
+            <line num="376" count="0" type="stmt"/>
+            <line complexity="1" visibility="public" signature="PauselessHashMap(int)" num="387" count="0" type="method"/>
+            <line num="388" count="0" type="stmt"/>
+            <line complexity="3" visibility="public" signature="calculateCapacity(int) : int" num="399" count="0" type="method"/>
+            <line num="400" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="400" type="cond"/>
+            <line num="401" count="0" type="stmt"/>
+            <line num="403" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="403" type="cond"/>
+            <line num="404" count="0" type="stmt"/>
+            <line num="406" count="0" type="stmt"/>
+            <line num="407" count="0" type="stmt"/>
+            <line num="408" count="0" type="stmt"/>
+            <line num="409" count="0" type="stmt"/>
+            <line num="410" count="0" type="stmt"/>
+            <line num="411" count="0" type="stmt"/>
+            <line num="412" count="0" type="stmt"/>
+            <line complexity="3" visibility="public" signature="PauselessHashMap(int,float)" num="427" count="0" type="method"/>
+            <line num="428" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="428" type="cond"/>
+            <line num="429" count="0" type="stmt"/>
+            <line num="430" count="0" type="stmt"/>
+            <line num="431" count="0" type="stmt"/>
+            <line num="432" count="0" type="stmt"/>
+            <line num="433" count="0" type="stmt"/>
+            <line num="435" count="0" type="stmt"/>
+            <line complexity="1" visibility="public" signature="PauselessHashMap(Map&lt;? extends K, ? extends V&gt;)" num="446" count="0" type="method"/>
+            <line num="447" count="0" type="stmt"/>
+            <line num="448" count="0" type="stmt"/>
+            <line complexity="2" visibility="public" signature="clear() : void" num="457" count="0" type="method"/>
+            <line num="459" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="459" type="cond"/>
+            <line num="460" count="0" type="stmt"/>
+            <line num="462" count="0" type="stmt"/>
+            <line num="463" count="0" type="stmt"/>
+            <line num="464" count="0" type="stmt"/>
+            <line complexity="3" visibility="public" signature="clearImpl() : void" num="469" count="0" type="method"/>
+            <line num="470" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="470" type="cond"/>
+            <line num="471" count="0" type="stmt"/>
+            <line num="473" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="473" type="cond"/>
+            <line num="474" count="0" type="stmt"/>
+            <line num="476" count="0" type="stmt"/>
+            <line complexity="2" visibility="public" signature="clone() : Object" num="485" count="0" type="method"/>
+            <line num="487" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="487" type="cond"/>
+            <line num="488" count="0" type="stmt"/>
+            <line num="490" count="0" type="stmt"/>
+            <line num="491" count="0" type="stmt"/>
+            <line num="492" count="0" type="stmt"/>
+            <line complexity="2" visibility="public" signature="cloneImpl() : Object" num="497" count="0" type="method"/>
+            <line num="499" count="0" type="stmt"/>
+            <line num="500" count="0" type="stmt"/>
+            <line num="501" count="0" type="stmt"/>
+            <line num="502" count="0" type="stmt"/>
+            <line num="503" count="0" type="stmt"/>
+            <line num="504" count="0" type="stmt"/>
+            <line num="505" count="0" type="stmt"/>
+            <line num="507" count="0" type="stmt"/>
+            <line num="509" count="0" type="stmt"/>
+            <line complexity="2" visibility="public" signature="computeThreshold() : void" num="516" count="0" type="method"/>
+            <line num="517" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="517" type="cond"/>
+            <line num="518" count="0" type="stmt"/>
+            <line complexity="1" visibility="public" signature="containsKey(Object) : boolean" num="529" count="0" type="method"/>
+            <line num="531" count="0" type="stmt"/>
+            <line num="532" count="0" type="stmt"/>
+            <line complexity="16" visibility="public" signature="containsValue(Object) : boolean" num="543" count="0" type="method"/>
+            <line num="546" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="546" type="cond"/>
+            <line num="547" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="547" type="cond"/>
+            <line num="548" count="0" type="stmt"/>
+            <line num="549" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="549" type="cond"/>
+            <line num="550" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="550" type="cond"/>
+            <line num="551" count="0" type="stmt"/>
+            <line num="553" count="0" type="stmt"/>
+            <line num="557" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="557" type="cond"/>
+            <line num="558" count="0" type="stmt"/>
+            <line num="559" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="559" type="cond"/>
+            <line num="560" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="560" type="cond"/>
+            <line num="561" count="0" type="stmt"/>
+            <line num="563" count="0" type="stmt"/>
+            <line num="569" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="569" type="cond"/>
+            <line num="570" count="0" type="stmt"/>
+            <line num="572" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="572" type="cond"/>
+            <line num="573" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="573" type="cond"/>
+            <line num="574" count="0" type="stmt"/>
+            <line num="575" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="575" type="cond"/>
+            <line num="576" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="576" type="cond"/>
+            <line num="577" count="0" type="stmt"/>
+            <line num="579" count="0" type="stmt"/>
+            <line num="583" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="583" type="cond"/>
+            <line num="584" count="0" type="stmt"/>
+            <line num="585" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="585" type="cond"/>
+            <line num="586" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="586" type="cond"/>
+            <line num="587" count="0" type="stmt"/>
+            <line num="589" count="0" type="stmt"/>
+            <line num="594" count="0" type="stmt"/>
+            <line complexity="1" visibility="public" signature="entrySet() : Set&lt;Map.Entry&lt;K, V&gt;&gt;" num="604" count="0" type="method"/>
+            <line num="606" count="0" type="stmt"/>
+            <line complexity="2" visibility="public" signature="get(Object) : V" num="617" count="0" type="method"/>
+            <line num="619" count="0" type="stmt"/>
+            <line num="620" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="620" type="cond"/>
+            <line num="621" count="0" type="stmt"/>
+            <line num="623" count="0" type="stmt"/>
+            <line complexity="2" visibility="package" signature="getEntry(Object) : Entry&lt;K, V&gt;" num="626" count="0" type="method"/>
+            <line num="627" count="0" type="stmt"/>
+            <line num="628" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="628" type="cond"/>
+            <line num="629" count="0" type="stmt"/>
+            <line num="631" count="0" type="stmt"/>
+            <line num="632" count="0" type="stmt"/>
+            <line num="633" count="0" type="stmt"/>
+            <line num="635" count="0" type="stmt"/>
+            <line complexity="3" visibility="package" signature="findNonNullKeyEntry(Object,int,int) : Entry&lt;K,V&gt;" num="638" count="0" type="method"/>
+            <line num="639" count="0" type="stmt"/>
+            <line num="640" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="640" type="cond"/>
+            <line num="641" count="0" type="stmt"/>
+            <line num="644" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="644" type="cond"/>
+            <line num="645" count="0" type="stmt"/>
+            <line num="647" count="0" type="stmt"/>
+            <line num="648" count="0" type="stmt"/>
+            <line complexity="1" visibility="package" signature="findNonNullKeyEntryInElementData(Object,int,int) : Entry&lt;K,V&gt;" num="651" count="0" type="method"/>
+            <line num="653" count="0" type="stmt"/>
+            <line complexity="1" visibility="package" signature="findNonNullKeyEntryInResizingIntoElementData(Object,int,int) : Entry&lt;K,V&gt;" num="656" count="0" type="method"/>
+            <line num="658" count="0" type="stmt"/>
+            <line complexity="5" visibility="package" signature="findNonNullKeyEntryInChain(Object,Entry&lt;K,V&gt;,int) : Entry&lt;K,V&gt;" num="661" count="0" type="method"/>
+            <line num="662" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="662" type="cond"/>
+            <line num="664" count="0" type="stmt"/>
+            <line num="666" count="0" type="stmt"/>
+            <line complexity="3" visibility="package" signature="findNullKeyEntry() : Entry&lt;K,V&gt;" num="669" count="0" type="method"/>
+            <line num="670" count="0" type="stmt"/>
+            <line num="671" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="671" type="cond"/>
+            <line num="672" count="0" type="stmt"/>
+            <line num="675" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="675" type="cond"/>
+            <line num="676" count="0" type="stmt"/>
+            <line num="677" count="0" type="stmt"/>
+            <line complexity="1" visibility="package" signature="findNullKeyEntryInElementData() : Entry&lt;K,V&gt;" num="680" count="0" type="method"/>
+            <line num="682" count="0" type="stmt"/>
+            <line complexity="1" visibility="package" signature="findNullKeyEntryInResizingIntoElementData() : Entry&lt;K,V&gt;" num="685" count="0" type="method"/>
+            <line num="687" count="0" type="stmt"/>
+            <line complexity="4" visibility="package" signature="findNullKeyEntryInChain(Entry&lt;K,V&gt;) : Entry&lt;K,V&gt;" num="690" count="0" type="method"/>
+            <line num="691" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="691" type="cond"/>
+            <line num="692" count="0" type="stmt"/>
+            <line num="693" count="0" type="stmt"/>
+            <line complexity="1" visibility="public" signature="isEmpty() : boolean" num="703" count="0" type="method"/>
+            <line num="705" count="0" type="stmt"/>
+            <line complexity="2" visibility="public" signature="keySet() : Set&lt;K&gt;" num="715" count="0" type="method"/>
+            <line num="717" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="717" type="cond"/>
+            <line num="718" count="0" type="stmt"/>
+            <line complexity="1" visibility="public" signature="contains(Object) : boolean" num="719" count="0" type="method"/>
+            <line num="721" count="0" type="stmt"/>
+            <line complexity="1" visibility="public" signature="size() : int" num="724" count="0" type="method"/>
+            <line num="726" count="0" type="stmt"/>
+            <line complexity="1" visibility="public" signature="clear() : void" num="729" count="0" type="method"/>
+            <line num="731" count="0" type="stmt"/>
+            <line complexity="2" visibility="public" signature="remove(Object) : boolean" num="734" count="0" type="method"/>
+            <line num="736" count="0" type="stmt"/>
+            <line num="737" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="737" type="cond"/>
+            <line num="738" count="0" type="stmt"/>
+            <line num="740" count="0" type="stmt"/>
+            <line num="741" count="0" type="stmt"/>
+            <line num="742" count="0" type="stmt"/>
+            <line num="745" count="0" type="stmt"/>
+            <line complexity="1" visibility="public" signature="iterator() : Iterator&lt;K&gt;" num="748" count="0" type="method"/>
+            <line num="750" count="0" type="stmt"/>
+            <line num="754" count="0" type="stmt"/>
+            <line complexity="1" visibility="public" signature="put(K,V) : V" num="767" count="0" type="method"/>
+            <line num="769" count="0" type="stmt"/>
+            <line complexity="13" visibility="public" signature="putImpl(K,V) : V" num="772" count="0" type="method"/>
+            <line num="773" count="0" type="stmt"/>
+            <line num="774" count="0" type="stmt"/>
+            <line num="775" count="0" type="stmt"/>
+            <line num="776" count="0" type="stmt"/>
+            <line num="778" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="778" type="cond"/>
+            <line num="779" count="0" type="stmt"/>
+            <line num="781" count="0" type="stmt"/>
+            <line num="782" count="0" type="stmt"/>
+            <line num="783" count="0" type="stmt"/>
+            <line num="786" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="786" type="cond"/>
+            <line num="787" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="787" type="cond"/>
+            <line num="788" count="0" type="stmt"/>
+            <line num="789" count="0" type="stmt"/>
+            <line num="790" count="0" type="stmt"/>
+            <line num="791" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="791" type="cond"/>
+            <line num="792" count="0" type="stmt"/>
+            <line num="794" count="0" type="stmt"/>
+            <line num="796" count="0" type="stmt"/>
+            <line num="797" count="0" type="stmt"/>
+            <line num="798" count="0" type="stmt"/>
+            <line num="802" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="802" type="cond"/>
+            <line num="804" count="0" type="stmt"/>
+            <line num="805" count="0" type="stmt"/>
+            <line num="808" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="808" type="cond"/>
+            <line num="810" count="0" type="stmt"/>
+            <line num="811" count="0" type="stmt"/>
+            <line num="819" count="0" type="stmt"/>
+            <line num="822" count="0" type="stmt"/>
+            <line num="825" count="0" type="stmt"/>
+            <line num="827" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="827" type="cond"/>
+            <line num="828" count="0" type="stmt"/>
+            <line num="832" count="0" type="stmt"/>
+            <line num="833" count="0" type="stmt"/>
+            <line num="836" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="836" type="cond"/>
+            <line num="837" count="0" type="stmt"/>
+            <line num="838" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="838" type="cond"/>
+            <line num="843" count="0" type="stmt"/>
+            <line num="844" count="0" type="stmt"/>
+            <line num="846" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="846" type="cond"/>
+            <line num="848" count="0" type="stmt"/>
+            <line num="851" count="0" type="stmt"/>
+            <line num="860" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="860" type="cond"/>
+            <line num="861" count="0" type="stmt"/>
+            <line num="865" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="865" type="cond"/>
+            <line num="866" count="0" type="stmt"/>
+            <line num="869" count="0" type="stmt"/>
+            <line complexity="6" visibility="package" signature="forceFinishResizing() : void" num="872" count="0" type="method"/>
+            <line num="873" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="873" type="cond"/>
+            <line num="874" count="0" type="stmt"/>
+            <line num="875" count="0" type="stmt"/>
+            <line num="876" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="876" type="cond"/>
+            <line num="877" count="0" type="stmt"/>
+            <line num="879" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="879" type="cond"/>
+            <line num="880" count="0" type="stmt"/>
+            <line num="882" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="882" type="cond"/>
+            <line num="883" count="0" type="stmt"/>
+            <line num="886" count="0" type="stmt"/>
+            <line complexity="2" visibility="package" signature="finishResizing() : void" num="894" count="0" type="method"/>
+            <line num="895" count="0" type="stmt"/>
+            <line num="896" count="0" type="stmt"/>
+            <line num="897" count="0" type="stmt"/>
+            <line num="898" count="0" type="stmt"/>
+            <line num="899" count="0" type="stmt"/>
+            <line num="900" count="0" type="stmt"/>
+            <line num="901" count="0" type="stmt"/>
+            <line num="903" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="903" type="cond"/>
+            <line num="904" count="0" type="stmt"/>
+            <line complexity="1" visibility="package" signature="createEntry(K,int,V) : Entry&lt;K, V&gt;" num="909" count="0" type="method"/>
+            <line num="911" count="0" type="stmt"/>
+            <line num="912" count="0" type="stmt"/>
+            <line num="913" count="0" type="stmt"/>
+            <line num="914" count="0" type="stmt"/>
+            <line complexity="3" visibility="package" signature="createHashedEntry(K,int,int) : Entry&lt;K,V&gt;" num="917" count="0" type="method"/>
+            <line num="919" count="0" type="stmt"/>
+            <line num="920" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="920" type="cond"/>
+            <line num="922" count="0" type="stmt"/>
+            <line num="923" count="0" type="stmt"/>
+            <line num="924" count="0" type="stmt"/>
+            <line num="925" count="0" type="stmt"/>
+            <line num="926" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="927" type="cond"/>
+            <line num="929" count="0" type="stmt"/>
+            <line num="931" count="0" type="stmt"/>
+            <line num="932" count="0" type="stmt"/>
+            <line num="933" count="0" type="stmt"/>
+            <line complexity="2" visibility="public" signature="putAll(Map&lt;? extends K, ? extends V&gt;) : void" num="946" count="0" type="method"/>
+            <line num="948" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="948" type="cond"/>
+            <line num="949" count="0" type="stmt"/>
+            <line complexity="4" visibility="public" signature="putAllImpl(Map&lt;? extends K, ? extends V&gt;) : void" num="953" count="0" type="method"/>
+            <line num="954" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="954" type="cond"/>
+            <line num="955" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="955" type="cond"/>
+            <line num="956" count="0" type="stmt"/>
+            <line num="959" count="0" type="stmt"/>
+            <line num="960" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="960" type="cond"/>
+            <line num="961" count="0" type="stmt"/>
+            <line num="963" count="0" type="stmt"/>
+            <line num="964" count="0" type="stmt"/>
+            <line complexity="3" visibility="package" signature="rehash(int) : void" num="968" count="0" type="method"/>
+            <line num="969" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="969" type="cond"/>
+            <line num="970" count="0" type="stmt"/>
+            <line complexity="3" visibility="package" signature="rehash() : void" num="974" count="0" type="method"/>
+            <line num="975" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="975" type="cond"/>
+            <line num="976" count="0" type="stmt"/>
+            <line complexity="2" visibility="public" signature="remove(Object) : V" num="989" count="0" type="method"/>
+            <line num="991" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="991" type="cond"/>
+            <line num="992" count="0" type="stmt"/>
+            <line num="994" count="0" type="stmt"/>
+            <line num="995" count="0" type="stmt"/>
+            <line num="996" count="0" type="stmt"/>
+            <line complexity="2" visibility="public" signature="removeImpl(Object) : V" num="1000" count="0" type="method"/>
+            <line num="1001" count="0" type="stmt"/>
+            <line num="1002" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1002" type="cond"/>
+            <line num="1003" count="0" type="stmt"/>
+            <line num="1005" count="0" type="stmt"/>
+            <line complexity="5" visibility="package" signature="removeEntry(Entry&lt;K, V&gt;) : void" num="1013" count="0" type="method"/>
+            <line num="1015" count="0" type="stmt"/>
+            <line num="1016" count="0" type="stmt"/>
+            <line num="1017" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1017" type="cond"/>
+            <line num="1018" count="0" type="stmt"/>
+            <line num="1020" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1020" type="cond"/>
+            <line num="1021" count="0" type="stmt"/>
+            <line num="1023" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1023" type="cond"/>
+            <line num="1024" count="0" type="stmt"/>
+            <line num="1027" count="0" type="stmt"/>
+            <line num="1028" count="0" type="stmt"/>
+            <line complexity="9" visibility="package" signature="removeEntry(Object) : Entry&lt;K, V&gt;" num="1031" count="0" type="method"/>
+            <line num="1033" count="0" type="stmt"/>
+            <line num="1034" count="0" type="stmt"/>
+            <line num="1035" count="0" type="stmt"/>
+            <line num="1036" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1036" type="cond"/>
+            <line num="1037" count="0" type="stmt"/>
+            <line num="1038" count="0" type="stmt"/>
+            <line num="1039" count="0" type="stmt"/>
+            <line num="1040" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1040" type="cond"/>
+            <line num="1043" count="0" type="stmt"/>
+            <line num="1044" count="0" type="stmt"/>
+            <line num="1047" count="0" type="stmt"/>
+            <line num="1048" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1048" type="cond"/>
+            <line num="1049" count="0" type="stmt"/>
+            <line num="1050" count="0" type="stmt"/>
+            <line num="1054" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1054" type="cond"/>
+            <line num="1055" count="0" type="stmt"/>
+            <line num="1057" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1057" type="cond"/>
+            <line num="1058" count="0" type="stmt"/>
+            <line num="1060" count="0" type="stmt"/>
+            <line num="1062" count="0" type="stmt"/>
+            <line num="1063" count="0" type="stmt"/>
+            <line num="1064" count="0" type="stmt"/>
+            <line complexity="1" visibility="public" signature="size() : int" num="1073" count="0" type="method"/>
+            <line num="1075" count="0" type="stmt"/>
+            <line complexity="2" visibility="public" signature="values() : Collection&lt;V&gt;" num="1097" count="0" type="method"/>
+            <line num="1099" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1099" type="cond"/>
+            <line num="1100" count="0" type="stmt"/>
+            <line complexity="1" visibility="public" signature="contains(Object) : boolean" num="1101" count="0" type="method"/>
+            <line num="1103" count="0" type="stmt"/>
+            <line complexity="1" visibility="public" signature="size() : int" num="1106" count="0" type="method"/>
+            <line num="1108" count="0" type="stmt"/>
+            <line complexity="1" visibility="public" signature="clear() : void" num="1111" count="0" type="method"/>
+            <line num="1113" count="0" type="stmt"/>
+            <line complexity="1" visibility="public" signature="iterator() : Iterator&lt;V&gt;" num="1116" count="0" type="method"/>
+            <line num="1118" count="0" type="stmt"/>
+            <line num="1122" count="0" type="stmt"/>
+            <line complexity="2" visibility="public" signature="writeObject(ObjectOutputStream) : void" num="1125" count="0" type="method"/>
+            <line num="1126" count="0" type="stmt"/>
+            <line num="1127" count="0" type="stmt"/>
+            <line num="1128" count="0" type="stmt"/>
+            <line num="1129" count="0" type="stmt"/>
+            <line num="1130" count="0" type="stmt"/>
+            <line num="1131" count="0" type="stmt"/>
+            <line num="1132" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1132" type="cond"/>
+            <line num="1133" count="0" type="stmt"/>
+            <line num="1134" count="0" type="stmt"/>
+            <line num="1135" count="0" type="stmt"/>
+            <line num="1136" count="0" type="stmt"/>
+            <line complexity="3" visibility="public" signature="readObject(ObjectInputStream) : void" num="1141" count="0" type="method"/>
+            <line num="1144" count="0" type="stmt"/>
+            <line num="1145" count="0" type="stmt"/>
+            <line num="1146" count="0" type="stmt"/>
+            <line num="1147" count="0" type="stmt"/>
+            <line num="1148" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1148" type="cond"/>
+            <line num="1149" count="0" type="stmt"/>
+            <line num="1150" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1150" type="cond"/>
+            <line num="1151" count="0" type="stmt"/>
+            <line complexity="1" visibility="package" signature="computeHashCode(Object) : int" num="1158" count="0" type="method"/>
+            <line num="1159" count="0" type="stmt"/>
+            <line complexity="1" visibility="package" signature="areEqualKeys(Object,Object) : boolean" num="1162" count="0" type="method"/>
+            <line num="1163" count="0" type="stmt"/>
+            <line complexity="1" visibility="package" signature="areEqualValues(Object,Object) : boolean" num="1166" count="0" type="method"/>
+            <line num="1167" count="0" type="stmt"/>
+            <line complexity="1" visibility="package" signature="InternalMapEntry(K)" num="1178" count="0" type="method"/>
+            <line num="1179" count="0" type="stmt"/>
+            <line complexity="1" visibility="package" signature="InternalMapEntry(K,V)" num="1182" count="0" type="method"/>
+            <line num="1183" count="0" type="stmt"/>
+            <line num="1184" count="0" type="stmt"/>
+            <line complexity="2" visibility="public" signature="clone() : Object" num="1187" count="0" type="method"/>
+            <line num="1189" count="0" type="stmt"/>
+            <line num="1190" count="0" type="stmt"/>
+            <line num="1192" count="0" type="stmt"/>
+            <line complexity="5" visibility="public" signature="equals(Object) : boolean" num="1196" count="0" type="method"/>
+            <line num="1198" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1198" type="cond"/>
+            <line num="1199" count="0" type="stmt"/>
+            <line num="1201" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1201" type="cond"/>
+            <line num="1202" count="0" type="stmt"/>
+            <line num="1203" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1203" type="cond"/>
+            <line falsecount="0" truecount="0" num="1205" type="cond"/>
+            <line num="1208" count="0" type="stmt"/>
+            <line complexity="1" visibility="public" signature="getKey() : K" num="1211" count="0" type="method"/>
+            <line num="1212" count="0" type="stmt"/>
+            <line complexity="1" visibility="public" signature="getValue() : V" num="1215" count="0" type="method"/>
+            <line num="1216" count="0" type="stmt"/>
+            <line complexity="3" visibility="public" signature="hashCode() : int" num="1219" count="0" type="method"/>
+            <line num="1221" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1221" type="cond"/>
+            <line falsecount="0" truecount="0" num="1222" type="cond"/>
+            <line complexity="1" visibility="public" signature="setValue(V) : V" num="1225" count="0" type="method"/>
+            <line num="1226" count="0" type="stmt"/>
+            <line num="1227" count="0" type="stmt"/>
+            <line num="1228" count="0" type="stmt"/>
+            <line complexity="1" visibility="public" signature="toString() : String" num="1231" count="0" type="method"/>
+            <line num="1233" count="0" type="stmt"/>
+            <line complexity="1" visibility="package" signature="&lt;clinit&gt;, line 1245()" num="1245" count="0" type="method"/>
+            <line num="1246" count="0" type="stmt"/>
+            <line num="1247" count="0" type="stmt"/>
+            <line num="1248" count="0" type="stmt"/>
+            <line complexity="3" visibility="public" signature="calculateShiftForScale(int) : int" num="1252" count="0" type="method"/>
+            <line num="1253" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1253" type="cond"/>
+            <line num="1254" count="0" type="stmt"/>
+            <line num="1255" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1255" type="cond"/>
+            <line num="1256" count="0" type="stmt"/>
+            <line num="1258" count="0" type="stmt"/>
+            <line complexity="2" visibility="public" signature="getUnsafe() : Unsafe" num="1262" count="0" type="method"/>
+            <line num="1263" count="0" type="stmt"/>
+            <line num="1264" count="0" type="stmt"/>
+            <line num="1265" count="0" type="stmt"/>
+            <line num="1266" count="0" type="stmt"/>
+            <line num="1269" count="0" type="stmt"/>
+            <line complexity="1" visibility="package" signature="compareAndSet(Entry[],int,Entry,Entry) : boolean" num="1272" count="0" type="method"/>
+            <line num="1273" count="0" type="stmt"/>
+            <line num="1274" count="0" type="stmt"/>
+            <line complexity="1" visibility="package" signature="Resizer(PauselessHashMap&lt;K, V&gt;,int,boolean)" num="1284" count="0" type="method"/>
+            <line num="1285" count="0" type="stmt"/>
+            <line num="1286" count="0" type="stmt"/>
+            <line num="1287" count="0" type="stmt"/>
+            <line complexity="7" visibility="package" signature="insertUniqueEquivalentAtHeadOfBucket(Entry&lt;K, V&gt;,int) : void" num="1290" count="0" type="method"/>
+            <line num="1291" count="0" type="stmt"/>
+            <line num="1292" count="0" type="stmt"/>
+            <line num="1293" count="0" type="stmt"/>
+            <line num="1294" count="0" type="stmt"/>
+            <line num="1295" count="0" type="stmt"/>
+            <line num="1297" count="0" type="stmt"/>
+            <line num="1298" count="0" type="stmt"/>
+            <line num="1299" count="0" type="stmt"/>
+            <line num="1300" count="0" type="stmt"/>
+            <line num="1302" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1302" type="cond"/>
+            <line num="1305" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1305" type="cond"/>
+            <line num="1311" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1311" type="cond"/>
+            <line num="1312" count="0" type="stmt"/>
+            <line num="1314" count="0" type="stmt"/>
+            <line num="1318" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1318" type="cond"/>
+            <line num="1319" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1324" type="cond"/>
+            <line num="1326" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1326" type="cond"/>
+            <line num="1328" count="0" type="stmt"/>
+            <line num="1334" count="0" type="stmt"/>
+            <line num="1337" count="0" type="stmt"/>
+            <line num="1339" count="0" type="stmt"/>
+            <line complexity="10" visibility="public" signature="run() : void" num="1342" count="0" type="method"/>
+            <line num="1344" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1344" type="cond"/>
+            <line num="1345" count="0" type="stmt"/>
+            <line num="1348" count="0" type="stmt"/>
+            <line num="1349" count="0" type="stmt"/>
+            <line num="1354" count="0" type="stmt"/>
+            <line num="1356" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1356" type="cond"/>
+            <line num="1358" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1358" type="cond"/>
+            <line num="1359" count="0" type="stmt"/>
+            <line num="1360" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1360" type="cond"/>
+            <line num="1361" count="0" type="stmt"/>
+            <line num="1365" count="0" type="stmt"/>
+            <line num="1368" count="0" type="stmt"/>
+            <line num="1369" count="0" type="stmt"/>
+            <line num="1371" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1371" type="cond"/>
+            <line num="1372" count="0" type="stmt"/>
+            <line num="1375" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1375" type="cond"/>
+            <line num="1379" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1379" type="cond"/>
+            <line num="1381" count="0" type="stmt"/>
+            <line num="1382" count="0" type="stmt"/>
+            <line num="1387" count="0" type="stmt"/>
+            <line num="1389" count="0" type="stmt"/>
+            <line num="1392" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1392" type="cond"/>
+            <line num="1393" count="0" type="stmt"/>
+            <line num="1395" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1395" type="cond"/>
+            <line num="1396" count="0" type="stmt"/>
+            <line num="1398" count="0" type="stmt"/>
+            <line num="1400" count="0" type="stmt"/>
+            <line num="1402" count="0" type="stmt"/>
+            <line num="1406" count="0" type="stmt"/>
+            <line num="1409" count="0" type="stmt"/>
+            <line num="1411" count="0" type="stmt"/>
+            <line num="1412" count="0" type="stmt"/>
+            <line num="1413" count="0" type="stmt"/>
+            <line complexity="1" visibility="public" signature="newThread(Runnable) : Thread" num="1429" count="0" type="method"/>
+            <line num="1431" count="0" type="stmt"/>
+            <line num="1432" count="0" type="stmt"/>
+            <line num="1434" count="0" type="stmt"/>
+            <line num="1435" count="0" type="stmt"/>
+            <line complexity="2" visibility="package" signature="kickoffBackgroundResize(int) : void" num="1439" count="0" type="method"/>
+            <line num="1441" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="1441" type="cond"/>
+            <line num="1442" count="0" type="stmt"/>
+            <line num="1443" count="0" type="stmt"/>
+            <line num="1447" count="0" type="stmt"/>
+            <line num="1448" count="0" type="stmt"/>
+            <line num="1449" count="0" type="stmt"/>
+            <line complexity="1" visibility="package" signature="doResize(int) : void" num="1457" count="0" type="method"/>
+            <line num="1458" count="0" type="stmt"/>
+            <line num="1459" count="0" type="stmt"/>
+            <line num="1460" count="0" type="stmt"/>
+            <line num="1461" count="0" type="stmt"/>
+            <line num="1463" count="0" type="stmt"/>
+         </file>
+      </package>
+   </project>
+   <testproject name="PauselessHashMap 0.0.1-SNAPSHOT" timestamp="1720165709064">
+      <metrics coveredelements="1" complexity="1" loc="14" methods="1" classes="1" statements="0" packages="1" coveredconditionals="0" coveredmethods="1" elements="1" ncloc="8" files="1" conditionals="0" coveredstatements="0"/>
+      <package name="net.mooctest">
+         <metrics coveredelements="1" complexity="1" loc="14" methods="1" classes="1" statements="0" coveredconditionals="0" coveredmethods="1" elements="1" ncloc="8" files="1" conditionals="0" coveredstatements="0"/>
+         <file path="C:\Work\Java_practice\PauselessHashMap\src\test\java\net\mooctest\PauselessHashMapTest.java" name="PauselessHashMapTest.java">
+            <metrics coveredelements="1" coveredconditionals="0" complexity="1" loc="14" coveredmethods="1" methods="1" elements="1" classes="1" ncloc="8" statements="0" conditionals="0" coveredstatements="0"/>
+            <class name="PauselessHashMapTest">
+               <metrics coveredelements="1" complexity="1" methods="1" testruns="1" statements="0" coveredconditionals="0" coveredmethods="1" elements="1" testfailures="0" testduration="0.007" conditionals="0" coveredstatements="0" testpasses="1"/>
+            </class>
+            <line complexity="1" visibility="public" signature="test() : void" num="9" testsuccess="true" count="1" testduration="0.007" type="method"/>
+         </file>
+      </package>
+   </testproject>
+</coverage>

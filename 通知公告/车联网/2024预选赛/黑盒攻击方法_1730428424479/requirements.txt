@@ -1,0 +1,1 @@
+运行predict代码需要安装ultralytics，安装参照https://github.com/ultralytics/ultralytics

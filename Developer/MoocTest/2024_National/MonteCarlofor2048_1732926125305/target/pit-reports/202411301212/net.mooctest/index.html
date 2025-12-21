@@ -1,0 +1,195 @@
+<html>
+<head>
+  
+    <style type='text/css'>
+   
+   .tests{ 
+     width : 50%;
+     float : left;
+   }
+   
+   .mutees{
+     float : right;
+     width : 50%;
+   }
+   
+   .unit {
+     padding-top : 20px;
+     clear : both;
+   }
+   
+   .coverage_bar {
+    display : inline-block;
+    height : 1.1em;
+    width: 130px;
+    background: #FAA;
+    margin: 0 5px;
+    vertical-align: middle;
+    border: 1px solid #AAA;
+    position : relative;
+   }
+   
+   .coverage_complete {
+    display : inline-block;
+    height : 100%;
+    background: #DFD;
+    float: left;
+   }
+   
+   .coverage_ledgend {
+        position : absolute;
+        height : 100%;
+        width: 100%;
+        left : 0;
+        top : 0;
+        text-align : center;
+   }
+   
+   .line, .mut {
+        vertical-align : middle;
+   }
+   
+   .coveragePercentage {
+        display: inline-block;
+        width: 3em;
+        text-align: right;
+   }
+  </style>
+  
+</head>
+<body>
+
+<h1>Pit Test Coverage Report</h1>
+<h2>Package Summary</h2>
+<h3>net.mooctest</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Number of Classes</th>
+            <th>Line Coverage</th>
+            <th>Mutation Coverage</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>15</td>
+            <td>90% <div class="coverage_bar"><div class="coverage_complete" style="width:90%"></div><div class="coverage_ledgend">365/404</div></div></td>
+            <td>72% <div class="coverage_bar"><div class="coverage_complete" style="width:72%"></div><div class="coverage_ledgend">265/366</div></div></td>
+        </tr>
+    </tbody>
+</table>
+
+
+<h3>Breakdown by Class</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Line Coverage</th>
+            <th>Mutation Coverage</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        <tr>
+            <td><a href="./BestMeasure.java.html">BestMeasure.java</a></td>
+            <td><div class="coveragePercentage">100% </div><div class="coverage_bar"><div class="coverage_complete" style="width:100%"></div><div class="coverage_ledgend">5/5</div></div></td>
+            <td><div class="coveragePercentage">33% </div><div class="coverage_bar"><div class="coverage_complete" style="width:33%"></div><div class="coverage_ledgend">2/6</div></div></td>
+        </tr>
+
+        <tr>
+            <td><a href="./BitBoards.java.html">BitBoards.java</a></td>
+            <td><div class="coveragePercentage">92% </div><div class="coverage_bar"><div class="coverage_complete" style="width:92%"></div><div class="coverage_ledgend">67/73</div></div></td>
+            <td><div class="coveragePercentage">80% </div><div class="coverage_bar"><div class="coverage_complete" style="width:80%"></div><div class="coverage_ledgend">80/100</div></div></td>
+        </tr>
+
+        <tr>
+            <td><a href="./Board.java.html">Board.java</a></td>
+            <td><div class="coveragePercentage">94% </div><div class="coverage_bar"><div class="coverage_complete" style="width:94%"></div><div class="coverage_ledgend">82/87</div></div></td>
+            <td><div class="coveragePercentage">82% </div><div class="coverage_bar"><div class="coverage_complete" style="width:82%"></div><div class="coverage_ledgend">70/85</div></div></td>
+        </tr>
+
+        <tr>
+            <td><a href="./CyclicStrategy.java.html">CyclicStrategy.java</a></td>
+            <td><div class="coveragePercentage">100% </div><div class="coverage_bar"><div class="coverage_complete" style="width:100%"></div><div class="coverage_ledgend">11/11</div></div></td>
+            <td><div class="coveragePercentage">79% </div><div class="coverage_bar"><div class="coverage_complete" style="width:79%"></div><div class="coverage_ledgend">11/14</div></div></td>
+        </tr>
+
+        <tr>
+            <td><a href="./EnsambleMeasure.java.html">EnsambleMeasure.java</a></td>
+            <td><div class="coveragePercentage">100% </div><div class="coverage_bar"><div class="coverage_complete" style="width:100%"></div><div class="coverage_ledgend">10/10</div></div></td>
+            <td><div class="coveragePercentage">57% </div><div class="coverage_bar"><div class="coverage_complete" style="width:57%"></div><div class="coverage_ledgend">4/7</div></div></td>
+        </tr>
+
+        <tr>
+            <td><a href="./FreesMeasure.java.html">FreesMeasure.java</a></td>
+            <td><div class="coveragePercentage">83% </div><div class="coverage_bar"><div class="coverage_complete" style="width:83%"></div><div class="coverage_ledgend">5/6</div></div></td>
+            <td><div class="coveragePercentage">67% </div><div class="coverage_bar"><div class="coverage_complete" style="width:67%"></div><div class="coverage_ledgend">4/6</div></div></td>
+        </tr>
+
+        <tr>
+            <td><a href="./GreedyStrategy.java.html">GreedyStrategy.java</a></td>
+            <td><div class="coveragePercentage">100% </div><div class="coverage_bar"><div class="coverage_complete" style="width:100%"></div><div class="coverage_ledgend">20/20</div></div></td>
+            <td><div class="coveragePercentage">90% </div><div class="coverage_bar"><div class="coverage_complete" style="width:90%"></div><div class="coverage_ledgend">9/10</div></div></td>
+        </tr>
+
+        <tr>
+            <td><a href="./MonotonicityMeasure.java.html">MonotonicityMeasure.java</a></td>
+            <td><div class="coveragePercentage">100% </div><div class="coverage_bar"><div class="coverage_complete" style="width:100%"></div><div class="coverage_ledgend">9/9</div></div></td>
+            <td><div class="coveragePercentage">100% </div><div class="coverage_bar"><div class="coverage_complete" style="width:100%"></div><div class="coverage_ledgend">15/15</div></div></td>
+        </tr>
+
+        <tr>
+            <td><a href="./NegativeMeasure.java.html">NegativeMeasure.java</a></td>
+            <td><div class="coveragePercentage">100% </div><div class="coverage_bar"><div class="coverage_complete" style="width:100%"></div><div class="coverage_ledgend">4/4</div></div></td>
+            <td><div class="coveragePercentage">0% </div><div class="coverage_bar"><div class="coverage_complete" style="width:0%"></div><div class="coverage_ledgend">0/2</div></div></td>
+        </tr>
+
+        <tr>
+            <td><a href="./RandomStrategy.java.html">RandomStrategy.java</a></td>
+            <td><div class="coveragePercentage">70% </div><div class="coverage_bar"><div class="coverage_complete" style="width:70%"></div><div class="coverage_ledgend">14/20</div></div></td>
+            <td><div class="coveragePercentage">50% </div><div class="coverage_bar"><div class="coverage_complete" style="width:50%"></div><div class="coverage_ledgend">6/12</div></div></td>
+        </tr>
+
+        <tr>
+            <td><a href="./SmoothMeasure.java.html">SmoothMeasure.java</a></td>
+            <td><div class="coveragePercentage">100% </div><div class="coverage_bar"><div class="coverage_complete" style="width:100%"></div><div class="coverage_ledgend">9/9</div></div></td>
+            <td><div class="coveragePercentage">87% </div><div class="coverage_bar"><div class="coverage_complete" style="width:87%"></div><div class="coverage_ledgend">13/15</div></div></td>
+        </tr>
+
+        <tr>
+            <td><a href="./SmoothStrategy.java.html">SmoothStrategy.java</a></td>
+            <td><div class="coveragePercentage">90% </div><div class="coverage_bar"><div class="coverage_complete" style="width:90%"></div><div class="coverage_ledgend">28/31</div></div></td>
+            <td><div class="coveragePercentage">63% </div><div class="coverage_bar"><div class="coverage_complete" style="width:63%"></div><div class="coverage_ledgend">17/27</div></div></td>
+        </tr>
+
+        <tr>
+            <td><a href="./SumMeasure.java.html">SumMeasure.java</a></td>
+            <td><div class="coveragePercentage">100% </div><div class="coverage_bar"><div class="coverage_complete" style="width:100%"></div><div class="coverage_ledgend">6/6</div></div></td>
+            <td><div class="coveragePercentage">75% </div><div class="coverage_bar"><div class="coverage_complete" style="width:75%"></div><div class="coverage_ledgend">6/8</div></div></td>
+        </tr>
+
+        <tr>
+            <td><a href="./UCTStrategy.java.html">UCTStrategy.java</a></td>
+            <td><div class="coveragePercentage">84% </div><div class="coverage_bar"><div class="coverage_complete" style="width:84%"></div><div class="coverage_ledgend">93/111</div></div></td>
+            <td><div class="coveragePercentage">48% </div><div class="coverage_bar"><div class="coverage_complete" style="width:48%"></div><div class="coverage_ledgend">28/58</div></div></td>
+        </tr>
+
+        <tr>
+            <td><a href="./ZeroMeasure.java.html">ZeroMeasure.java</a></td>
+            <td><div class="coveragePercentage">100% </div><div class="coverage_bar"><div class="coverage_complete" style="width:100%"></div><div class="coverage_ledgend">2/2</div></div></td>
+            <td><div class="coveragePercentage">0% </div><div class="coverage_bar"><div class="coverage_complete" style="width:0%"></div><div class="coverage_ledgend">0/1</div></div></td>
+        </tr>
+
+     </tbody>
+</table>
+<br/>
+
+
+
+<hr/>
+
+Report generated by <a href='http://pitest.org'>PIT</a> 1.1.10
+
+</body>
+</html>

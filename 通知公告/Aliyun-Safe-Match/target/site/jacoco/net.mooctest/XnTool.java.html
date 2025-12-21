@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>XnTool.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Aliyun-Safe-Match</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">XnTool.java</span></div><h1>XnTool.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+/**
+ * 解析网址中的xn--部分
+ */
+<span class="nc" id="L6">public class XnTool {</span>
+	
+<span class="nc" id="L8">	static int TMIN = 1;</span>
+<span class="nc" id="L9">	static int TMAX = 26;</span>
+<span class="nc" id="L10">	static int BASE = 36;</span>
+<span class="nc" id="L11">	static int INITIAL_N = 128;</span>
+<span class="nc" id="L12">	static int INITIAL_BIAS = 72;</span>
+<span class="nc" id="L13">	static int DAMP = 700;</span>
+<span class="nc" id="L14">	static int SKEW = 38;</span>
+<span class="nc" id="L15">	static char DELIMITER = '-';</span>
+
+	/**
+	 * Punycodes a unicode string.
+	 * 
+	 * @param input
+	 *            Unicode string.
+	 * 
+	 * @return Punycoded string.
+	 */
+	public static String encode(String input) throws Exception {
+<span class="nc" id="L26">		int n = INITIAL_N;</span>
+<span class="nc" id="L27">		int delta = 0;</span>
+<span class="nc" id="L28">		int bias = INITIAL_BIAS;</span>
+<span class="nc" id="L29">		StringBuilder output = new StringBuilder();</span>
+		// Copy all basic code points to the output
+<span class="nc" id="L31">		int b = 0;</span>
+<span class="nc bnc" id="L32" title="All 2 branches missed.">		for (int i = 0; i &lt; input.length(); i++) {</span>
+<span class="nc" id="L33">			char c = input.charAt(i);</span>
+<span class="nc bnc" id="L34" title="All 2 branches missed.">			if (isBasic(c)) {</span>
+<span class="nc" id="L35">				output.append(c);</span>
+<span class="nc" id="L36">				b++;</span>
+			}
+		}
+		// Append delimiter
+<span class="nc bnc" id="L40" title="All 2 branches missed.">		if (b &gt; 0) {</span>
+<span class="nc" id="L41">			output.append(DELIMITER);</span>
+		}
+<span class="nc" id="L43">		int h = b;</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">		while (h &lt; input.length()) {</span>
+<span class="nc" id="L45">			int m = Integer.MAX_VALUE;</span>
+			// Find the minimum code point &gt;= n
+<span class="nc bnc" id="L47" title="All 2 branches missed.">			for (int i = 0; i &lt; input.length(); i++) {</span>
+<span class="nc" id="L48">				int c = input.charAt(i);</span>
+<span class="nc bnc" id="L49" title="All 4 branches missed.">				if (c &gt;= n &amp;&amp; c &lt; m) {</span>
+<span class="nc" id="L50">					m = c;</span>
+				}
+			}
+<span class="nc bnc" id="L53" title="All 2 branches missed.">			if (m - n &gt; (Integer.MAX_VALUE - delta) / (h + 1)) {</span>
+<span class="nc" id="L54">				throw new Exception(&quot;OVERFLOW&quot;);</span>
+			}
+<span class="nc" id="L56">			delta = delta + (m - n) * (h + 1);</span>
+<span class="nc" id="L57">			n = m;</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">			for (int j = 0; j &lt; input.length(); j++) {</span>
+<span class="nc" id="L59">				int c = input.charAt(j);</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">				if (c &lt; n) {</span>
+<span class="nc" id="L61">					delta++;</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">					if (0 == delta) {</span>
+<span class="nc" id="L63">						throw new Exception(&quot;OVERFLOW&quot;);</span>
+					}
+				}
+<span class="nc bnc" id="L66" title="All 2 branches missed.">				if (c == n) {</span>
+<span class="nc" id="L67">					int q = delta;</span>
+<span class="nc" id="L68">					for (int k = BASE;; k += BASE) {</span>
+						int t;
+<span class="nc bnc" id="L70" title="All 2 branches missed.">						if (k &lt;= bias) {</span>
+<span class="nc" id="L71">							t = TMIN;</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">						} else if (k &gt;= bias + TMAX) {</span>
+<span class="nc" id="L73">							t = TMAX;</span>
+						} else {
+<span class="nc" id="L75">							t = k - bias;</span>
+						}
+<span class="nc bnc" id="L77" title="All 2 branches missed.">						if (q &lt; t) {</span>
+<span class="nc" id="L78">							break;</span>
+						}
+<span class="nc" id="L80">						output.append((char) digit2codepoint(t + (q - t)</span>
+								% (BASE - t)));
+<span class="nc" id="L82">						q = (q - t) / (BASE - t);</span>
+					}
+<span class="nc" id="L84">					output.append((char) digit2codepoint(q));</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">					bias = adapt(delta, h + 1, h == b);</span>
+<span class="nc" id="L86">					delta = 0;</span>
+<span class="nc" id="L87">					h++;</span>
+				}
+			}
+<span class="nc" id="L90">			delta++;</span>
+<span class="nc" id="L91">			n++;</span>
+<span class="nc" id="L92">		}</span>
+<span class="nc" id="L93">		return output.toString();</span>
+	}
+
+	/**
+	 * Decode a punycoded string.
+	 * 
+	 * @param input
+	 *            Punycode string
+	 * 
+	 * @return Unicode string.
+	 */
+	public static String decode(String input) throws Exception {
+<span class="nc" id="L105">		int n = INITIAL_N;</span>
+<span class="nc" id="L106">		int i = 0;</span>
+<span class="nc" id="L107">		int bias = INITIAL_BIAS;</span>
+<span class="nc" id="L108">		StringBuilder output = new StringBuilder();</span>
+<span class="nc" id="L109">		int d = input.lastIndexOf(DELIMITER);</span>
+<span class="nc bnc" id="L110" title="All 2 branches missed.">		if (d &gt; 0) {</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">			for (int j = 0; j &lt; d; j++) {</span>
+<span class="nc" id="L112">				char c = input.charAt(j);</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">				if (!isBasic(c)) {</span>
+<span class="nc" id="L114">					throw new Exception(&quot;BAD_INPUT&quot;);</span>
+				}
+<span class="nc" id="L116">				output.append(c);</span>
+			}
+<span class="nc" id="L118">			d++;</span>
+		} else {
+<span class="nc" id="L120">			d = 0;</span>
+		}
+<span class="nc bnc" id="L122" title="All 2 branches missed.">		while (d &lt; input.length()) {</span>
+<span class="nc" id="L123">			int oldi = i;</span>
+<span class="nc" id="L124">			int w = 1;</span>
+<span class="nc" id="L125">			for (int k = BASE;; k += BASE) {</span>
+<span class="nc bnc" id="L126" title="All 2 branches missed.">				if (d == input.length()) {</span>
+<span class="nc" id="L127">					throw new Exception(&quot;BAD_INPUT&quot;);</span>
+				}
+<span class="nc" id="L129">				int c = input.charAt(d++);</span>
+<span class="nc" id="L130">				int digit = codepoint2digit(c);</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">				if (digit &gt; (Integer.MAX_VALUE - i) / w) {</span>
+<span class="nc" id="L132">					throw new Exception(&quot;OVERFLOW&quot;);</span>
+				}
+<span class="nc" id="L134">				i = i + digit * w;</span>
+				int t;
+<span class="nc bnc" id="L136" title="All 2 branches missed.">				if (k &lt;= bias) {</span>
+<span class="nc" id="L137">					t = TMIN;</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">				} else if (k &gt;= bias + TMAX) {</span>
+<span class="nc" id="L139">					t = TMAX;</span>
+				} else {
+<span class="nc" id="L141">					t = k - bias;</span>
+				}
+<span class="nc bnc" id="L143" title="All 2 branches missed.">				if (digit &lt; t) {</span>
+<span class="nc" id="L144">					break;</span>
+				}
+<span class="nc" id="L146">				w = w * (BASE - t);</span>
+			}
+<span class="nc bnc" id="L148" title="All 2 branches missed.">			bias = adapt(i - oldi, output.length() + 1, oldi == 0);</span>
+<span class="nc bnc" id="L149" title="All 2 branches missed.">			if (i / (output.length() + 1) &gt; Integer.MAX_VALUE - n) {</span>
+<span class="nc" id="L150">				throw new Exception(&quot;OVERFLOW&quot;);</span>
+			}
+<span class="nc" id="L152">			n = n + i / (output.length() + 1);</span>
+<span class="nc" id="L153">			i = i % (output.length() + 1);</span>
+<span class="nc" id="L154">			output.insert(i, (char) n);</span>
+<span class="nc" id="L155">			i++;</span>
+<span class="nc" id="L156">		}</span>
+<span class="nc" id="L157">		return output.toString();</span>
+	}
+
+	public static int adapt(int delta, int numpoints, boolean first) {
+<span class="nc bnc" id="L161" title="All 2 branches missed.">		if (first) {</span>
+<span class="nc" id="L162">			delta = delta / DAMP;</span>
+		} else {
+<span class="nc" id="L164">			delta = delta / 2;</span>
+		}
+<span class="nc" id="L166">		delta = delta + (delta / numpoints);</span>
+<span class="nc" id="L167">		int k = 0;</span>
+<span class="nc bnc" id="L168" title="All 2 branches missed.">		while (delta &gt; ((BASE - TMIN) * TMAX) / 2) {</span>
+<span class="nc" id="L169">			delta = delta / (BASE - TMIN);</span>
+<span class="nc" id="L170">			k = k + BASE;</span>
+		}
+<span class="nc" id="L172">		return k + ((BASE - TMIN + 1) * delta) / (delta + SKEW);</span>
+	}
+
+	public static boolean isBasic(char c) {
+<span class="nc bnc" id="L176" title="All 2 branches missed.">		return c &lt; 0x80;</span>
+	}
+
+	public static int digit2codepoint(int d) throws Exception {
+<span class="nc bnc" id="L180" title="All 2 branches missed.">		if (d &lt; 26) {</span>
+			// 0..25 : 'a'..'z'
+<span class="nc" id="L182">			return d + 'a';</span>
+<span class="nc bnc" id="L183" title="All 2 branches missed.">		} else if (d &lt; 36) {</span>
+			// 26..35 : '0'..'9';
+<span class="nc" id="L185">			return d - 26 + '0';</span>
+		} else {
+<span class="nc" id="L187">			throw new Exception(&quot;BAD_INPUT&quot;);</span>
+		}
+	}
+
+	public static int codepoint2digit(int c) throws Exception {
+<span class="nc bnc" id="L192" title="All 2 branches missed.">		if (c - '0' &lt; 10) {</span>
+			// '0'..'9' : 26..35
+<span class="nc" id="L194">			return c - '0' + 26;</span>
+<span class="nc bnc" id="L195" title="All 2 branches missed.">		} else if (c - 'a' &lt; 26) {</span>
+			// 'a'..'z' : 0..25
+<span class="nc" id="L197">			return c - 'a';</span>
+		} else {
+<span class="nc" id="L199">			throw new Exception(&quot;BAD_INPUT&quot;);</span>
+		}
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

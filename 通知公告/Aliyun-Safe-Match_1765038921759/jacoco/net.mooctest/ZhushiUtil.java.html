@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ZhushiUtil.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Aliyun-Safe-Match</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">ZhushiUtil.java</span></div><h1>ZhushiUtil.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+/**
+ * 处理注释
+ */
+<span class="nc" id="L6">public class ZhushiUtil {</span>
+
+	public static String removeZhushi(String htmlContent) {
+		// 去掉注释 &lt;!-- --&gt;
+<span class="fc" id="L10">		htmlContent = removeZhushi1(htmlContent);</span>
+		// 去掉注释 /**/
+<span class="fc" id="L12">		htmlContent = removeZhushi2(htmlContent);</span>
+//		// 去掉注释 //  http://
+//		htmlContent = removeZhushi3(htmlContent);
+<span class="fc" id="L15">		return htmlContent;</span>
+	}
+
+	/**
+	 *  去掉注释 &lt;!-- --&gt;
+	 */
+	public static String removeZhushi1(String str) {
+
+<span class="fc" id="L23">		while (true) {</span>
+
+<span class="fc" id="L25">			int start = str.indexOf(&quot;&lt;!--&quot;);</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">			if (start == -1)</span>
+<span class="fc" id="L27">				return str;</span>
+
+<span class="fc" id="L29">			int end = str.indexOf(&quot;--&gt;&quot;, start + 4);</span>
+<span class="fc bfc" id="L30" title="All 2 branches covered.">			if (end == -1)</span>
+<span class="fc" id="L31">				return str;</span>
+
+<span class="fc" id="L33">			end += 4;</span>
+<span class="fc" id="L34">			StringBuilder builder = new StringBuilder();</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">			for (int i = 0; i &lt; str.length(); ++i) {</span>
+<span class="fc bfc" id="L36" title="All 4 branches covered.">				if (i &gt;= start &amp;&amp; i &lt; end)</span>
+<span class="fc" id="L37">					continue;</span>
+<span class="fc" id="L38">				builder.append(str.charAt(i));</span>
+			}
+<span class="fc" id="L40">			str = builder.toString();</span>
+		}
+	}
+
+	// 去掉注释 /**/
+	public static String removeZhushi2(String str) {
+
+<span class="fc" id="L47">		while (true) {</span>
+
+<span class="fc" id="L49">			int start = str.indexOf(&quot;/*&quot;);</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">			if (start == -1)</span>
+<span class="fc" id="L51">				return str;</span>
+
+<span class="fc" id="L53">			int end = str.indexOf(&quot;*/&quot;, start + 2);</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">			if (end == -1)</span>
+<span class="fc" id="L55">				return str;</span>
+
+<span class="fc" id="L57">			end += 2;</span>
+<span class="fc" id="L58">			StringBuilder builder = new StringBuilder();</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">			for (int i = 0; i &lt; str.length(); ++i) {</span>
+<span class="fc bfc" id="L60" title="All 4 branches covered.">				if (i &gt;= start &amp;&amp; i &lt; end)</span>
+<span class="fc" id="L61">					continue;</span>
+<span class="fc" id="L62">				builder.append(str.charAt(i));</span>
+			}
+<span class="fc" id="L64">			str = builder.toString();</span>
+		}
+	}
+
+	// 去掉注释 //  但是会误判： http://
+	public static String removeZhushi3(String str) {
+
+<span class="fc" id="L71">		while (true) {</span>
+
+<span class="fc" id="L73">			int start = str.indexOf(&quot;//&quot;);</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">			if (start == -1)</span>
+<span class="fc" id="L75">				return str;</span>
+
+<span class="fc" id="L77">			int end = str.indexOf(&quot;\n&quot;, start + 2);</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">			if (end == -1)</span>
+<span class="fc" id="L79">				return str;</span>
+
+<span class="fc" id="L81">			end += 2;</span>
+<span class="fc" id="L82">			StringBuilder builder = new StringBuilder();</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">			for (int i = 0; i &lt; str.length(); ++i) {</span>
+<span class="fc bfc" id="L84" title="All 4 branches covered.">				if (i &gt;= start &amp;&amp; i &lt; end)</span>
+<span class="fc" id="L85">					continue;</span>
+<span class="fc" id="L86">				builder.append(str.charAt(i));</span>
+			}
+<span class="fc" id="L88">			str = builder.toString();</span>
+		}
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

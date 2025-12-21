@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FunctionFormulaCalculation.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Mathematical-Expression</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">FunctionFormulaCalculation.java</span></div><h1>FunctionFormulaCalculation.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import java.util.Stack;
+
+/**
+ * 一个支持函数运算操作的计算组件，在该组件中，支持使用函数进行表达式的运算，需要注意，本类由于是针对数值的计算，因此仅仅支持” ManyToOneNumberFunction “类型的函数进行计算，需要注意的是，在此类中的函数参数只能有一个！
+ * &lt;p&gt;
+ * A calculation component that supports function operation. In this component, it supports the operation of expressions using functions. Note that this class only supports the calculation of functions of the type &quot;ManyToOneNumberFunction&quot; because it is for numerical calculation
+ * &lt;p&gt;
+ * 更新：当前组件只能运算具有一个函数形参的数学表达式，针对函数的多参运算，请您使用新版API“FunctionFormulaCalculation2”
+ * Update: The current component can only operate on mathematical expressions with one function parameter. For multi parameter operation of functions, please use the new API &quot;FunctionFormulaCalculation2&quot;
+ *
+ * @author zhao
+ * @see FunctionFormulaCalculation2 新版函数运算组件 New version of function operation component
+ */
+public class FunctionFormulaCalculation extends NumberCalculation {
+
+<span class="nc" id="L18">    public final static BracketsCalculation2 BRACKETS_CALCULATION_2 = BracketsCalculation2.getInstance(CalculationManagement.BRACKETS_CALCULATION_2_NAME);</span>
+
+    protected FunctionFormulaCalculation(String name) {
+<span class="nc" id="L21">        super(name);</span>
+<span class="nc" id="L22">    }</span>
+
+    protected FunctionFormulaCalculation() {
+<span class="nc" id="L25">        this(Mathematical_Expression.functionFormulaCalculation.name() + &quot;_temp&quot;);</span>
+<span class="nc" id="L26">    }</span>
+
+    /**
+     * 从管理者中获取到指定名称的计算组件，注意 如果管理者中不存在该名称的组件，那么该组件就会自动的注册
+     * &lt;p&gt;
+     * Get the calculation component with the specified name from the manager. Note that if there is no component with this name in the manager, the component will be registered automatically
+     *
+     * @param CalculationName 组件的名字
+     * @return 解析括号类计算公式的计算组件
+     */
+    public static FunctionFormulaCalculation getInstance(String CalculationName) {
+<span class="nc bnc" id="L37" title="All 2 branches missed.">        if (CalculationManagement.isRegister(CalculationName)) {</span>
+<span class="nc" id="L38">            final Calculation calculationByName = CalculationManagement.getCalculationByName(CalculationName);</span>
+<span class="nc bnc" id="L39" title="All 2 branches missed.">            if (calculationByName instanceof FunctionFormulaCalculation) {</span>
+<span class="nc" id="L40">                return (FunctionFormulaCalculation) calculationByName;</span>
+            } else {
+<span class="nc" id="L42">                throw new ExtractException(</span>
+                        &quot;您需要的计算组件[&quot; + CalculationName + &quot;]被找到了，但是它似乎不属于 FunctionFormulaCalculation 类型\n请您重新定义一个名称。&quot;
+                );
+            }
+        } else {
+<span class="nc" id="L47">            FunctionFormulaCalculation FunctionFormulaCalculation = new FunctionFormulaCalculation(CalculationName);</span>
+<span class="nc" id="L48">            CalculationManagement.register(FunctionFormulaCalculation, false);</span>
+<span class="nc" id="L49">            return FunctionFormulaCalculation;</span>
+        }
+    }
+
+    /**
+     * 格式化一个公式 使得其可以被该计算组件进行运算
+     * &lt;p&gt;
+     * Format a formula so that it can be calculated by the calculation component
+     *
+     * @param string 数学运算公式
+     * @return 格式化之后的数学运算公式
+     */
+    @Override
+    public String formatStr(String string) {
+<span class="nc" id="L63">        return string.replaceAll(&quot;\\s+&quot;, &quot;&quot;);</span>
+    }
+
+    /**
+     * 检查公式格式是否正确，如果不正确就会抛出一个异常
+     * &lt;p&gt;
+     * Check whether the formula format is correct. If not, an exception will be thrown
+     *
+     * @param string 需要被判断格式的数学运算公式
+     *               &lt;p&gt;
+     *               Mathematical operation formula of the format to be judged
+     */
+    @Override
+    public void check(String string) throws WrongFormat {
+        // 将所有函数进行提取
+<span class="nc" id="L78">        final Stack&lt;Integer&gt; start = new Stack&lt;&gt;();</span>
+<span class="nc" id="L79">        final Stack&lt;Integer&gt; end = new Stack&lt;&gt;();</span>
+<span class="nc" id="L80">        StringBuilder stringBuilder = new StringBuilder();</span>
+        // 创建一个标记，标记是否进入函数
+<span class="nc" id="L82">        boolean b = false;</span>
+<span class="nc" id="L83">        int count = 0;</span>
+<span class="nc" id="L84">        final char[] chars = string.toCharArray();</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        for (int i = 0; i &lt; chars.length; i++) {</span>
+<span class="nc" id="L86">            char aChar = chars[i];</span>
+<span class="nc bnc" id="L87" title="All 8 branches missed.">            if (((aChar &gt;= ConstantRegion.BA_ASCII &amp;&amp; aChar &lt;= ConstantRegion.BZ_ASCII) || (aChar &gt;= ConstantRegion.SA_ASCII &amp;&amp; aChar &lt;= ConstantRegion.SZ_ASCII))) {</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">                if (!b) {</span>
+                    // 如果是刚刚进入函数，就将当前索引添加到栈
+<span class="nc" id="L90">                    b = true;</span>
+<span class="nc" id="L91">                    start.push(i);</span>
+                }
+                // 如果当前是函数的名字，就将函数起始索引继续移动，将函数名字部分的索引去除
+<span class="nc" id="L94">                start.push(start.pop() + 1);</span>
+<span class="nc bnc" id="L95" title="All 4 branches missed.">            } else if (b &amp;&amp; aChar == ConstantRegion.LEFT_BRACKET) {</span>
+<span class="nc" id="L96">                count += 1;</span>
+<span class="nc bnc" id="L97" title="All 6 branches missed.">            } else if (b &amp;&amp; aChar == ConstantRegion.RIGHT_BRACKET &amp;&amp; --count == 0) {</span>
+                // 如果是函数结束，就将函数的终止点索引添加到栈
+<span class="nc" id="L99">                b = false;</span>
+<span class="nc" id="L100">                end.push(i);</span>
+<span class="nc bnc" id="L101" title="All 4 branches missed.">            } else if (!b &amp;&amp; aChar != ConstantRegion.EMPTY) {</span>
+<span class="nc" id="L102">                stringBuilder.append(aChar);</span>
+            }
+        }
+        // 迭代所有的函数公式，判断是否有错误
+<span class="nc" id="L106">        int size = start.size();</span>
+<span class="nc" id="L107">        int size1 = end.size();</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">        if (size == size1) {</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">            for (int i = 0; i &lt; size; i++) {</span>
+<span class="nc" id="L110">                super.check(string.substring(start.pop() + 2, end.pop()));</span>
+<span class="nc" id="L111">                stringBuilder.append('0');</span>
+            }
+            // 检查最终公式
+<span class="nc" id="L114">            super.check(stringBuilder.toString());</span>
+        } else {
+<span class="nc" id="L116">            throw new WrongFormat(&quot;函数可能缺少起始或结束括号，没有正常的闭环。\nThe function may lack a start or end bracket, and there is no normal closed loop\nMissing function bracket logarithm: &quot; + Math.abs(size - size1));</span>
+        }
+<span class="nc" id="L118">    }</span>
+
+    /**
+     * 计算一个数学表达式，并将计算细节与计算结果存储到数值结果集中。
+     * &lt;p&gt;
+     * Compute a mathematical expression and store the calculation details and results in the numerical result set.
+     *
+     * @param Formula        被计算的表达式，要求返回值是一个数值。
+     *                       &lt;p&gt;
+     *                       The returned value of the evaluated expression is required to be a numeric value.
+     * @param formatRequired 是否需要被格式化，用于确保公式格式正确。
+     *                       &lt;p&gt;
+     *                       Whether it needs to be formatted to ensure that the formula format is correct.
+     * @return 数值结果集对象，其中保存着每一步的操作数据，以及最终结果数值
+     * &lt;p&gt;
+     * Numerical result set object, which stores the operation data of each step and the final result value
+     */
+    @Override
+    public CalculationNumberResults calculation(String Formula, boolean formatRequired) {
+        // 创建一个公式缓冲区
+<span class="nc" id="L138">        final StringBuilder stringBuilder = new StringBuilder();</span>
+        {
+<span class="nc" id="L140">            final char[] chars = Formula.toCharArray();</span>
+            // 创建变量，负责记录函数的起始索引
+<span class="nc" id="L142">            int start = 0;</span>
+            // 创建一个计数器，统计括号对数
+<span class="nc" id="L144">            int count = 0;</span>
+            // 创建一个状态，统计是否进入函数
+<span class="nc" id="L146">            boolean setOk = false;</span>
+            // 创建一个字符缓冲区，用于存储函数的名字
+<span class="nc" id="L148">            final StringBuilder name = new StringBuilder();</span>
+            // 开始迭代公式，找到函数的索引值
+<span class="nc bnc" id="L150" title="All 2 branches missed.">            for (int i = 0; i &lt; chars.length; ++i) {</span>
+<span class="nc" id="L151">                final char aChar = chars[i];</span>
+<span class="nc bnc" id="L152" title="All 8 branches missed.">                if (((aChar &gt;= ConstantRegion.BA_ASCII &amp;&amp; aChar &lt;= ConstantRegion.BZ_ASCII) || (aChar &gt;= ConstantRegion.SA_ASCII &amp;&amp; aChar &lt;= ConstantRegion.SZ_ASCII))) {</span>
+                    // 如果是字母，代表当前就是函数的起始点，将这个函数的名字存储到临时缓冲区
+<span class="nc bnc" id="L154" title="All 2 branches missed.">                    if (!setOk) {</span>
+<span class="nc" id="L155">                        start = i;</span>
+<span class="nc" id="L156">                        setOk = true;</span>
+                    }
+<span class="nc" id="L158">                    name.append(aChar);</span>
+<span class="nc bnc" id="L159" title="All 4 branches missed.">                } else if (setOk &amp;&amp; aChar == ConstantRegion.LEFT_BRACKET) {</span>
+                    // 如果是一个左括号 同时当前属于函数范围内，就为计数器加1
+<span class="nc" id="L161">                    count += 1;</span>
+<span class="nc bnc" id="L162" title="All 6 branches missed.">                } else if (setOk &amp;&amp; aChar == ConstantRegion.RIGHT_BRACKET &amp;&amp; --count == 0) {</span>
+                    // 如果当前区域是函数内，同时当前是一个右括号，而且该括号是与起始括号相对应的，代表函数结束
+<span class="nc" id="L164">                    setOk = false;</span>
+                    // 通过函数名字获取到函数组件
+<span class="nc" id="L166">                    ManyToOneNumberFunction functionByName = CalculationManagement.getFunctionByName(name.toString());</span>
+                    // 使用括号计算组件，计算出函数实参，然后通过函数将函数内的公式计算出来
+<span class="nc" id="L168">                    double run = functionByName.run(BRACKETS_CALCULATION_2.calculation(Formula.substring(start + name.length() + 1, i), formatRequired).getResult());</span>
+<span class="nc" id="L169">                    name.delete(0, name.length());</span>
+                    // 将当前的函数结果添加到公式缓冲区，这里判断了下run的精度，如果run是一个整数，就直接转换成整数添加
+<span class="nc" id="L171">                    int run1 = (int) run;</span>
+<span class="nc bnc" id="L172" title="All 2 branches missed.">                    if (run == run1) {</span>
+<span class="nc" id="L173">                        stringBuilder.append(run1);</span>
+                    } else {
+<span class="nc" id="L175">                        stringBuilder.append(run);</span>
+                    }
+<span class="nc bnc" id="L177" title="All 4 branches missed.">                } else if (!setOk &amp;&amp; aChar != ConstantRegion.EMPTY) {</span>
+                    // 如果是其他情况就直接将字符添加到公式中
+<span class="nc" id="L179">                    stringBuilder.append(aChar);</span>
+                }
+            }
+        }
+        // 将当前不包含函数的公式使用括号表达式解析计算出来
+<span class="nc" id="L184">        return BRACKETS_CALCULATION_2.calculation(stringBuilder.toString(), formatRequired);</span>
+    }
+
+    /**
+     * 计算一个数学表达式，并将计算细节与计算结果存储到数值结果集中。
+     * &lt;p&gt;
+     * Compute a mathematical expression and store the calculation details and results in the numerical result set.
+     *
+     * @param Formula 被计算的表达式，要求返回值是一个数值。
+     *                &lt;p&gt;
+     *                The returned value of the evaluated expression is required to be a numeric value.
+     */
+    @Override
+    public CalculationNumberResults calculation(String Formula) {
+<span class="nc" id="L198">        return this.calculation(Formula, true);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

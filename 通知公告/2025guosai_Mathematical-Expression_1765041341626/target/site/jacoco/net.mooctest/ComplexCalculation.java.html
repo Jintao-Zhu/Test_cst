@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ComplexCalculation.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Mathematical-Expression</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">ComplexCalculation.java</span></div><h1>ComplexCalculation.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import static net.mooctest.CalculationManagement.FUNCTION_FORMULA_CALCULATION_2_NAME;
+
+import java.util.PrimitiveIterator;
+
+/**
+ * 复数计算组件，此组件中支持对于复数的表达式的运算！
+ * &lt;p&gt;
+ * Complex calculation component, which supports operations on complex expressions!
+ *
+ * @author zhao
+ */
+public class ComplexCalculation extends NumberCalculation implements CompileCalculation {
+
+<span class="nc" id="L16">    protected final static FunctionFormulaCalculation2 FUNCTION_FORMULA_CALCULATION_2 = FunctionFormulaCalculation2.getInstance(FUNCTION_FORMULA_CALCULATION_2_NAME);</span>
+
+    protected ComplexCalculation(String name) {
+<span class="nc" id="L19">        super(name);</span>
+<span class="nc" id="L20">    }</span>
+
+    /**
+     * 从管理者中获取到指定名称的计算组件，注意 如果管理者中不存在该名称的组件，那么该组件就会自动的注册
+     * &lt;p&gt;
+     * Get the calculation component with the specified name from the manager. Note that if there is no component with this name in the manager, the component will be registered automatically
+     *
+     * @param CalculationName 组件的名字
+     * @return 解析比较运算公式的计算组件对象
+     */
+    public static ComplexCalculation getInstance(String CalculationName) {
+<span class="nc bnc" id="L31" title="All 2 branches missed.">        if (CalculationManagement.isRegister(CalculationName)) {</span>
+<span class="nc" id="L32">            final Calculation calculationByName = CalculationManagement.getCalculationByName(CalculationName);</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">            if (calculationByName instanceof ComplexCalculation) {</span>
+<span class="nc" id="L34">                return (ComplexCalculation) calculationByName;</span>
+            } else {
+<span class="nc" id="L36">                throw new ExtractException(</span>
+                        &quot;您需要的计算组件[&quot; + CalculationName + &quot;]被找到了，但是它似乎不属于 ComplexCalculation 类型\n请您重新定义一个名称。&quot;
+                );
+            }
+        } else {
+<span class="nc" id="L41">            ComplexCalculation BooleanCalculation2 = new ComplexCalculation(CalculationName);</span>
+<span class="nc" id="L42">            CalculationManagement.register(BooleanCalculation2, false);</span>
+<span class="nc" id="L43">            return BooleanCalculation2;</span>
+        }
+    }
+
+    /**
+     * 获取复数表达式的计算结果
+     *
+     * @param Formula  需要被计算的表达式
+     * @param explain  实部的计算结果
+     * @param explain1 虚部的计算结果
+     * @param name     计算结果的名称
+     * @return LogResults
+     */
+    private static LogResults getLogResults(String Formula, LogResults explain, LogResults explain1, String name) {
+        // 生成名字
+<span class="nc" id="L58">        final String s = &quot;start&quot; + System.currentTimeMillis();</span>
+<span class="nc" id="L59">        final LogResults logResults = new LogResults(s, explain, explain1);</span>
+<span class="nc" id="L60">        logResults.setNameJoin(false);</span>
+<span class="nc" id="L61">        logResults.setPrefix(s + &quot;(\&quot;&quot; + Formula + &quot;\&quot;)&quot;);</span>
+<span class="nc" id="L62">        logResults.setResult(</span>
+<span class="nc" id="L63">                new CalculationComplexResults(-1, (double) explain.getResult(), (double) explain1.getResult(), name)</span>
+        );
+<span class="nc" id="L65">        logResults.put(&quot;result&quot;, logResults.getResult().toString());</span>
+<span class="nc" id="L66">        return logResults;</span>
+    }
+
+    @Override
+    public String formatStr(String string) {
+<span class="nc" id="L71">        return StrUtils.removeEmpty(string);</span>
+    }
+
+    @Override
+    public CalculationNumberResults calculation(String Formula, boolean formatRequired) {
+<span class="nc bnc" id="L76" title="All 2 branches missed.">        return Mathematical_Expression.Options.isUseBigDecimal() ?</span>
+<span class="nc" id="L77">                this.compile(Formula, formatRequired).calculationBigDecimalsCache(false) :</span>
+<span class="nc" id="L78">                this.compile(Formula, formatRequired).calculationCache(false);</span>
+    }
+
+    @Override
+    public ComplexExpression compile(String Formula, boolean formatRequired) {
+<span class="nc bnc" id="L83" title="All 2 branches missed.">        if (formatRequired) {</span>
+<span class="nc" id="L84">            Formula = formatStr(Formula);</span>
+        }
+<span class="nc" id="L86">        return ComplexExpression.compile(Formula, this.getName());</span>
+    }
+
+    @Override
+    public ComplexExpression compileBigDecimal(String Formula, boolean formatRequired) {
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        if (formatRequired) {</span>
+<span class="nc" id="L92">            Formula = formatStr(Formula);</span>
+        }
+<span class="nc" id="L94">        return this.compile(Formula, formatRequired);</span>
+    }
+
+    @Override
+    public void check(String expression) throws WrongFormat {
+        // 首先准备计数器，当前面的右括号与左括号一样的时候 此数值应为0
+<span class="nc" id="L100">        int count = 0;</span>
+<span class="nc" id="L101">        final StringBuilder stringBuilder = new StringBuilder(expression.length());</span>
+<span class="nc" id="L102">        final PrimitiveIterator.OfInt iterator = expression.chars().iterator();</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">        while (iterator.hasNext()) {</span>
+<span class="nc" id="L104">            final char c1 = (char) iterator.next().intValue();</span>
+<span class="nc bnc" id="L105" title="All 4 branches missed.">            switch (c1) {</span>
+                case ConstantRegion.LEFT_BRACKET:
+<span class="nc" id="L107">                    ++count;</span>
+<span class="nc" id="L108">                    break;</span>
+                case ConstantRegion.RIGHT_BRACKET:
+<span class="nc" id="L110">                    --count;</span>
+<span class="nc" id="L111">                    break;</span>
+                case ConstantRegion.PLUS_SIGN:
+                case ConstantRegion.MINUS_SIGN:
+<span class="nc bnc" id="L114" title="All 2 branches missed.">                    if (count == 0) {</span>
+                        // 检查实部
+<span class="nc" id="L116">                        FUNCTION_FORMULA_CALCULATION_2.check(stringBuilder.toString());</span>
+                        // 然后编译出剩下的部分 但是要在这里找一下 i 的位置
+<span class="nc" id="L118">                        final int i = expression.lastIndexOf('i');</span>
+                        // 检查虚部
+<span class="nc bnc" id="L120" title="All 4 branches missed.">                        if (i == -1 || expression.length() &lt;= stringBuilder.length()) {</span>
+                            // 找不到 i 或者 总体长度小于等于实部长度 这代表 这个表达式不是一个复数
+<span class="nc" id="L122">                            throw new WrongFormat(&quot;The imaginary part of the complex number is not found. error =&gt; &quot; + expression.substring(stringBuilder.length()) + &quot; ﹏+/-﹏&lt;imaginary&gt;﹏i&quot;);</span>
+                        }
+<span class="nc" id="L124">                        FUNCTION_FORMULA_CALCULATION_2.check(expression.substring(stringBuilder.length(), i));</span>
+                        // 结束循环
+<span class="nc" id="L126">                        return;</span>
+                    }
+            }
+<span class="nc" id="L129">            stringBuilder.append(c1);</span>
+<span class="nc" id="L130">        }</span>
+<span class="nc" id="L131">        throw new RuntimeException(expression + &quot; is not a complex expression.&quot;);</span>
+    }
+
+    @Override
+    public LogResults explain(String Formula, boolean formatRequired) {
+        // 首先准备计数器，当前面的右括号与左括号一样的时候 此数值应为0
+<span class="nc" id="L137">        int count = 0;</span>
+<span class="nc" id="L138">        final StringBuilder stringBuilder = new StringBuilder(Formula.length());</span>
+<span class="nc" id="L139">        final PrimitiveIterator.OfInt iterator = Formula.chars().iterator();</span>
+<span class="nc bnc" id="L140" title="All 2 branches missed.">        while (iterator.hasNext()) {</span>
+<span class="nc" id="L141">            final char c1 = (char) iterator.next().intValue();</span>
+<span class="nc bnc" id="L142" title="All 4 branches missed.">            switch (c1) {</span>
+                case ConstantRegion.LEFT_BRACKET:
+<span class="nc" id="L144">                    ++count;</span>
+<span class="nc" id="L145">                    break;</span>
+                case ConstantRegion.RIGHT_BRACKET:
+<span class="nc" id="L147">                    --count;</span>
+<span class="nc" id="L148">                    break;</span>
+                case ConstantRegion.PLUS_SIGN:
+                case ConstantRegion.MINUS_SIGN:
+<span class="nc bnc" id="L151" title="All 2 branches missed.">                    if (count == 0) {</span>
+                        // 处理实部
+<span class="nc" id="L153">                        final LogResults explain = FUNCTION_FORMULA_CALCULATION_2.explain(stringBuilder.toString(), formatRequired);</span>
+                        // 然后编译出剩下的部分 但是要在这里找一下 i 的位置
+<span class="nc" id="L155">                        final int i = Formula.lastIndexOf('i');</span>
+                        // 检查虚部
+<span class="nc bnc" id="L157" title="All 4 branches missed.">                        if (i == -1 || Formula.length() &lt;= stringBuilder.length()) {</span>
+                            // 找不到 i 或者 总体长度小于等于实部长度 这代表 这个表达式不是一个复数
+<span class="nc" id="L159">                            throw new UnsupportedOperationException(&quot;The imaginary part of the complex number is not found. error =&gt; &quot; + Formula.substring(stringBuilder.length()) + &quot; ﹏+/-﹏&lt;imaginary&gt;﹏i&quot;);</span>
+                        }
+                        // 结束循环
+<span class="nc" id="L162">                        return getLogResults(Formula, explain, FUNCTION_FORMULA_CALCULATION_2.explain(Formula.substring(stringBuilder.length(), i), formatRequired), this.getName());</span>
+                    }
+            }
+<span class="nc" id="L165">            stringBuilder.append(c1);</span>
+<span class="nc" id="L166">        }</span>
+<span class="nc" id="L167">        throw new RuntimeException(Formula + &quot; is not a complex expression.&quot;);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

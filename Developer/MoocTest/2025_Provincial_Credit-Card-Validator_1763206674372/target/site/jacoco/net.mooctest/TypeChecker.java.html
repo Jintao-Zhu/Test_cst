@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TypeChecker.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Credit-Card-Validator</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">TypeChecker.java</span></div><h1>TypeChecker.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import net.mooctest.CreditCardType;
+
+
+/*
+ * Type checker checking against the most common
+ * credit card types: VISA, AMERICAN EXPXRESS,
+ * DISCOVER &amp; MASTERCARD.
+ */
+<span class="nc" id="L11">public class TypeChecker {</span>
+    /*
+     * @param a String representation of the credit card number
+     * @return CreditCardType enumerable
+     */
+    public static CreditCardType checkType(String creditCardNumber) {
+<span class="fc" id="L17">        CreditCardType type = null;</span>
+
+        // Instantiate credit card validators and set type on match
+<span class="pc bpc" id="L20" title="1 of 2 branches missed.">        while (type == null) {</span>
+            boolean isThisType;
+
+<span class="fc" id="L23">            VisaValidator visaValidator = new VisaValidator(creditCardNumber);</span>
+<span class="fc" id="L24">            isThisType = visaValidator.validate();</span>
+
+<span class="fc bfc" id="L26" title="All 2 branches covered.">            if (isThisType) {</span>
+<span class="fc" id="L27">                type = CreditCardType.VISA;</span>
+<span class="fc" id="L28">                break;</span>
+            }
+
+<span class="fc" id="L31">            AmericanExpressValidator americanExpressValidator = new AmericanExpressValidator(creditCardNumber);</span>
+<span class="fc" id="L32">            isThisType = americanExpressValidator.validate();</span>
+
+<span class="fc bfc" id="L34" title="All 2 branches covered.">            if (isThisType) {</span>
+<span class="fc" id="L35">                type = CreditCardType.AMERICAN_EXPRESS;</span>
+<span class="fc" id="L36">                break;</span>
+            }
+
+<span class="fc" id="L39">            MasterCardValidator masterCardValidator = new MasterCardValidator(creditCardNumber);</span>
+<span class="fc" id="L40">            isThisType = masterCardValidator.validate();</span>
+
+<span class="fc bfc" id="L42" title="All 2 branches covered.">            if (isThisType) {</span>
+<span class="fc" id="L43">                type = CreditCardType.MASTERCARD;</span>
+<span class="fc" id="L44">                break;</span>
+            }
+
+<span class="fc" id="L47">            DiscoverValidator discoverValidator = new DiscoverValidator(creditCardNumber);</span>
+<span class="fc" id="L48">            isThisType = discoverValidator.validate();</span>
+
+<span class="fc bfc" id="L50" title="All 2 branches covered.">            if (isThisType) {</span>
+<span class="fc" id="L51">                type = CreditCardType.DISCOVER;</span>
+<span class="fc" id="L52">                break;</span>
+            }
+
+            // If credit card type does not match, mark as &quot;other&quot;
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">            if (type == null) {</span>
+<span class="fc" id="L57">                type = CreditCardType.OTHER;</span>
+<span class="fc" id="L58">                break;</span>
+            }
+
+<span class="nc" id="L61">        }</span>
+
+<span class="fc" id="L63">        return type;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

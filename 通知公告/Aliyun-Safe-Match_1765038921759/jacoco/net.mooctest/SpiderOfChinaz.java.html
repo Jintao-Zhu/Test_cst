@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SpiderOfChinaz.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Aliyun-Safe-Match</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">SpiderOfChinaz.java</span></div><h1>SpiderOfChinaz.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+/**
+ * 找到国内知名的网站
+ */
+<span class="nc" id="L16">public class SpiderOfChinaz {</span>
+	
+	public static void main(String[] args) {
+<span class="nc" id="L19">		SpiderOfChinaz.run();</span>
+<span class="nc" id="L20">	}</span>
+	
+	private static void run() {
+<span class="nc" id="L23">		PrintWriter printWriter = null;</span>
+<span class="nc" id="L24">		int i =0;</span>
+		try {
+			
+<span class="nc bnc" id="L27" title="All 2 branches missed.">		for ( i= 1800; i &lt;= 1877; ++i) {</span>
+<span class="nc bnc" id="L28" title="All 2 branches missed.">			if (printWriter == null) {</span>
+<span class="nc" id="L29">				printWriter = getPrintWriter(String.format(&quot;data\\白名单\\%04d.csv&quot;, i));</span>
+<span class="nc" id="L30">			} else {</span>
+<span class="nc bnc" id="L31" title="All 2 branches missed.">				if (i % 200 == 0) {</span>
+<span class="nc" id="L32">					System.out.println(i + &quot; ed&quot;);</span>
+<span class="nc" id="L33">					printWriter.close();</span>
+<span class="nc" id="L34">					printWriter = getPrintWriter(String.format(&quot;data\\白名单\\%04d.csv&quot;, i));</span>
+				}
+			}
+<span class="nc bnc" id="L37" title="All 2 branches missed.">			if (i == 1)</span>
+<span class="nc" id="L38">				crawlData(&quot;&quot;, printWriter);</span>
+			else
+<span class="nc" id="L40">				crawlData(&quot;_&quot; + i, printWriter);</span>
+		}
+<span class="nc" id="L42">		printWriter.close();</span>
+<span class="nc" id="L43">		}catch(Exception e) {</span>
+<span class="nc" id="L44">			System.out.println(&quot;error at i:&quot;+i);</span>
+<span class="nc" id="L45">			e.printStackTrace();</span>
+		}
+		
+<span class="nc" id="L48">	}</span>
+
+	/* 爬取页面数据 */
+	private static void crawlData(String lastPart, PrintWriter printWriter) throws MalformedURLException, IOException {
+		
+<span class="nc" id="L53">		Document document = Jsoup.parse(new URL(&quot;http://top.chinaz.com/all/index_br&quot; + lastPart + &quot;.html&quot;), 3000);</span>
+
+<span class="nc" id="L55">		Elements elements = document.select(&quot;.CentTxt&quot;);</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">		for (Element element : elements) {</span>
+
+<span class="nc" id="L58">			String title = element.select(&quot;.fz14&quot;).text().trim();</span>
+<span class="nc" id="L59">			String url = element.select(&quot;.col-gray&quot;).text().trim();</span>
+
+<span class="nc bnc" id="L61" title="All 8 branches missed.">			if (title.contains(&quot;《&quot;) || title.contains(&quot;》&quot;) || title.contains(&quot;_&quot;) || title.contains(&quot;.&quot;)</span>
+<span class="nc bnc" id="L62" title="All 6 branches missed.">					|| title.contains(&quot;-&quot;) || title.contains(&quot;·&quot;) || title.contains(&quot; &quot;))</span>
+<span class="nc" id="L63">				continue;</span>
+<span class="nc" id="L64">			String str = String.format(&quot;%s,%s\n&quot;, title.toLowerCase(), url.toLowerCase());</span>
+<span class="nc" id="L65">			printWriter.write(str);</span>
+		}
+
+<span class="nc" id="L68">	}</span>
+
+
+	/** 输出覆盖 */
+	public static PrintWriter getPrintWriter(String outFilePath) {
+<span class="nc" id="L73">		PrintWriter out = null;</span>
+		try {
+<span class="nc" id="L75">			out = new PrintWriter(outFilePath);</span>
+<span class="nc" id="L76">		} catch (FileNotFoundException e) {</span>
+<span class="nc" id="L77">			e.printStackTrace();</span>
+<span class="nc" id="L78">			System.out.println(outFilePath+&quot; not found!&quot;);</span>
+<span class="nc" id="L79">			System.exit(0);</span>
+		}
+<span class="nc" id="L81">		return out;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

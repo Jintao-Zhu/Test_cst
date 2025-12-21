@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite tests="194" failures="0" name="net.mooctest.DataLoaderTest" time="2.118" errors="0" skipped="0">
+  <properties>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="sun.boot.library.path" value="D:\Java\jdk1.8.0_201\jre\bin"/>
+    <property name="java.vm.version" value="25.201-b09"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="maven.multiModuleProjectDirectory" value="D:\000Desktop\Download\Aliyun-Safe-Match_1765038921759"/>
+    <property name="java.vendor.url" value="http://java.oracle.com/"/>
+    <property name="path.separator" value=";"/>
+    <property name="guice.disable.misplaced.annotation.check" value="true"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+    <property name="file.encoding.pkg" value="sun.io"/>
+    <property name="user.script" value=""/>
+    <property name="user.country" value="CN"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="sun.os.patch.level" value=""/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="user.dir" value="D:\000Desktop\Download\Aliyun-Safe-Match_1765038921759"/>
+    <property name="java.runtime.version" value="1.8.0_201-b09"/>
+    <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment"/>
+    <property name="java.endorsed.dirs" value="D:\Java\jdk1.8.0_201\jre\lib\endorsed"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.io.tmpdir" value="C:\Users\86187\AppData\Local\Temp\"/>
+    <property name="line.separator" value="
+"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="user.variant" value=""/>
+    <property name="os.name" value="Windows 10"/>
+    <property name="classworlds.conf" value="C:\apache-maven-3.6.3\bin\..\bin\m2.conf"/>
+    <property name="sun.jnu.encoding" value="GBK"/>
+    <property name="java.library.path" value="D:\Java\jdk1.8.0_201\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;c:\Users\86187\AppData\Roaming\Code\User\globalStorage\github.copilot-chat\debugCommand;c:\Users\86187\AppData\Roaming\Code\User\globalStorage\github.copilot-chat\copilotCli;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;D:\Java\jdk1.8.0_201\bin;D:\Java\jdk1.8.0_201\jre\bin;C:\apache-maven-3.6.3\bin;D:\000Desktop\VMware\VMware-workstation\bin\;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\dotnet\;C:\Program Files\mingw64\bin;C:\mingw64\bin;C:\Windows\System32;D:\apache-ant-1.10.14\bin;C:\Program Files\Java\jdk-22\bin;D:\nodejs\;D:\nodejs\node_gloabl\node_modules;C:\Program Files\Google\Chrome\Application;D:\nodejs;C:\Program Files\MySQL\MySQL Server 8.0\bin;D:\Graphviz2.38\bin;D:\apktool\;D:\neo4j\neo4j-community-5.25.1\bin;D:\neo4j\Java\jdk-17;D:\Tesseract-OCR;D:\Git\mingw64\bin;D:\Git\mingw64\libexec\git-core;D:\Cppcheck;D:\gradle-7.4.1\bin;D:\000Desktop\1-Learn\6-data\VulDetectArtifact\preprocess\joern;;C:\WINDOWS\system32;C:\WINDOWS;D:\python\Scripts\;D:\python\;D:\Python311\Scripts\;D:\Python311\;C:\Program Files\mingw64\bin;C:\Users\86187\AppData\Local\Microsoft\WindowsApps;C:\mingw64\bin;C:\Windows\System32;C:\Users\86187\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\86187\AppData\Roaming\npm;D:\nodejs\node_global;D:\IntelliJ IDEA 2020.3.4\bin;;%DevEco Studio%;c:\Users\86187\.vscode\extensions\vscjava.vscode-java-debug-0.58.3\bundled\scripts\noConfigScripts;."/>
+    <property name="maven.conf" value="C:\apache-maven-3.6.3\bin\../conf"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.class.version" value="52.0"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="os.version" value="10.0"/>
+    <property name="library.jansi.path" value="C:\apache-maven-3.6.3\bin\..\lib\jansi-native"/>
+    <property name="user.home" value="C:\Users\86187"/>
+    <property name="user.timezone" value="Asia/Shanghai"/>
+    <property name="java.awt.printerjob" value="sun.awt.windows.WPrinterJob"/>
+    <property name="java.specification.version" value="1.8"/>
+    <property name="file.encoding" value="GBK"/>
+    <property name="user.name" value="86187"/>
+    <property name="java.class.path" value="C:\apache-maven-3.6.3\bin\..\boot\plexus-classworlds-2.6.0.jar"/>
+    <property name="java.vm.specification.version" value="1.8"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.home" value="D:\Java\jdk1.8.0_201\jre"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher test"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="user.language" value="zh"/>
+    <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="java.version" value="1.8.0_201"/>
+    <property name="java.ext.dirs" value="D:\Java\jdk1.8.0_201\jre\lib\ext;C:\WINDOWS\Sun\Java\lib\ext"/>
+    <property name="sun.boot.class.path" value="D:\Java\jdk1.8.0_201\jre\lib\resources.jar;D:\Java\jdk1.8.0_201\jre\lib\rt.jar;D:\Java\jdk1.8.0_201\jre\lib\sunrsasign.jar;D:\Java\jdk1.8.0_201\jre\lib\jsse.jar;D:\Java\jdk1.8.0_201\jre\lib\jce.jar;D:\Java\jdk1.8.0_201\jre\lib\charsets.jar;D:\Java\jdk1.8.0_201\jre\lib\jfr.jar;D:\Java\jdk1.8.0_201\jre\classes"/>
+    <property name="sun.stderr.encoding" value="ms936"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="maven.home" value="C:\apache-maven-3.6.3\bin\.."/>
+    <property name="file.separator" value="\"/>
+    <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="sun.stdout.encoding" value="ms936"/>
+    <property name="sun.desktop" value="windows"/>
+    <property name="sun.cpu.isalist" value="amd64"/>
+  </properties>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testFishFilterUrlContainsAbchina" time="0.384"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testFishFilterWithChineseHostContainingJd" time="0.01"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testLoadKeysMap" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testLoadAllWhiteList" time="0.201"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testFishFilterWithShortComDomain" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageKeyCheckerWithCopyrightPattern2" time="0.458"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testDomainConflictCheckerWithSelfKeyDenglu" time="0.003"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageKeyCheckerWithWelcomeYouPattern" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testFishFilterUrlContainsJd" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testXnToolDecodeWithEmptyNonBasic" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testSystemConvertBase64Detection" time="0.007"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTextCheckerWithProcOpen" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTextCheckerWithPregReplace" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testDomainConflictCheckerReturnGood" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testFishFilterWithVmall" time="0.002"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageKeyCheckerWithTitleContainingChineseName" time="0.002"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testDomainConflictCheckerWithSelfKeyGuanyu" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testFishFilterWithDomainContainingHyphenAndSimilar" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageKeyCheckerWithEmptyTitle" time="0.002"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTitleDividerWithEmptyString" time="0.002"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testFishFilterWithL0086VipDomain" time="0.002"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageInfoWithMultipleMetaTags" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTextCheckerWithInflate" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTextCheckerWithDollarVariable" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTextCheckerWithExecuteGlobal" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testFishFilter" time="0.006"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageInfoGetDocument" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testXnToolIsBasicWithNumbers" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPwHostWithBrandKeywordsIsFlagged" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageKeyCheckerWithKeywordMatch" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testXnToolAdaptWithZeroDelta" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testChineseDnsRemoveSuffixShoujiyinhang" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testWezhanHostIsIgnored" time="0.002"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testDomainAndChineseHostUtilities" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageKeyCheckerWithDomainSuffix" time="0.003"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTextCheckerWithGetMagicQuotes" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testDecoderDecodeBase64WithInvalidInput" time="0.022"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTextCheckerWithIncludeRequire" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testIgnoredQQLinksDoNotTrigger" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testFishFilterWithChineseHostTianmao" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testAdaptHandlesLargeDeltaOnFirstCall" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testWebShellDetectorWithRot13Payload" time="0.008"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageInfoWithHashLinks" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testChineseDnsRemoveSuffixZhongguowangzhan" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTitleDividerWithNullInput" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testAdaptHandlesLargeDeltaOnSubsequentCall" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPercentEncodedPayloadIsDetected" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testXnToolDecodeWithBasicOnlyString" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testParseHtmlExtractsMetadataAndLinks" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageInfoWithHttpsUrl" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageInfoGetHtml" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testFishFilterWithSimilarDomainJ0" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageInfoCharsetWithGB2312Meta" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTitleDividerWithHyphenSeparator" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testWebShellDetectorWithGzipPayload" time="0.007"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testParametersWithoutSeparatorAreIgnored" time="0.032"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testWebShellDetectorWithMultipleParams" time="0.013"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testMy3wDomainIsFlaggedEvenOnOtherTlds" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testChineseDnsRemoveSuffixGongsi" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTitleDivider" time="0.01"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTextCheckerWithClassForName" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testDirectEvalPayloadIsDetected" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTextChecker" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testChinaW3DomainIsFlaggedEvenOnOtherTlds" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testDomainConflictCheckerWithEmptyHrefDomain" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTextCheckerWithCommentRemoval" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testRuntimeExecDetection" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testDomainContaining121maiIsFlagged" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageKeyCheckerWithWelcomePattern" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTextCheckerWithStringConcat" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTitleDividerWithPipeSeparator" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testChineseDnsRemoveSuffixShouye" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testRequestItemPatternDetection" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testFishFilterWithChineseHostContainingBank" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTextCheckerWithCallUserFunc" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageInfoWithPortInUrl" time="0.002"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testChineseDnsRemoveSuffixWangzhan" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testXnToolDecodeEdgeCases" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageInfoGetUrl" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageKeyCheckerReturnGoodWhenDomainShorter" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testFishFilterWithAbchina" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testDomainConflictCheckerWithSelfKeyGuanyuwomen" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testChineseDnsWithEcshop" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testIpHrefIsIgnored" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testDomainConflictFishResultFlagsSite" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTextCheckerWithEchoCurl" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testChineseDnsRemoveSuffixShoujiwang" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageInfoGetChineseInHostWithNonXnHost" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testReversePayloadIsDetected" time="0.004"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testFishFilterWith10086ynaDomain" time="0.008"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testChineseDnsRemoveSuffixYidongban" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testFishFilterWith52TaobaoDomain" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testDomainConflictCheckerWithNetDomain" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="test" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testBase64EncodedPayloadIsDetected" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageKeyCheckerWithWelcomePatternGuanglin" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testFishFilterWithLiuguopingDomain" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testFishFilterWithChineseHostContaining10086" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testWgetInvocationIsDetected" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTextCheckerWithAssert" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testMatchingDomainReturnsGood" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testChineseDnsWithJixiekexueyanjiuzongyuan" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testVariableReassignmentIsDetected" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testDomainConflictGoodResultKeepsSiteSafe" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testFishFilterUrlContains10086" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTextCheckerWithPassthru" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testChineseDnsWithHuhutong" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testFishFilterUrlContainsTmall" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testFishFilterUrlContainsVmall" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageInfoWithJavascriptLinks" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testFishFilterWithPwDomainAndShangwangDaohang" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testDomainConflictCheckerWithInvalidUrl" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testFishFilterWithPwDomainAndZhonguoYidong" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageInfoWithInvalidUrl" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTextCheckerWithNewCom" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testChineseDnsWithJianzhanzaixing" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testChineseDnsRemoveSuffixMenhuwangzhan" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testLoadHotWhiteList" time="0.002"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTextCheckerWithPropen" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTextCheckerWithCreateFunction" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testCharsetFallbacks" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageKeyCheckerWithBrowsePattern" time="0.004"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testFishFilterWithPwDomainAndUrlDaquan" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testGetDomainByChineseNameHandlesNullAndSpecialNames" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testLoadDomains" time="0.003"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTextCheckerWithUdpTcp" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testXnToolAdaptWithSmallDelta" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testChineseDnsRemoveSuffixGonggongzhuye" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageKeyCheckerGoodResultAvoidsFalsePositive" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testLongerHrefDomainKeepsUnknown" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageInfoWithEmptyHrefLinks" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testFishFilterWithJdDomain" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testDomainConflictCheckerWithSelfKeyWangzhanshouye" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageKeyCheckerWithWwwHost" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testDifferentDomainReturnsFish" time="0.002"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testFishFilterWith10086Domain" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testDecoderDecodeGzipWithValidData" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTextCheckerWithStrRot13" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testFishFilterWithDomainSimilarTo10086" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testDomainConflictCheckerWithSelfKeyZhuce" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testDomainConflictCheckerWithSelfKeyZhuye" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testZhushiUtilAll" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTitleDividerWithWhatIsPattern" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTextCheckerWithShellExec" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTitleDividerWithChineseText" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTextCheckerWithRequestFiles" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testSafeParametersRemainSafe" time="0.018"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testLocalhostHrefIsIgnored" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testWebShellDetectorWithEmptyString" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testDecoder" time="0.014"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testWebShellDetectorWithNullValue" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageKeyCheckerReturnsFishWhenDomainNotMatch" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testDomainConflictCheckerWithMatchingDomain" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageInfoGetDomainByHostWithMultipleParts" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testFishFilterWithPwDomainAndJingdong" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTitleDividerWithUnderscoreSeparator" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testChineseDnsWithTwoCharName" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageKeyCheckerWithCopyrightInfo" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTextCheckerWithReflectionFunction" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTextCheckerWithGzipDecode" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testFishFilterWithOrgDomain" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testExcludedSuffixHostsReturnUnknownImmediately" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testXnToolDigit2codepointEdgeCases" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testChineseDnsRemoveSuffixQuanqiumenhuwangzhan" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testDomainConflictCheckerWithBaiduLink" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageInfo" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testChineseDnsRemoveSuffixGuanfangwangzhan" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testRemoveZhushi3WithoutNewlineReturnsOriginal" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testDomainConflictCheckerWithComCnDomain" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTextCheckerWithPcntlExec" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageInfoCharsetWithGBKMeta" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testGetDomainByChineseNameReturnsNullForShortNames" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testDecoderDecodeURLWithSpecialChars" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testXnToolCodepoint2digitWithUpperCase" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testEncodeDecodeRoundTripForMixedInput" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testFishFilterWithTmallDomain" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testDecoderDecodeRot13WithNumbers" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPwHostWithNavigationWordsIsSafe" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testChineseDnsRemoveSuffixShoujiban" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testChineseDnsWithValidMapping" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testXnToolWithLongNonBasicString" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testRelativeHrefReturnsUnknown" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testChineseDnsWithValidName" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageKeyCheckerWithCopyrightElement" time="0.001"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testDomainConflictChecker" time="0.006"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testXnTool" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testWebShellDetectorWithLongPayload" time="0.831"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testDecoderDecodeRot13WithMixedCase" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testChineseDnsRemoveSuffixZhuye" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testXnToolEncodeWithOnlyBasic" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testPageKeyCheckerWithVisitPattern" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testTextCheckerWithEscapeshellcmd" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testChineseDnsRemoveSuffixGuanwang" time="0"/>
+  <testcase classname="net.mooctest.DataLoaderTest" name="testXnToolEncodeWithOnlyNonBasic" time="0"/>
+</testsuite>

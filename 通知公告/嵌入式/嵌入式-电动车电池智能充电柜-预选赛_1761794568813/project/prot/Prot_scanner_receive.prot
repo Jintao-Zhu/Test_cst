@@ -1,0 +1,76 @@
+{
+    "version": 4,
+    "data": {
+        "kind": "protocol",
+        "alignment": "right",
+        "title": "名称",
+        "items": [
+            {
+                "id": "c9b_uEcI9",
+                "kind": "seg_integer",
+                "name": "header",
+                "title": "名称",
+                "autoValue": "0xAA55",
+                "signed": "false",
+                "bitCount": "16",
+                "bigOrder": "true",
+                "encode": "complement"
+            },
+            {
+                "id": "a_dj-0chcv",
+                "kind": "seg_integer",
+                "name": "data_length",
+                "title": "名称",
+                "autoValue": "0x2",
+                "signed": "false",
+                "bitCount": "8",
+                "bigOrder": "false",
+                "encode": "complement"
+            },
+            {
+                "id": "Ie5x8tUBLN",
+                "kind": "seg_integer",
+                "name": "cmd_type",
+                "title": "名称",
+                "autoValue": "0x1",
+                "signed": "false",
+                "bitCount": "8",
+                "bigOrder": "false",
+                "encode": "complement"
+            },
+            {
+                "id": "tA@t2##f5l8#~fidrb3?",
+                "kind": "seg_integer",
+                "name": "holder_id",
+                "title": "名称",
+                "autoValue": "0x1",
+                "signed": "false",
+                "bitCount": "8",
+                "bigOrder": "false",
+                "encode": "complement"
+            },
+            {
+                "id": "H}(_fEuT1Cr,%_1{N=?A",
+                "kind": "seg_integer",
+                "name": "check_code",
+                "title": "名称",
+                "autoValue": "CheckCode(XOR_8,this.data_length,this.holder_id)",
+                "signed": "false",
+                "bitCount": "8",
+                "bigOrder": "false",
+                "encode": "complement"
+            },
+            {
+                "id": "XNeTJTputL^pC`PE?-m$",
+                "kind": "seg_integer",
+                "name": "tail",
+                "title": "名称",
+                "autoValue": "0x55AA",
+                "signed": "false",
+                "bitCount": "16",
+                "bigOrder": "true",
+                "encode": "complement"
+            }
+        ]
+    }
+}

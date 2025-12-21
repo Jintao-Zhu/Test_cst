@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CalculationManagement.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Mathematical-Expression</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">CalculationManagement.java</span></div><h1>CalculationManagement.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import java.util.HashMap;
+import java.util.Set;
+
+/**
+ * 计算管理者类，在框架中的所有计算组件既可以复用，也可以进行动态的实例化，获取计算组件与动态注册组件的操作都可以在这里进行。
+ * &lt;p&gt;
+ * For the computing manager class, all computing components in the framework can be reused or dynamically instantiated. The operations of obtaining computing components and dynamically registering components can be performed here.
+ *
+ * @author zhao
+ */
+<span class="nc" id="L13">public final class CalculationManagement {</span>
+
+    /**
+     * 被其它组件所依赖的解析无括号数学表达式的组件名称，该组件由于被其它组件所依赖，加载的时候是一定会加载的，因此在进行获取组件的时候，可以直接引用该名称，也可以由您手动设置一个新的组件。
+     * &lt;p&gt;
+     * The name of a component that is relied on by other components to resolve parenthesis free mathematical expressions. Because this component is relied on by other components, it is bound to be loaded when loading. Therefore, this name can be directly referenced when obtaining components, or you can manually set a new component.
+     */
+    public static final String PREFIX_EXPRESSION_OPERATION_NAME = &quot;PrefixExpressionOperation&quot;;
+    public static final String BRACKETS_CALCULATION_2_NAME = &quot;BracketsCalculation2&quot;;
+
+    public static final String FUNCTION_FORMULA_CALCULATION_2_NAME = &quot;FunctionFormulaCalculation2&quot;;
+
+<span class="nc" id="L25">    private static final HashMap&lt;String, Calculation&gt; STRING_CALCULATION_HASH_MAP = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L26">    private static final HashMap&lt;String, Function&gt; STRING_FUNCTION_HASH_MAP = new HashMap&lt;&gt;();</span>
+
+    /**
+     * 根据名字，在哈希集合中获取到一个以该名称命名的计算组件
+     *
+     * @param CalculationName 计算组件的名字
+     * @return 计算组件对象
+     */
+    public static Calculation getCalculationByName(String CalculationName) {
+<span class="nc" id="L35">        return STRING_CALCULATION_HASH_MAP.get(CalculationName);</span>
+    }
+
+
+    /**
+     * 将一个计算组件注册到管理者中，如果注册成功会返回true，不允许重复注册
+     * &lt;p&gt;
+     * Register a calculation component to the administrator. If the registration is successful, true will be returned. Repeated registration is not allowed
+     *
+     * @param calculation 需要被注册的计算组件
+     *                    &lt;p&gt;
+     *                    Computing components to be registered
+     * @param judge       如果设置为true代表需要检查判断情况 如果设置为false 代表直接注册
+     * @return 如果注册成功返回true，如果注册失败，意味着在管理者中很肯恩和已经存在一个该名称的数值了，所以不允许再一次注册。
+     * &lt;p&gt;
+     * If the registration succeeds, it returns true. If the registration fails, it means that there is already a numerical value of the name in the manager, so it is not allowed to register again.
+     */
+    public static boolean register(Calculation calculation, boolean judge) {
+<span class="nc" id="L53">        final String calculationName = calculation.getName();</span>
+<span class="nc bnc" id="L54" title="All 4 branches missed.">        if (judge &amp;&amp; STRING_CALCULATION_HASH_MAP.containsValue(calculation)) {</span>
+<span class="nc" id="L55">            return false;</span>
+        } else {
+<span class="nc" id="L57">            STRING_CALCULATION_HASH_MAP.put(calculationName, calculation);</span>
+<span class="nc" id="L58">            return true;</span>
+        }
+    }
+
+    public static boolean register(Calculation calculation) {
+<span class="nc" id="L63">        return register(calculation, false);</span>
+    }
+
+    /**
+     * 将一个函数组件注册到管理者中，如果注册成功会返回true
+     * &lt;p&gt;
+     * Register a function component to the administrator, and return true if the registration is successful
+     *
+     * @param function 需要被注册的函数，这里的对象要求是function的子类实现
+     *                 &lt;p&gt;
+     *                 Functions that need to be registered. The object here is required to be a subclass implementation of function
+     * @return 注册函数是否成功，如果返回false，那么代表函数名称已经被其它函数使用，需要更换函数名称
+     * &lt;p&gt;
+     * Whether the function is registered successfully. If false is returned, it means that the function name has been used by other functions, and the function name needs to be changed
+     */
+    public static boolean register(Function function) {
+<span class="nc" id="L79">        final String name = function.getName();</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">        if (STRING_FUNCTION_HASH_MAP.containsKey(name)) {</span>
+<span class="nc" id="L81">            return false;</span>
+        } else {
+<span class="nc" id="L83">            STRING_FUNCTION_HASH_MAP.put(name, function);</span>
+<span class="nc" id="L84">            return true;</span>
+        }
+    }
+
+    /**
+     * 将一个函数包注册到管理者中，这将会导致函数包中的所有函数被注册。
+     * &lt;p&gt;
+     * Registering a function package with the manager will result in all functions in the package being registered.
+     *
+     * @param functionPackage 包含需要被注册的所有函数的函数包
+     *                        &lt;p&gt;
+     *                        A function package containing all the functions that need to be registered
+     */
+    public static void register(FunctionPackage functionPackage) {
+<span class="nc" id="L98">        STRING_FUNCTION_HASH_MAP.putAll(functionPackage.getFunctionMap());</span>
+<span class="nc" id="L99">    }</span>
+
+    /**
+     * 通过函数的名字获取到一个函数的对象
+     * &lt;p&gt;
+     * Get the object of a function through the name of the function
+     *
+     * @param FunctionName   需要获取的函数的名字
+     *                       &lt;p&gt;
+     *                       Name of the function to be obtained
+     * @param &lt;functionType&gt; 函数的实现类型，需要注意在这里的实现类型如果与找到的函数不一致，那么这里会抛出&quot;ExtractException&quot;
+     *                       &lt;p&gt;
+     *                       The implementation type of the function. Note that if the implementation type here is inconsistent with the found function, an &quot;ExtractException&quot; will be thrown here
+     * @return 通过函数名字获取到的函数对象
+     * &lt;p&gt;
+     * Function object obtained by function name
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public static &lt;functionType extends Function&gt; functionType getFunctionByName(String FunctionName) {
+<span class="nc" id="L118">        final Function function = STRING_FUNCTION_HASH_MAP.get(FunctionName);</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        if (function == null) {</span>
+<span class="nc" id="L120">            throw new ExtractException(&quot;您想要提取的函数似乎没有被注册到管理者中，请您先使用“register”进行函数的注册！\nIt seems that the function you want to extract has not been registered with the manager. Please use \&quot;register\&quot; to register the function first!\nERROR FUNCTION =&gt; &quot; + FunctionName);</span>
+        } else {
+            try {
+<span class="nc" id="L123">                return (functionType) function;</span>
+<span class="nc" id="L124">            } catch (ClassCastException c) {</span>
+<span class="nc" id="L125">                throw new ExtractException(&quot;您要提取的函数被找到了，但是它不适用您指定的类型，请在泛型中对该函数的类型进行调整。\nThe function you want to extract has been found, but it does not apply to the type you specified. Please adjust the type of the function in the generic type.\nERROR FUNCTION =&gt; &quot; + function.getName());</span>
+            }
+        }
+    }
+
+    /**
+     * 判断指定的函数是否存在
+     * &lt;p&gt;
+     * Determine whether the specified function exists
+     *
+     * @param FunctionName 指定的函数名字
+     *                     &lt;p&gt;
+     *                     The specified function name
+     * @return 如果存在返回 true
+     * &lt;p&gt;
+     * If there is, return true
+     */
+    public static boolean isFunctionExist(String FunctionName) {
+<span class="nc" id="L143">        return STRING_FUNCTION_HASH_MAP.containsKey(FunctionName);</span>
+    }
+
+    /**
+     * 获取到所有已注册的函数的名字
+     * &lt;p&gt;
+     * Get the names of all registered functions
+     *
+     * @return 所有已注册的函数的名字的集合
+     * &lt;p&gt;
+     * A collection of the names of all registered functions
+     */
+    public static Set&lt;String&gt; getFunctionMap() {
+<span class="nc" id="L156">        return STRING_FUNCTION_HASH_MAP.keySet();</span>
+    }
+
+    /**
+     * 通过函数的名字获取到一个函数的对象
+     * &lt;p&gt;
+     * Get the object of a function through the name of the function
+     *
+     * @param FunctionName   需要获取的函数的名字
+     *                       &lt;p&gt;
+     *                       Name of the function to be obtained
+     * @param &lt;functionType&gt; 函数的实现类型，需要注意在这里的实现类型如果与找到的函数不一致，那么这里会抛出&quot;ExtractException&quot;
+     *                       &lt;p&gt;
+     *                       The implementation type of the function. Note that if the implementation type here is inconsistent with the found function, an &quot;ExtractException&quot; will be thrown here
+     * @return 通过函数名字获取到的函数对象
+     * &lt;p&gt;
+     * Function object obtained by function name
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public static &lt;functionType extends Function&gt; functionType getFunctionByNameNoCheck(String FunctionName) {
+<span class="nc" id="L176">        return (functionType) STRING_FUNCTION_HASH_MAP.get(FunctionName);</span>
+    }
+
+    /**
+     * 取消一个函数的注册，将一个函数注销掉，与之相关的所有信息将会被清除
+     * &lt;p&gt;
+     * Cancel the registration of a function and log off a function. All information related to it will be cleared
+     *
+     * @param FunctionName 需要注销的函数名字
+     *                     &lt;p&gt;
+     *                     Function name to be unregistered
+     * @return 注销是否成功，如果返回false 代表需要注销的函数不存在
+     * &lt;p&gt;
+     * Whether the logout is successful. If false is returned, the function to logout does not exist
+     */
+    public static boolean unregisterF(String FunctionName) {
+<span class="nc bnc" id="L192" title="All 2 branches missed.">        return STRING_FUNCTION_HASH_MAP.remove(FunctionName) != null;</span>
+    }
+
+    /**
+     * 将一个计算组件取消注册，如果取消注册成功会返回false 请注意，不建议注销所有被依赖的组件
+     * Cancel the registration of a computing component. If the registration is cancelled successfully, false will be returned. Please note that it is not recommended unregistering all dependent components
+     *
+     * @param CalculationName 需要取消注册的计算组件的名称
+     *                        &lt;p&gt;
+     *                        The name of the calculation component that needs to be unregistered
+     * @return 如果注销成功返回true
+     * &lt;p&gt;
+     * Returns true if the logout is successful
+     */
+    public static boolean unregister(String CalculationName) {
+<span class="nc bnc" id="L207" title="All 2 branches missed.">        return STRING_CALCULATION_HASH_MAP.remove(CalculationName) != null;</span>
+    }
+
+    /**
+     * 判断某个计算组件是否被成功注册，因为相同的组件名称只能注册一个组件，所以在这里的函数可以帮助您避免这种覆盖组件的情况
+     * &lt;p&gt;
+     * Judge whether a computing component has been successfully registered. Because only one component can be registered with the same component name, the functions here can help you avoid this case of overwriting components
+     *
+     * @param Name 被判断的组件
+     *             &lt;p&gt;
+     *             Judged components
+     * @return 如果组件名称已经被注册过了，该函数返回true
+     * &lt;p&gt;
+     * If the component name has been registered, this function returns true
+     */
+    public static boolean isRegister(String Name) {
+<span class="nc" id="L223">        return STRING_CALCULATION_HASH_MAP.containsKey(Name);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

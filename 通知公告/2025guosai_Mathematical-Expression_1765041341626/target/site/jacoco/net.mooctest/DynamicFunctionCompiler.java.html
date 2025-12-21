@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DynamicFunctionCompiler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Mathematical-Expression</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">DynamicFunctionCompiler.java</span></div><h1>DynamicFunctionCompiler.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import javax.tools.*;
+
+import java.net.URI;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.UUID;
+
+<span class="nc" id="L10">public class DynamicFunctionCompiler {</span>
+<span class="nc" id="L11">    private static final JavaCompiler COMPILER = ToolProvider.getSystemJavaCompiler();</span>
+    private static final StandardJavaFileManager STANDARD_FILE_MANAGER;
+
+    static {
+<span class="nc" id="L15">        STANDARD_FILE_MANAGER = COMPILER.getStandardFileManager(null, null, null);</span>
+<span class="nc" id="L16">    }</span>
+
+    /**
+     * 动态生成函数
+     *
+     * @param funcName 函数名
+     * @param expr     函数的表达式 要使用下面的参数名称列表来构建表达式！
+     * @param params   函数的参数名称列表
+     * @return 动态函数
+     */
+    public static ManyToOneNumberFunction compile(String funcName, String expr, String[] params) {
+        try {
+            // 构建动态库类
+<span class="nc" id="L29">            String libPkg = &quot;io.github.beardedManZhao.mathematicalExpression.core.calculation.function.jvm&quot;;</span>
+<span class="nc" id="L30">            String libCls = &quot;FunctionLibrary&quot;;</span>
+<span class="nc" id="L31">            String functionLibClassName = libPkg + &quot;.&quot; + libCls;</span>
+<span class="nc" id="L32">            StringBuilder libSrc = new StringBuilder();</span>
+<span class="nc" id="L33">            libSrc.append(&quot;package &quot;).append(libPkg).append(&quot;;\n&quot;);</span>
+<span class="nc" id="L34">            libSrc.append(&quot;public class &quot;).append(libCls).append(&quot; {\n&quot;);</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">            for (Map.Entry&lt;String, String&gt; entry : JvmExpressionFunction.getRegisteredMethods().entrySet()) {</span>
+<span class="nc" id="L36">                libSrc.append(&quot;  &quot;).append(entry.getValue()).append(&quot;\n&quot;);</span>
+<span class="nc" id="L37">            }</span>
+<span class="nc" id="L38">            libSrc.append(&quot;}\n&quot;);</span>
+
+<span class="nc" id="L40">            JavaFileObject libFile = new SimpleJavaFileObject(</span>
+<span class="nc" id="L41">                    URI.create(&quot;string:///&quot; + functionLibClassName.replace('.', '/') + &quot;.java&quot;),</span>
+<span class="nc" id="L42">                    JavaFileObject.Kind.SOURCE) {</span>
+                @Override
+                public CharSequence getCharContent(boolean ignore) {
+<span class="nc" id="L45">                    return libSrc.toString();</span>
+                }
+            };
+
+            // 构建表达式类，注意静态导入库方法
+<span class="nc" id="L50">            String cls = &quot;ExprFunc_&quot; + funcName + &quot;_&quot; + UUID.randomUUID().toString().replace(&quot;-&quot;, &quot;_&quot;);</span>
+<span class="nc" id="L51">            String fullName = libPkg + &quot;.&quot; + cls;</span>
+<span class="nc" id="L52">            StringBuilder funcSrc = new StringBuilder();</span>
+<span class="nc" id="L53">            funcSrc.append(&quot;package &quot;).append(libPkg).append(&quot;;\n&quot;);</span>
+<span class="nc" id="L54">            funcSrc.append(&quot;import static &quot;).append(functionLibClassName).append(&quot;.*;\n&quot;);</span>
+<span class="nc" id="L55">            funcSrc.append(&quot;import io.github.beardedManZhao.mathematicalExpression.core.calculation.function.ManyToOneNumberFunction;\n&quot;);</span>
+<span class="nc" id="L56">            funcSrc.append(&quot;public class &quot;).append(cls).append(&quot; extends ManyToOneNumberFunction {\n&quot;);</span>
+<span class="nc" id="L57">            funcSrc.append(&quot;  public &quot;).append(cls).append(&quot;() { super(\&quot;&quot;).append(funcName).append(&quot;\&quot;); }\n&quot;);</span>
+<span class="nc" id="L58">            funcSrc.append(&quot;  @Override public double run(double... numbers) {\n&quot;);</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">            for (int i = 0; i &lt; params.length; i++) {</span>
+<span class="nc" id="L60">                funcSrc.append(&quot;    double &quot;).append(params[i]).append(&quot; = numbers[&quot;).append(i).append(&quot;];&quot;);</span>
+            }
+<span class="nc" id="L62">            funcSrc.append(&quot;    return &quot;).append(expr).append(&quot;;\n  }\n}\n&quot;);</span>
+<span class="nc" id="L63">            JavaFileObject funcFile = new SimpleJavaFileObject(</span>
+<span class="nc" id="L64">                    URI.create(&quot;string:///&quot; + fullName.replace('.', '/') + &quot;.java&quot;),</span>
+<span class="nc" id="L65">                    JavaFileObject.Kind.SOURCE) {</span>
+                @Override
+                public CharSequence getCharContent(boolean ignore) {
+<span class="nc" id="L68">                    return funcSrc.toString();</span>
+                }
+            };
+
+<span class="nc" id="L72">            DiagnosticCollector&lt;JavaFileObject&gt; dg = new DiagnosticCollector&lt;&gt;();</span>
+<span class="nc" id="L73">            DynamicClassLoader loader = new DynamicClassLoader();</span>
+<span class="nc" id="L74">            JavaFileManager fm = new ForwardingJavaFileManager&lt;JavaFileManager&gt;(STANDARD_FILE_MANAGER) {</span>
+                @Override
+                public JavaFileObject getJavaFileForOutput(Location loc, String name,
+                                                           JavaFileObject.Kind kind, FileObject sibling) {
+<span class="nc" id="L78">                    InMemoryJavaFileObject out = new InMemoryJavaFileObject(name, kind);</span>
+<span class="nc" id="L79">                    loader.addClass(name, out);</span>
+<span class="nc" id="L80">                    return out;</span>
+                }
+            };
+            // 编译库类与表达式类
+<span class="nc" id="L84">            COMPILER.getTask(null, fm, dg, null, null, Arrays.asList(libFile, funcFile)).call();</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">            if (!dg.getDiagnostics().isEmpty()) throw new RuntimeException(&quot;编译错误: &quot; + dg.getDiagnostics());</span>
+
+<span class="nc" id="L87">            Class&lt;?&gt; clazz = loader.loadClass(fullName);</span>
+<span class="nc" id="L88">            return (ManyToOneNumberFunction) clazz.getDeclaredConstructor().newInstance();</span>
+<span class="nc" id="L89">        } catch (Exception e) {</span>
+<span class="nc" id="L90">            throw new RuntimeException(&quot;动态函数生成失败&quot;, e);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

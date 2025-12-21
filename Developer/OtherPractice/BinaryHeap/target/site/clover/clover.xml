@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1740142665341" clover="4.4.1">
+   <project name="BinaryHeap 0.0.1-SNAPSHOT" timestamp="1740142662928">
+      <metrics coveredelements="5" complexity="29" loc="183" methods="11" classes="2" statements="43" packages="1" coveredconditionals="0" coveredmethods="2" elements="80" ncloc="95" files="2" conditionals="26" coveredstatements="3"/>
+      <package name="net.mooctest">
+         <metrics coveredelements="5" complexity="29" loc="183" methods="11" classes="2" statements="43" coveredconditionals="0" coveredmethods="2" elements="80" ncloc="95" files="2" conditionals="26" coveredstatements="3"/>
+         <file path="C:\mooctest\projects\123\119\BinaryHeap\src\main\java\net\mooctest\BinaryHeap.java" name="BinaryHeap.java">
+            <metrics coveredelements="5" coveredconditionals="0" complexity="29" loc="173" coveredmethods="2" methods="11" elements="80" classes="1" ncloc="91" statements="43" conditionals="26" coveredstatements="3"/>
+            <class name="BinaryHeap">
+               <metrics coveredelements="5" coveredconditionals="0" complexity="29" coveredmethods="2" methods="11" elements="80" statements="43" conditionals="26" coveredstatements="3"/>
+            </class>
+            <line complexity="1" visibility="public" signature="BinaryHeap()" num="28" count="1" type="method"/>
+            <line num="30" count="1" type="stmt"/>
+            <line complexity="1" visibility="public" signature="BinaryHeap(int)" num="39" count="1" type="method"/>
+            <line num="41" count="1" type="stmt"/>
+            <line num="42" count="1" type="stmt"/>
+            <line complexity="4" visibility="public" signature="insert(int) : void" num="51" count="0" type="method"/>
+            <line num="53" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="53" type="cond"/>
+            <line num="54" count="0" type="stmt"/>
+            <line num="57" count="0" type="stmt"/>
+            <line num="58" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="58" type="cond"/>
+            <line num="59" count="0" type="stmt"/>
+            <line num="60" count="0" type="stmt"/>
+            <line complexity="2" visibility="public" signature="findMin() : int" num="67" count="0" type="method"/>
+            <line num="69" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="69" type="cond"/>
+            <line num="70" count="0" type="stmt"/>
+            <line num="71" count="0" type="stmt"/>
+            <line complexity="9" visibility="package" signature="wellFormed() : boolean" num="73" count="0" type="method"/>
+            <line num="74" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="74" type="cond"/>
+            <line num="75" count="0" type="stmt"/>
+            <line num="77" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="77" type="cond"/>
+            <line num="78" count="0" type="stmt"/>
+            <line num="80" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="80" type="cond"/>
+            <line num="81" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="81" type="cond"/>
+            <line num="82" count="0" type="stmt"/>
+            <line num="84" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="84" type="cond"/>
+            <line num="85" count="0" type="stmt"/>
+            <line num="88" count="0" type="stmt"/>
+            <line complexity="2" visibility="public" signature="deleteMin() : int" num="94" count="0" type="method"/>
+            <line num="96" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="96" type="cond"/>
+            <line num="97" count="0" type="stmt"/>
+            <line num="99" count="0" type="stmt"/>
+            <line num="100" count="0" type="stmt"/>
+            <line num="101" count="0" type="stmt"/>
+            <line num="103" count="0" type="stmt"/>
+            <line complexity="2" visibility="public" signature="buildHeap() : void" num="110" count="0" type="method"/>
+            <line num="112" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="112" type="cond"/>
+            <line num="113" count="0" type="stmt"/>
+            <line complexity="1" visibility="public" signature="isEmpty() : boolean" num="120" count="0" type="method"/>
+            <line num="122" count="0" type="stmt"/>
+            <line complexity="1" visibility="public" signature="isFull() : boolean" num="129" count="0" type="method"/>
+            <line num="131" count="0" type="stmt"/>
+            <line complexity="1" visibility="public" signature="makeEmpty() : void" num="138" count="0" type="method"/>
+            <line num="140" count="0" type="stmt"/>
+            <line complexity="5" visibility="private" signature="percolateDown(int) : void" num="152" count="0" type="method"/>
+            <line num="154" count="0" type="stmt"/>
+            <line num="155" count="0" type="stmt"/>
+            <line num="157" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="157" type="cond"/>
+            <line num="159" count="0" type="stmt"/>
+            <line num="161" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="161" type="cond"/>
+            <line num="163" count="0" type="stmt"/>
+            <line num="164" count="0" type="stmt"/>
+            <line falsecount="0" truecount="0" num="164" type="cond"/>
+            <line num="165" count="0" type="stmt"/>
+            <line num="167" count="0" type="stmt"/>
+            <line num="169" count="0" type="stmt"/>
+         </file>
+         <file path="C:\mooctest\projects\123\119\BinaryHeap\src\main\java\net\mooctest\Overflow.java" name="Overflow.java">
+            <metrics coveredelements="0" coveredconditionals="0" complexity="0" loc="10" coveredmethods="0" methods="0" elements="0" classes="1" ncloc="4" statements="0" conditionals="0" coveredstatements="0"/>
+            <class name="Overflow">
+               <metrics coveredelements="0" coveredconditionals="0" complexity="0" coveredmethods="0" methods="0" elements="0" statements="0" conditionals="0" coveredstatements="0"/>
+            </class>
+         </file>
+      </package>
+   </project>
+   <testproject name="BinaryHeap 0.0.1-SNAPSHOT" timestamp="1740142662928">
+      <metrics coveredelements="2" complexity="1" loc="14" methods="1" classes="1" statements="1" packages="1" coveredconditionals="0" coveredmethods="1" elements="2" ncloc="9" files="1" conditionals="0" coveredstatements="1"/>
+      <package name="net.mooctest">
+         <metrics coveredelements="2" complexity="1" loc="14" methods="1" classes="1" statements="1" coveredconditionals="0" coveredmethods="1" elements="2" ncloc="9" files="1" conditionals="0" coveredstatements="1"/>
+         <file path="C:\mooctest\projects\123\119\BinaryHeap\src\test\java\net\mooctest\BinaryHeapTest.java" name="BinaryHeapTest.java">
+            <metrics coveredelements="2" coveredconditionals="0" complexity="1" loc="14" coveredmethods="1" methods="1" elements="2" classes="1" ncloc="9" statements="1" conditionals="0" coveredstatements="1"/>
+            <class name="BinaryHeapTest">
+               <metrics coveredelements="2" complexity="1" methods="1" testruns="1" statements="1" coveredconditionals="0" coveredmethods="1" elements="2" testfailures="0" testduration="0.035" conditionals="0" coveredstatements="1" testpasses="1"/>
+            </class>
+            <line complexity="1" visibility="public" signature="test() : void" num="9" testsuccess="true" count="1" testduration="0.035" type="method"/>
+            <line num="11" count="1" type="stmt"/>
+         </file>
+      </package>
+   </testproject>
+</coverage>

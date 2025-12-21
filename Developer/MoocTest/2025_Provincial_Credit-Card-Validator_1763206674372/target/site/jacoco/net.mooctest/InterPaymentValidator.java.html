@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InterPaymentValidator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Credit-Card-Validator</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">InterPaymentValidator.java</span></div><h1>InterPaymentValidator.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import java.util.List;
+
+import static net.mooctest.CreditCardParser.parseIIN;
+import static net.mooctest.CreditCardParser.parseNumber;
+
+/*
+ * InterPayment format:
+ * length = 16 - 19
+ * IIN range = 637 - 639
+ */
+public class InterPaymentValidator extends CreditCardValidator {
+    private List&lt;Integer&gt; creditCardNumberList;
+
+    /*
+     * @param String representation of credit card number
+     */
+<span class="fc" id="L19">    public InterPaymentValidator(String creditCardNumber) {</span>
+<span class="fc" id="L20">        creditCardNumberList = parseNumber(creditCardNumber);</span>
+<span class="fc" id="L21">    }</span>
+
+    /*
+     * Check the length of the card against the format
+     * requirement.
+     *
+     * @return boolean of whether or not credit card
+     * number meet requirement.
+     */
+    @Override
+    boolean checkLength() {
+<span class="fc" id="L32">        boolean hasAllowedLength = false;</span>
+
+<span class="fc bfc" id="L34" title="All 4 branches covered.">        if (creditCardNumberList.size() &gt;= 16 &amp;&amp; creditCardNumberList.size() &lt;= 19) {</span>
+<span class="fc" id="L35">            hasAllowedLength = true;</span>
+        }
+
+<span class="fc" id="L38">        return hasAllowedLength;</span>
+    }
+
+    /*
+     * Check that IIN meets IIN range requirement
+     *
+     * @return boolean of whether or not IIN matches
+     * requirement
+     */
+    @Override
+    boolean checkIINRanges() {
+<span class="fc" id="L49">        boolean hasAllowedIINRange = false;</span>
+<span class="fc" id="L50">        int IINRange = 636;</span>
+<span class="fc" id="L51">        int IIN = parseIIN(creditCardNumberList, 3);</span>
+
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        if (IIN == IINRange) {</span>
+<span class="fc" id="L54">            hasAllowedIINRange = true;</span>
+        }
+
+<span class="fc" id="L57">        return hasAllowedIINRange;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

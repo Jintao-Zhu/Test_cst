@@ -1,0 +1,86 @@
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.By;
+
+public class Example {
+
+    // Mooctest Selenium Example
+
+
+    // <!> Check if selenium-standalone.jar is added to build path.
+
+    public static void test(WebDriver driver) throws InterruptedException {
+        // TODO Test script
+        eg:driver.get("http://120.26.37.204:8088/marks/login");
+    driver.manage().window().maximize();   // 窗口最大化
+    driver.findElement(By.name("userName")).sendKeys("admin");
+    Thread.sleep(1500);
+    driver.findElement(By.name("passWord")).sendKeys("123456");
+    Thread.sleep(1500);
+    driver.findElement(By.id("loginFormBtn")).click();
+    Thread.sleep(1500);
+    driver.findElement(By.linkText("系统用户管理")).click();
+    Thread.sleep(1500);
+    driver.findElement(By.xpath("/html/body/div[3]/div[2]/div[1]/button")).click();
+    Thread.sleep(1500);
+    driver.findElement(By.name("userName")).sendKeys("1234");
+    Thread.sleep(1500);
+    driver.findElement(By.name("passWord")).sendKeys("5678");
+    Thread.sleep(1500);
+    driver.findElement(By.name("name")).sendKeys("小天");
+    Thread.sleep(1500);
+    driver.findElement(By.name("age")).sendKeys("20");
+    Thread.sleep(1500);
+    driver.findElement(By.xpath("/html/body/div[4]/div[2]/form/div[5]/input[2]")).click();
+    Thread.sleep(1500);
+    driver.findElement(By.xpath("/html/body/div[4]/div[2]/form/div[6]/input[2]")).click();
+    Thread.sleep(1500);
+    driver.findElement(By.name("phone")).sendKeys("11662258633");
+    Thread.sleep(1500);
+    driver.findElement(By.name("address")).sendKeys("江苏南京");
+    Thread.sleep(1500);
+    driver.findElement(By.id("addFormBtn")).click();
+    Thread.sleep(1500);
+    driver.findElement(By.xpath("/html/body/div[9]/div[2]/div[2]/button")).click();
+    Thread.sleep(1500);
+    driver.findElement(By.name("para2")).sendKeys("小天");
+    Thread.sleep(1500);
+    driver.findElement(By.name("para3")).sendKeys("11662258633");
+    Thread.sleep(1500);
+    driver.findElement(By.xpath("/html/body/div[3]/div[1]/div[2]/div[4]/button")).click();
+    Thread.sleep(1500);
+    driver.findElement(By.xpath("//*[@id=\"tableShow\"]/table/tbody/tr[1]/td[9]/button[2]")).click();
+    Thread.sleep(1500);
+    driver.findElement(By.xpath("/html/body/div[9]/div[2]/div[2]/button[1]")).click();
+    Thread.sleep(1500);
+    driver.findElement(By.linkText("会员等级设置")).click();
+    Thread.sleep(1500);
+    driver.findElement(By.xpath("/html/body/div[3]/div[2]/div[1]/button/span")).click();
+    Thread.sleep(1500);
+    driver.findElement(By.name("name")).sendKeys("钻石");
+    Thread.sleep(1500);
+    driver.findElement(By.name("total")).sendKeys("1000");
+    Thread.sleep(1500);
+    driver.findElement(By.name("discount")).sendKeys("0.5");
+    Thread.sleep(1500);
+    driver.findElement(By.id("addFormBtn")).click();
+    Thread.sleep(1500);
+    driver.findElement(By.xpath("/html/body/div[9]/div[2]/div[2]/button")).click();
+    Thread.sleep(1500);
+    driver.findElement(By.className("fater-user")).click();
+    Thread.sleep(1500);
+    driver.findElement(By.id("sessionExit")).click();
+    Thread.sleep(1500);
+    }
+    public static void main(String[] args) {
+        // Run main function to test your script.
+    	System.setProperty("webdriver.chrome.driver","C:\\Users\\20433\\AppData\\Local\\Google\\Chrome\\Application\\chromedriver.exe");
+        WebDriver driver = new ChromeDriver();
+        try { test(driver); } 
+        catch(Exception e) { e.printStackTrace(); }
+        finally { driver.quit(); }
+    }
+
+}
+

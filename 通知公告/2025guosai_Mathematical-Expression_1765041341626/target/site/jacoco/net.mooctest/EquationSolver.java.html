@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EquationSolver.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Mathematical-Expression</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">EquationSolver.java</span></div><h1>EquationSolver.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import java.util.ArrayList;
+
+/**
+ * 数学表达式逆运算 单 x 方程求解器。
+ * &lt;p&gt;
+ * 该类基于牛顿法与二分法提供方程求根功能，支持动态编译与自动区间检测。
+ * 主要特性：
+ * &lt;ul&gt;
+ *     &lt;li&gt;支持牛顿法与二分法切换&lt;/li&gt;
+ *     &lt;li&gt;自动检测并抛出无解异常&lt;/li&gt;
+ *     &lt;li&gt;可配置精度、迭代次数与初始区间/猜测值&lt;/li&gt;
+ *     &lt;li&gt;JavaScript 引擎动态函数编译&lt;/li&gt;
+ * &lt;/ul&gt;
+ *
+ * @author 赵凌宇
+ */
+@SuppressWarnings(&quot;unused&quot;)
+public class EquationSolver extends NameExpression {
+
+<span class="nc" id="L22">    protected static final String[] X = {&quot;x&quot;};</span>
+
+    private static final double DERIVE_STEP = 1e-6;
+    protected final ManyToOneNumberFunction function;
+    protected final double result;
+<span class="nc" id="L27">    protected double newtonInitialX = 2;</span>
+<span class="nc" id="L28">    protected double bisectionLeft = 1;</span>
+<span class="nc" id="L29">    protected double bisectionRight = 3;</span>
+<span class="nc" id="L30">    protected double tol = 1e-12;</span>
+<span class="nc" id="L31">    protected int maxIter = 100;</span>
+<span class="nc" id="L32">    protected boolean useNewton = true;</span>
+
+    /**
+     * 私有构造函数，通过表达式字符串与结果值初始化求解器。
+     *
+     * @param exprString 方程左侧表达式字符串（关于 x）
+     * @param exprResult 方程右侧常数字符串
+     * @param name       计算器名称，用于动态编译函数命名
+     * @throws IllegalArgumentException 如果右侧值无法解析为数字
+     */
+    private EquationSolver(String exprString, String exprResult, String name) {
+<span class="nc" id="L43">        this(exprString, Double.parseDouble(exprResult), name, DynamicFunctionCompiler.compile(&quot;EquationSolver&quot;, exprString, X));</span>
+<span class="nc" id="L44">        autoDetectInterval();</span>
+<span class="nc" id="L45">    }</span>
+
+    /**
+     * 私有构造函数，通过表达式字符串与结果值初始化求解器。
+     *
+     * @param exprString 方程左侧表达式字符串（关于 x）
+     * @param exprResult 方程右侧常数字符串
+     * @param name       计算器名称，用于动态编译函数命名
+     * @param function   已编译的函数 这个就是方程左边表达式的编译
+     * @throws IllegalArgumentException 如果右侧值无法解析为数字
+     */
+    protected EquationSolver(String exprString, double exprResult, String name, ManyToOneNumberFunction function) {
+<span class="nc" id="L57">        super(exprString, name);</span>
+<span class="nc" id="L58">        this.function = function;</span>
+        try {
+<span class="nc" id="L60">            this.result = exprResult;</span>
+<span class="nc" id="L61">        } catch (NumberFormatException e) {</span>
+<span class="nc" id="L62">            throw new IllegalArgumentException(&quot;方程右侧值必须为数字：&quot; + exprResult, e);</span>
+<span class="nc" id="L63">        }</span>
+<span class="nc" id="L64">    }</span>
+
+    /**
+     * 编译方程求解器实例。表达式必须为 &quot;左侧表达式=右侧数值&quot; 格式。
+     *
+     * @param expression      含有等号的方程字符串
+     * @param calculationName 实例名称，用于内部函数编译
+     * @return 已初始化并完成区间检测的 {@link EquationSolver} 实例
+     * @throws IllegalArgumentException 方程格式不合法时抛出
+     */
+    public static EquationSolver compile(String expression, String calculationName) {
+<span class="nc" id="L75">        ArrayList&lt;String&gt; parts = StrUtils.splitByChar(expression, '=');</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">        if (parts.size() != 2) {</span>
+<span class="nc" id="L77">            throw new IllegalArgumentException(&quot;方程表达式格式应为 '表达式=值'，实际：&quot; + expression);</span>
+        }
+<span class="nc" id="L79">        final String s = parts.get(0);</span>
+<span class="nc" id="L80">        return new EquationSolver(s, parts.get(1), calculationName);</span>
+    }
+
+    /**
+     * 在指定 x 值处评估方程左侧表达式。
+     *
+     * @param x 自变量值
+     * @return 表达式在 x 处的计算结果
+     */
+    protected double eval(double x) {
+<span class="nc" id="L90">        return function.run(x);</span>
+    }
+
+    /**
+     * 使用中心差分法计算函数在指定点的数值导数。
+     *
+     * @param x 自变量值
+     * @return 近似导数 f'(x)
+     */
+    private double derivative(double x) {
+<span class="nc" id="L100">        double h = DERIVE_STEP;</span>
+<span class="nc" id="L101">        return (eval(x + h) - eval(x - h)) / (2 * h);</span>
+    }
+
+    /**
+     * 使用牛顿迭代法求解方程根。
+     *
+     * @param tol     收敛容忍度，当 `abs(f(x)-result) 小于 tol` 时停止
+     * @param maxIter 最大迭代次数
+     * @return 长度为 2 的数组，包含根近似值与实际迭代次数：[x, iter]
+     * @throws ArithmeticException 导数接近零或迭代未收敛时抛出
+     */
+    public double[] solveNewton(double tol, int maxIter) {
+<span class="nc" id="L113">        double x = newtonInitialX;</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">        for (int i = 1; i &lt;= maxIter; i++) {</span>
+<span class="nc" id="L115">            double fx = eval(x) - result;</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">            if (Math.abs(fx) &lt; tol) {</span>
+<span class="nc" id="L117">                return new double[]{x, i};</span>
+            }
+<span class="nc" id="L119">            double dfx = derivative(x);</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">            if (Math.abs(dfx) &lt; 1e-12) {</span>
+<span class="nc" id="L121">                throw new ArithmeticException(</span>
+<span class="nc" id="L122">                        String.format(&quot;导数过小 (|f'(x)| &lt; 1e-12) 在 x=%.6f 处停止迭代&quot;, x)</span>
+                );
+            }
+<span class="nc" id="L125">            x -= fx / dfx;</span>
+        }
+<span class="nc" id="L127">        throw new ArithmeticException(</span>
+<span class="nc" id="L128">                String.format(&quot;牛顿法在 %d 次迭代后未收敛 (阈值 tol=%.2e)&quot;, maxIter, tol)</span>
+        );
+    }
+
+    /**
+     * 使用二分法求解方程根。
+     *
+     * @param tol     收敛容忍度，当区间长度/2 小于 tol 或 abs(f(mid)-result) 小于 tol 时停止
+     * @param maxIter 最大迭代次数
+     * @return 长度为 2 的数组，包含根近似值与实际迭代次数：[mid, iter]
+     * @throws IllegalArgumentException 初始区间两端函数值同号时抛出
+     */
+    public double[] solveBisection(double tol, int maxIter) {
+<span class="nc" id="L141">        double a = bisectionLeft;</span>
+<span class="nc" id="L142">        double b = bisectionRight;</span>
+<span class="nc" id="L143">        double fa = eval(a) - result;</span>
+<span class="nc" id="L144">        double fb = eval(b) - result;</span>
+<span class="nc bnc" id="L145" title="All 2 branches missed.">        if (fa * fb &gt; 0) {</span>
+<span class="nc" id="L146">            throw new IllegalArgumentException(</span>
+<span class="nc" id="L147">                    String.format(&quot;二分法初始区间 f(%.6f)=%.6f 与 f(%.6f)=%.6f 同号，无法保证有根&quot;, a, fa, b, fb)</span>
+            );
+        }
+<span class="nc" id="L150">        double mid = a;</span>
+<span class="nc bnc" id="L151" title="All 4 branches missed.">        for (int i = 1; i &lt;= maxIter &amp;&amp; (b - a) / 2 &gt; tol; i++) {</span>
+<span class="nc" id="L152">            mid = (a + b) / 2;</span>
+<span class="nc" id="L153">            double fm = eval(mid) - result;</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">            if (Math.abs(fm) &lt; tol) {</span>
+<span class="nc" id="L155">                return new double[]{mid, i};</span>
+            }
+<span class="nc bnc" id="L157" title="All 2 branches missed.">            if (fa * fm &lt;= 0) {</span>
+<span class="nc" id="L158">                b = mid;</span>
+            } else {
+<span class="nc" id="L160">                a = mid;</span>
+<span class="nc" id="L161">                fa = fm;</span>
+            }
+        }
+<span class="nc" id="L164">        return new double[]{mid, maxIter};</span>
+    }
+
+    /**
+     * 指示是否使用 BigDecimal 类型计算。
+     *
+     * @return 始终返回 false
+     */
+    @Override
+    public boolean isBigDecimal() {
+<span class="nc" id="L174">        return false;</span>
+    }
+
+    /**
+     * 指示是否使用非 BigDecimal 的普通双精度计算。
+     *
+     * @return 始终返回 true
+     */
+    @Override
+    public boolean isUnBigDecimal() {
+<span class="nc" id="L184">        return true;</span>
+    }
+
+    /**
+     * 将实例切换到多精度模式。当前不支持 BigDecimal，调用将抛出异常。
+     *
+     * @throws UnsupportedOperationException 总是抛出，不支持 BigDecimal
+     */
+    @Override
+    public void convertToMultiPrecisionSupported() {
+<span class="nc" id="L194">        throw new UnsupportedOperationException(&quot;不支持 BigDecimal 类型计算&quot;);</span>
+    }
+
+    /**
+     * 执行方程求解，根据配置选择 Newton 或 Bisection。
+     *
+     * @param isCopy 未使用参数，用于接口兼容
+     * @return {@link CalculationNumberResults} 包含迭代次数、计算结果及名称
+     */
+    @Override
+    public CalculationNumberResults calculation(boolean isCopy) {
+<span class="nc bnc" id="L205" title="All 2 branches missed.">        double[] res = useNewton</span>
+<span class="nc" id="L206">                ? solveNewton(tol, maxIter)</span>
+<span class="nc" id="L207">                : solveBisection(tol, maxIter);</span>
+<span class="nc" id="L208">        return new CalculationNumberResults((int) res[1], res[0], getCalculationName());</span>
+    }
+
+    /**
+     * 执行 BigDecimal 高精度方程求解，当前不支持。
+     *
+     * @param isCopy 未使用参数，用于接口兼容
+     * @throws UnsupportedOperationException 总是抛出，不支持高精度
+     */
+    @Override
+    public CalculationResults calculationBigDecimals(boolean isCopy) {
+<span class="nc" id="L219">        throw new UnsupportedOperationException(&quot;不支持高精度计算&quot;);</span>
+    }
+
+    /**
+     * 获取当前是否使用牛顿法。
+     *
+     * @return true 表示使用牛顿法，否则使用二分法
+     */
+    public boolean isUseNewton() {
+<span class="nc" id="L228">        return useNewton;</span>
+    }
+
+    /**
+     * 设置求解时是否使用牛顿法。
+     *
+     * @param useNewton true 切换到牛顿法， false 切换到二分法
+     */
+    public void setUseNewton(boolean useNewton) {
+<span class="nc" id="L237">        this.useNewton = useNewton;</span>
+<span class="nc" id="L238">    }</span>
+
+    /**
+     * 获取最大迭代次数。
+     *
+     * @return 最大迭代次数
+     */
+    public int getMaxIter() {
+<span class="nc" id="L246">        return maxIter;</span>
+    }
+
+    /**
+     * 设置最大迭代次数。
+     *
+     * @param maxIter 新的最大迭代次数，必须为正整数
+     */
+    public void setMaxIter(int maxIter) {
+<span class="nc" id="L255">        this.maxIter = maxIter;</span>
+<span class="nc" id="L256">    }</span>
+
+    /**
+     * 获取当前收敛容忍度。
+     *
+     * @return 收敛容忍度 tol
+     */
+    public double getTol() {
+<span class="nc" id="L264">        return tol;</span>
+    }
+
+    /**
+     * 设置收敛容忍度。
+     *
+     * @param tol 新的 tol，必须大于 0
+     */
+    public void setTol(double tol) {
+<span class="nc" id="L273">        this.tol = tol;</span>
+<span class="nc" id="L274">    }</span>
+
+    /**
+     * 获取牛顿初始猜测值。
+     *
+     * @return 牛顿法初始 x
+     */
+    public double getNewtonInitialX() {
+<span class="nc" id="L282">        return newtonInitialX;</span>
+    }
+
+    /**
+     * 设置牛顿法初始猜测值。
+     *
+     * @param newtonInitialX 初始 x 值
+     */
+    public void setNewtonInitialX(double newtonInitialX) {
+<span class="nc" id="L291">        this.newtonInitialX = newtonInitialX;</span>
+<span class="nc" id="L292">    }</span>
+
+    /**
+     * 获取二分法左端点。
+     *
+     * @return 二分法左边界 a
+     */
+    public double getBisectionLeft() {
+<span class="nc" id="L300">        return bisectionLeft;</span>
+    }
+
+    /**
+     * 设置二分法左端点。
+     *
+     * @param bisectionLeft 新的左边界 a
+     */
+    public void setBisectionLeft(double bisectionLeft) {
+<span class="nc" id="L309">        this.bisectionLeft = bisectionLeft;</span>
+<span class="nc" id="L310">    }</span>
+
+    /**
+     * 获取二分法右端点。
+     *
+     * @return 二分法右边界 b
+     */
+    public double getBisectionRight() {
+<span class="nc" id="L318">        return bisectionRight;</span>
+    }
+
+    /**
+     * 设置二分法右端点。
+     *
+     * @param bisectionRight 新的右边界 b
+     */
+    public void setBisectionRight(double bisectionRight) {
+<span class="nc" id="L327">        this.bisectionRight = bisectionRight;</span>
+<span class="nc" id="L328">    }</span>
+
+    /**
+     * 获取方程结果。
+     *
+     * @return 方程的右表达式
+     */
+    public double getResult() {
+<span class="nc" id="L336">        return result;</span>
+    }
+
+    /**
+     * 自动检测解所在的初始区间并设置二分法与牛顿法相关参数。
+     *
+     * &lt;p&gt;算法分两阶段：
+     * &lt;ol&gt;
+     *   &lt;li&gt;指数级扩展搜索区间，快速定位符号变化区间&lt;/li&gt;
+     *   &lt;li&gt;线性细化已定位区间，找到首个符号变化点&lt;/li&gt;
+     * &lt;/ol&gt;
+     *
+     * @throws NoRootFoundException 若在 [-1000.0, 1000.0] 区间未检测到根
+     */
+    protected void autoDetectInterval() {
+<span class="nc" id="L351">        final double MAX_RANGE = 1000.0;</span>
+<span class="nc" id="L352">        final double BASE_STEP = 1.0;</span>
+<span class="nc" id="L353">        double prevX = 0.0, prevY = eval(prevX) - result;</span>
+        // 指数搜索
+<span class="nc bnc" id="L355" title="All 2 branches missed.">        for (double exp = BASE_STEP; exp &lt;= MAX_RANGE; exp *= 2) {</span>
+<span class="nc" id="L356">            double currX = Math.copySign(exp, prevY);</span>
+<span class="nc" id="L357">            double currY = eval(currX) - result;</span>
+<span class="nc bnc" id="L358" title="All 2 branches missed.">            if (prevY * currY &lt;= 0) {</span>
+<span class="nc" id="L359">                refineInterval(prevX, currX, prevY, currY);</span>
+<span class="nc" id="L360">                return;</span>
+            }
+<span class="nc" id="L362">            prevX = currX;</span>
+<span class="nc" id="L363">            prevY = currY;</span>
+        }
+<span class="nc" id="L365">    }</span>
+
+    /**
+     * 在给定区间内以固定步长线性细化，寻找首个符号变化点并设置相关参数。
+     *
+     * @param a  区间左端点
+     * @param b  区间右端点
+     * @param fa a 处函数值 f(a)-result
+     * @param fb b 处函数值 f(b)-result
+     * @throws NoRootFoundException 若未找到符号变化点
+     */
+    private void refineInterval(double a, double b, double fa, double fb) {
+<span class="nc" id="L377">        final double STEP = 1.0;</span>
+<span class="nc" id="L378">        double x1 = a, y1 = fa;</span>
+<span class="nc" id="L379">        double x2 = a + STEP;</span>
+<span class="nc bnc" id="L380" title="All 2 branches missed.">        while (x2 &lt;= b) {</span>
+<span class="nc" id="L381">            double y2 = eval(x2) - result;</span>
+<span class="nc bnc" id="L382" title="All 2 branches missed.">            if (y1 * y2 &lt;= 0) {</span>
+<span class="nc" id="L383">                this.bisectionLeft = x1;</span>
+<span class="nc" id="L384">                this.bisectionRight = x2;</span>
+<span class="nc" id="L385">                this.newtonInitialX = (x1 + x2) / 2;</span>
+<span class="nc" id="L386">                return;</span>
+            }
+<span class="nc" id="L388">            x1 = x2;</span>
+<span class="nc" id="L389">            y1 = y2;</span>
+<span class="nc" id="L390">            x2 += STEP;</span>
+<span class="nc" id="L391">        }</span>
+<span class="nc" id="L392">        throw new NoRootFoundException(</span>
+<span class="nc" id="L393">                String.format(&quot;线性细化在 [%.6f, %.6f] 未找到根&quot;, a, b)</span>
+        );
+    }
+
+    /**
+     * 当自动检测区间失败时抛出。
+     */
+    public static class NoRootFoundException extends RuntimeException {
+        public NoRootFoundException(String message) {
+<span class="nc" id="L402">            super(message);</span>
+<span class="nc" id="L403">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

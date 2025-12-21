@@ -1,0 +1,99 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+Mathematical-Expression,net.mooctest,StrUtils,510,0,67,0,97,0,47,0,13,0
+Mathematical-Expression,net.mooctest,DynamicFunctionCompiler.new SimpleJavaFileObject() {...},12,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,DynamicFunctionCompiler.new SimpleJavaFileObject() {...},12,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,NumberCalculation,184,0,31,0,43,0,20,0,4,0
+Mathematical-Expression,net.mooctest,CalculationComplexResults,18,0,0,0,5,0,3,0,3,0
+Mathematical-Expression,net.mooctest,ExtractException,16,0,0,0,8,0,4,0,4,0
+Mathematical-Expression,net.mooctest,Mathematical_Expression.new Mathematical_Expression() {...},9,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},9,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,Mathematical_Expression.new Mathematical_Expression() {...},9,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},9,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,Mathematical_Expression.new Mathematical_Expression() {...},9,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},9,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,Mathematical_Expression.new Mathematical_Expression() {...},9,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},66,0,6,0,11,0,5,0,2,0
+Mathematical-Expression,net.mooctest,Mathematical_Expression.new Mathematical_Expression() {...},9,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,SingletonEquationSolvingTwo,60,0,4,0,14,0,8,0,6,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},24,0,2,0,5,0,3,0,2,0
+Mathematical-Expression,net.mooctest,Mathematical_Expression.new Mathematical_Expression() {...},9,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},9,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,Mathematical_Expression.new Mathematical_Expression() {...},9,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,AbnormalOperation,16,0,0,0,8,0,4,0,4,0
+Mathematical-Expression,net.mooctest,EquationSolver,544,0,28,0,110,0,42,0,28,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},9,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,Mathematical_Expression.new Mathematical_Expression() {...},9,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,DynamicFunctionCompiler.new ForwardingJavaFileManager() {...},20,0,0,0,4,0,2,0,2,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},12,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,Mathematical_Expression.new Mathematical_Expression() {...},9,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},28,0,2,0,5,0,3,0,2,0
+Mathematical-Expression,net.mooctest,BracketsCalculation2,215,0,20,0,45,0,20,0,10,0
+Mathematical-Expression,net.mooctest,PrefixExpression,733,0,76,0,148,0,54,0,16,0
+Mathematical-Expression,net.mooctest,DynamicClassLoader,40,0,2,0,10,0,4,0,3,0
+Mathematical-Expression,net.mooctest,WrongFormat,16,0,0,0,8,0,4,0,4,0
+Mathematical-Expression,net.mooctest,JvmExpression,199,0,2,0,42,0,17,0,16,0
+Mathematical-Expression,net.mooctest,FunctionPackage,385,0,6,0,19,0,9,0,6,0
+Mathematical-Expression,net.mooctest,Expression,32,0,4,0,12,0,4,0,2,0
+Mathematical-Expression,net.mooctest,EquationSolver.NoRootFoundException,4,0,0,0,2,0,1,0,1,0
+Mathematical-Expression,net.mooctest,BooleanCalculation2,153,0,12,0,30,0,9,0,3,0
+Mathematical-Expression,net.mooctest,ComplexCalculation,331,0,34,0,68,0,29,0,10,0
+Mathematical-Expression,net.mooctest,NumberUtils,385,0,54,0,63,0,45,0,13,0
+Mathematical-Expression,net.mooctest,BracketsExpression,182,0,22,0,43,0,16,0,5,0
+Mathematical-Expression,net.mooctest,DynamicFunctionCompiler,290,0,6,0,39,0,6,0,3,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},30,0,4,0,4,0,4,0,2,0
+Mathematical-Expression,net.mooctest,LogResults,36,0,0,0,10,0,8,0,8,0
+Mathematical-Expression,net.mooctest,ExpressionFunction,388,0,30,0,78,0,25,0,10,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},30,0,4,0,4,0,4,0,2,0
+Mathematical-Expression,net.mooctest,Calculation,19,0,0,0,1,0,1,0,1,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},30,0,4,0,4,0,4,0,2,0
+Mathematical-Expression,net.mooctest,Mathematical_Expression.new Mathematical_Expression() {...},9,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,InMemoryJavaFileObject,31,0,0,0,5,0,3,0,3,0
+Mathematical-Expression,net.mooctest,Mathematical_Expression.new Mathematical_Expression() {...},9,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,Mathematical_Expression.new Mathematical_Expression() {...},9,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},10,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},10,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},10,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},10,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},10,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},10,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,ParsedSignature,41,0,0,0,9,0,5,0,5,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},10,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,Mathematical_Expression,339,0,18,0,62,0,26,0,17,0
+Mathematical-Expression,net.mooctest,CalculationOptimized,78,0,2,0,13,0,5,0,4,0
+Mathematical-Expression,net.mooctest,CumulativeCalculation,235,0,18,0,39,0,18,0,9,0
+Mathematical-Expression,net.mooctest,CalculationNumberResults,70,0,2,0,16,0,11,0,10,0
+Mathematical-Expression,net.mooctest,SubCompileExpression,37,0,4,0,9,0,6,0,4,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},10,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},10,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},10,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},10,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,FunctionFormulaCalculation2,805,0,96,0,148,0,64,0,16,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},11,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},11,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,JvmCalculation,62,0,4,0,15,0,9,0,7,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},10,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},10,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},11,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},10,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,NameExpression,59,0,4,0,22,0,12,0,10,0
+Mathematical-Expression,net.mooctest,CalculationBooleanResults,100,0,6,0,22,0,14,0,11,0
+Mathematical-Expression,net.mooctest,PackExpression,72,0,2,0,14,0,8,0,7,0
+Mathematical-Expression,net.mooctest,BracketsCalculation,85,0,8,0,18,0,8,0,4,0
+Mathematical-Expression,net.mooctest,JvmExpressionFunction,531,0,40,0,90,0,34,0,14,0
+Mathematical-Expression,net.mooctest,EquationSolverExpression,378,0,16,0,65,0,18,0,10,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},30,0,4,0,4,0,4,0,2,0
+Mathematical-Expression,net.mooctest,FunctionPackage.new ManyToOneNumberFunction() {...},30,0,4,0,4,0,4,0,2,0
+Mathematical-Expression,net.mooctest,FunctionFormulaCalculation,352,0,62,0,71,0,39,0,8,0
+Mathematical-Expression,net.mooctest,BooleanCalculation,84,0,6,0,20,0,10,0,7,0
+Mathematical-Expression,net.mooctest,CalculationBigDecimalResults,13,0,0,0,4,0,2,0,2,0
+Mathematical-Expression,net.mooctest,CalculationResults,10,0,0,0,2,0,2,0,2,0
+Mathematical-Expression,net.mooctest,FunctionExpression,351,0,24,0,65,0,29,0,17,0
+Mathematical-Expression,net.mooctest,FastSumOfIntervalsBrackets,301,0,26,0,69,0,28,0,15,0
+Mathematical-Expression,net.mooctest,ConstantRegion,38,0,0,0,9,0,2,0,2,0
+Mathematical-Expression,net.mooctest,Mathematical_Expression.Options,57,0,2,0,20,0,11,0,10,0
+Mathematical-Expression,net.mooctest,FastMultiplyOfIntervalsBrackets,129,0,4,0,22,0,7,0,5,0
+Mathematical-Expression,net.mooctest,ManyToOneNumberFunction,40,0,2,0,12,0,7,0,6,0
+Mathematical-Expression,net.mooctest,SingletonEquationSolving,60,0,4,0,14,0,8,0,6,0
+Mathematical-Expression,net.mooctest,CalculationManagement,127,0,12,0,29,0,20,0,14,0
+Mathematical-Expression,net.mooctest,PrefixExpressionOperation,611,0,48,0,109,0,35,0,11,0
+Mathematical-Expression,net.mooctest,ComplexExpression,210,0,12,0,45,0,18,0,11,0

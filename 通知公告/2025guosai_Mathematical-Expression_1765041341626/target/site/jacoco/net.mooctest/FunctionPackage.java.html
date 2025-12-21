@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FunctionPackage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Mathematical-Expression</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">FunctionPackage.java</span></div><h1>FunctionPackage.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import static net.mooctest.ConstantRegion.*;
+
+import java.util.HashMap;
+
+/**
+ * 函数包类，在这里包含一些内置的函数包，您可以直接将这里的内置函数包选择性的注册到计算组件中！
+ * &lt;p&gt;
+ * Function package class, which includes some built-in function packages, you can selectively register the built-in function packages here into the calculation component!
+ */
+<span class="nc" id="L12">public enum FunctionPackage {</span>
+
+    /**
+     * 数学函数包
+     */
+<span class="nc" id="L17">    MATH(&quot;Math&quot;,</span>
+            // 求和函数
+<span class="nc" id="L19">            new ManyToOneNumberFunction(&quot;sum&quot;) {</span>
+                @Override
+                public double run(double... numbers) {
+<span class="nc" id="L22">                    double temp = 0;</span>
+<span class="nc bnc" id="L23" title="All 2 branches missed.">                    for (double number : numbers) {</span>
+<span class="nc" id="L24">                        temp += number;</span>
+                    }
+<span class="nc" id="L26">                    return temp;</span>
+                }
+            },
+            // 求方函数
+<span class="nc" id="L30">            new ManyToOneNumberFunction(&quot;pow&quot;) {</span>
+                @Override
+                public double run(double... numbers) {
+<span class="nc" id="L33">                    return Math.pow(numbers[0], numbers[1]);</span>
+                }
+            },
+            // 求根函数
+<span class="nc" id="L37">            new ManyToOneNumberFunction(&quot;sqrt&quot;) {</span>
+                @Override
+                public double run(double... numbers) {
+<span class="nc" id="L40">                    return Math.sqrt(numbers[0]);</span>
+                }
+            },
+            // 求 ! 函数
+<span class="nc" id="L44">            new ManyToOneNumberFunction(&quot;factorial&quot;) {</span>
+                @Override
+                public double run(double... numbers) {
+<span class="nc" id="L47">                    return NumberUtils.factorial(numbers[0]);</span>
+                }
+            },
+            // 求均值函数
+<span class="nc" id="L51">            new ManyToOneNumberFunction(&quot;avg&quot;) {</span>
+                @Override
+                public double run(double... numbers) {
+<span class="nc" id="L54">                    final ManyToOneNumberFunction sum = CalculationManagement.getFunctionByNameNoCheck(&quot;sum&quot;);</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">                    if (sum == null) {</span>
+<span class="nc" id="L56">                        throw FunctionPackage.throwException(&quot;sum&quot;, &quot;double[]&quot;, &quot;double&quot;, &quot;求均值前的求和函数;&quot;);</span>
+                    }
+<span class="nc" id="L58">                    return sum.run(numbers) / numbers.length;</span>
+                }
+            },
+            // 求模长函数
+<span class="nc" id="L62">            new ManyToOneNumberFunction(&quot;moduleLength&quot;) {</span>
+                @Override
+                public double run(double... numbers) {
+<span class="nc" id="L65">                    final ManyToOneNumberFunction pow = CalculationManagement.getFunctionByNameNoCheck(&quot;pow&quot;);</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">                    if (pow == null) {</span>
+<span class="nc" id="L67">                        throw FunctionPackage.throwException(&quot;pow&quot;, &quot;double[]{需要被计算的数值，需要的次方数}&quot;, &quot;int/double&quot;, &quot;求某个数的N次方函数;&quot;);</span>
+                    }
+<span class="nc" id="L69">                    final ManyToOneNumberFunction sqrt = CalculationManagement.getFunctionByNameNoCheck(&quot;sqrt&quot;);</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">                    if (sqrt == null) {</span>
+<span class="nc" id="L71">                        throw FunctionPackage.throwException(&quot;sqrt&quot;, &quot;double[]{需要被计算的数值}&quot;, &quot;double&quot;, &quot;求某个数的 2 次方根函数;&quot;);</span>
+                    }
+<span class="nc" id="L73">                    double temp = 0;</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">                    for (double number : numbers) {</span>
+<span class="nc" id="L75">                        temp += pow.run(number);</span>
+                    }
+<span class="nc" id="L77">                    return sqrt.run(temp);</span>
+                }
+            },
+            // 求sin
+<span class="nc" id="L81">            new ManyToOneNumberFunction(&quot;sin&quot;) {</span>
+                @Override
+                public double run(double... numbers) {
+<span class="nc" id="L84">                    return Math.sin(numbers[0]);</span>
+                }
+            },
+            // 求cos
+<span class="nc" id="L88">            new ManyToOneNumberFunction(&quot;cos&quot;) {</span>
+                @Override
+                public double run(double... numbers) {
+<span class="nc" id="L91">                    return Math.cos(numbers[0]);</span>
+                }
+            },
+            // 求tan
+<span class="nc" id="L95">            new ManyToOneNumberFunction(&quot;tan&quot;) {</span>
+                @Override
+                public double run(double... numbers) {
+<span class="nc" id="L98">                    return Math.tan(numbers[0]);</span>
+                }
+            },
+            // 求cot
+<span class="nc" id="L102">            new ManyToOneNumberFunction(&quot;cot&quot;) {</span>
+                @Override
+                public double run(double... numbers) {
+<span class="nc" id="L105">                    return 1 / Math.tan(numbers[0]);</span>
+                }
+            },
+            // 求sec
+<span class="nc" id="L109">            new ManyToOneNumberFunction(&quot;sec&quot;) {</span>
+                @Override
+                public double run(double... numbers) {
+<span class="nc" id="L112">                    return 1 / Math.cos(numbers[0]);</span>
+                }
+            },
+            // 求csc
+<span class="nc" id="L116">            new ManyToOneNumberFunction(&quot;csc&quot;) {</span>
+                @Override
+                public double run(double... numbers) {
+<span class="nc" id="L119">                    return 1 / Math.sin(numbers[0]);</span>
+                }
+            }
+    ),
+
+    /**
+     * 日期函数包
+     */
+<span class="nc" id="L127">    DATE(&quot;Date&quot;,</span>
+            // 毫秒转秒
+<span class="nc" id="L129">            new ManyToOneNumberFunction(&quot;msToS&quot;) {</span>
+                @Override
+                public double run(double... numbers) {
+<span class="nc" id="L132">                    return numbers[0] / 1000;</span>
+                }
+            },
+            // 秒转毫秒
+<span class="nc" id="L136">            new ManyToOneNumberFunction(&quot;sToMs&quot;) {</span>
+                @Override
+                public double run(double... numbers) {
+<span class="nc" id="L139">                    return numbers[0] * 1000;</span>
+                }
+            },
+            // 毫秒转分钟
+<span class="nc" id="L143">            new ManyToOneNumberFunction(&quot;msToMin&quot;) {</span>
+                @Override
+                public double run(double... numbers) {
+<span class="nc" id="L146">                    return numbers[0] / 60000;</span>
+                }
+            },
+            // 分钟转毫秒
+<span class="nc" id="L150">            new ManyToOneNumberFunction(&quot;minToMs&quot;) {</span>
+                @Override
+                public double run(double... numbers) {
+<span class="nc" id="L153">                    return numbers[0] * 60000;</span>
+                }
+            },
+            // 毫秒转小时
+<span class="nc" id="L157">            new ManyToOneNumberFunction(&quot;msToHour&quot;) {</span>
+                @Override
+                public double run(double... numbers) {
+<span class="nc" id="L160">                    return numbers[0] / 3600000;</span>
+                }
+            },
+            // 小时转毫秒
+<span class="nc" id="L164">            new ManyToOneNumberFunction(&quot;hourToMs&quot;) {</span>
+                @Override
+                public double run(double... numbers) {
+<span class="nc" id="L167">                    return numbers[0] * 3600000;</span>
+                }
+            },
+            // 毫秒转天
+<span class="nc" id="L171">            new ManyToOneNumberFunction(&quot;msToDay&quot;) {</span>
+                @Override
+                public double run(double... numbers) {
+<span class="nc" id="L174">                    return numbers[0] / 86400000;</span>
+                }
+            },
+            // 天转毫秒
+<span class="nc" id="L178">            new ManyToOneNumberFunction(&quot;dayToMs&quot;) {</span>
+                @Override
+                public double run(double... numbers) {
+<span class="nc" id="L181">                    return numbers[0] * 86400000;</span>
+                }
+            },
+            // 毫秒转周
+<span class="nc" id="L185">            new ManyToOneNumberFunction(&quot;msToWeek&quot;) {</span>
+                @Override
+                public double run(double... numbers) {
+<span class="nc" id="L188">                    return numbers[0] / 604800000;</span>
+                }
+            },
+            // 周转毫秒
+<span class="nc" id="L192">            new ManyToOneNumberFunction(&quot;weekToMs&quot;) {</span>
+                @Override
+                public double run(double... numbers) {
+<span class="nc" id="L195">                    return numbers[0] * 604800000;</span>
+                }
+            },
+            // 毫秒转月
+<span class="nc" id="L199">            new ManyToOneNumberFunction(&quot;msToMonth&quot;) {</span>
+                @Override
+                public double run(double... numbers) {
+<span class="nc" id="L202">                    return numbers[0] / 2592000000L;</span>
+                }
+            },
+            // 月转毫秒
+<span class="nc" id="L206">            new ManyToOneNumberFunction(&quot;monthToMs&quot;) {</span>
+                @Override
+                public double run(double... numbers) {
+<span class="nc" id="L209">                    return numbers[0] * 2592000000L;</span>
+                }
+            },
+            // 毫秒转年
+<span class="nc" id="L213">            new ManyToOneNumberFunction(&quot;msToYear&quot;) {</span>
+                @Override
+                public double run(double... numbers) {
+<span class="nc" id="L216">                    return numbers[0] / 31536000000L;</span>
+                }
+            },
+            // 年转毫秒
+<span class="nc" id="L220">            new ManyToOneNumberFunction(&quot;yearToMs&quot;) {</span>
+                @Override
+                public double run(double... numbers) {
+<span class="nc" id="L223">                    return numbers[0] * 31536000000L;</span>
+                }
+            }
+    ),
+
+    /**
+     * 分支函数包
+     */
+<span class="nc" id="L231">    BRANCH(&quot;Branch&quot;,</span>
+            // if_eq 函数
+<span class="nc" id="L233">            new ManyToOneNumberFunction(&quot;ifEq&quot;) {</span>
+                @Override
+                public double run(double... numbers) {
+                    // 检查参数
+<span class="nc bnc" id="L237" title="All 2 branches missed.">                    if (numbers.length != 4) {</span>
+<span class="nc" id="L238">                        throw new UnsupportedOperationException(&quot;if函数的参数个数必须为4，示例 ifEq(比较值1, 比较值2, true的结果, false的结果)&quot;);</span>
+                    }
+                    // 返回结果
+<span class="nc bnc" id="L241" title="All 2 branches missed.">                    return NumberUtils.ComparisonOperation(EQUAL_SIGN1, numbers[0], numbers[1]) ? numbers[2] : numbers[3];</span>
+                }
+            },
+            // if_gt 函数
+<span class="nc" id="L245">            new ManyToOneNumberFunction(&quot;ifGt&quot;) {</span>
+                @Override
+                public double run(double... numbers) {
+                    // 检查参数
+<span class="nc bnc" id="L249" title="All 2 branches missed.">                    if (numbers.length != 4) {</span>
+<span class="nc" id="L250">                        throw new UnsupportedOperationException(&quot;if函数的参数个数必须为4，示例 ifGt(比较值1, 比较值2, true的结果, false的结果)&quot;);</span>
+                    }
+                    // 返回结果
+<span class="nc bnc" id="L253" title="All 2 branches missed.">                    return NumberUtils.ComparisonOperation(GREATER_THAN_SIGN, numbers[0], numbers[1]) ? numbers[2] : numbers[3];</span>
+                }
+            },
+            // if_lt 函数
+<span class="nc" id="L257">            new ManyToOneNumberFunction(&quot;ifLt&quot;) {</span>
+
+                @Override
+                public double run(double... numbers) {
+                    // 检查参数
+<span class="nc bnc" id="L262" title="All 2 branches missed.">                    if (numbers.length != 4) {</span>
+<span class="nc" id="L263">                        throw new UnsupportedOperationException(&quot;if函数的参数个数必须为4，示例 ifLt(比较值1, 比较值2, true的结果, false的结果)&quot;);</span>
+                    }
+                    // 返回结果
+<span class="nc bnc" id="L266" title="All 2 branches missed.">                    return NumberUtils.ComparisonOperation(LESS_THAN_SIGN, numbers[0], numbers[1]) ? numbers[2] : numbers[3];</span>
+                }
+            },
+            // if_ge 函数
+<span class="nc" id="L270">            new ManyToOneNumberFunction(&quot;ifGe&quot;) {</span>
+                @Override
+                public double run(double... numbers) {
+                    // 检查参数
+<span class="nc bnc" id="L274" title="All 2 branches missed.">                    if (numbers.length != 4) {</span>
+<span class="nc" id="L275">                        throw new UnsupportedOperationException(&quot;if函数的参数个数必须为4，示例 ifGe(比较值1, 比较值2, true的结果, false的结果)&quot;);</span>
+                    }
+                    // 返回结果
+<span class="nc bnc" id="L278" title="All 2 branches missed.">                    return NumberUtils.ComparisonOperation(GREATER_THAN_OR_EQUAL_TO_SIGN, numbers[0], numbers[1]) ? numbers[2] : numbers[3];</span>
+                }
+            },
+            // if_le 函数
+<span class="nc" id="L282">            new ManyToOneNumberFunction(&quot;ifLe&quot;) {</span>
+                @Override
+                public double run(double... numbers) {
+                    // 检查参数
+<span class="nc bnc" id="L286" title="All 2 branches missed.">                    if (numbers.length != 4) {</span>
+<span class="nc" id="L287">                        throw new UnsupportedOperationException(&quot;if函数的参数个数必须为4，示例 ifLe(比较值1, 比较值2, true的结果, false的结果)&quot;);</span>
+                    }
+                    // 返回结果
+<span class="nc bnc" id="L290" title="All 2 branches missed.">                    return NumberUtils.ComparisonOperation(LESS_THAN_OR_EQUAL_TO_SIGN, numbers[0], numbers[1]) ? numbers[2] : numbers[3];</span>
+                }
+            }
+    );
+
+    private final String name;
+<span class="nc" id="L296">    private final HashMap&lt;String, Function&gt; functionMap = new HashMap&lt;&gt;();</span>
+
+<span class="nc" id="L298">    FunctionPackage(String name, Function... function) {</span>
+<span class="nc" id="L299">        this.name = name;</span>
+<span class="nc bnc" id="L300" title="All 2 branches missed.">        for (Function function1 : function) {</span>
+<span class="nc" id="L301">            functionMap.put(function1.getName(), function1);</span>
+        }
+<span class="nc" id="L303">    }</span>
+
+    /**
+     * 当函数包中没有该函数时，抛出异常
+     *
+     * @param needName       需要的第三方函数
+     * @param needParamsType 函数接收的参数的类型
+     * @param returnType     函数返回的类型
+     * @param info           对于函数的描述
+     * @return 返回异常对象
+     */
+    private static UnsupportedOperationException throwException(String needName, String needParamsType, String returnType, String info) {
+        // 首先判断这个函数在哪
+<span class="nc" id="L316">        String w = needName + &quot; 函数似乎没有被 Mathematical_Expression 所注册或实现，不用担心，您可以现在去实现一个!\nThe function &quot; + needName + &quot; seems to have not been mathematically defined_ You can now implement an expression that has been registered or implemented!&quot;;</span>
+<span class="nc bnc" id="L317" title="All 2 branches missed.">        for (FunctionPackage value : FunctionPackage.values()) {</span>
+<span class="nc" id="L318">            final Function functionByName = value.getFunctionByNameNoCheck(needName);</span>
+<span class="nc bnc" id="L319" title="All 2 branches missed.">            if (functionByName != null) {</span>
+<span class="nc" id="L320">                w = needName + &quot; 函数位于 &quot; + value.getName() + &quot; 函数包中! 将这个函数包注册到 Mathematical_Expression 中就可以了!&quot;;</span>
+            }
+        }
+<span class="nc" id="L323">        return new UnsupportedOperationException(&quot;操作错误，您需要将 一个名为 &quot; + needName + &quot; 的函数注册到管理者中，它接收的是一个&quot; + needParamsType + &quot; 类型，返回的是一个 &quot; + returnType + &quot; 类型，它的作用是：&quot; + info + &quot;\n--- describe ---\n&quot; + w);</span>
+    }
+
+    /**
+     * @return 当前函数所属的函数包的名字
+     */
+    public String getName() {
+<span class="nc" id="L330">        return name;</span>
+    }
+
+    /**
+     * 根据函数名获取函数
+     *
+     * @param needName 需要的函数名
+     * @return 指定的函数名字对应的函数对象
+     */
+    public Function getFunctionByNameNoCheck(String needName) {
+<span class="nc" id="L340">        return this.functionMap.get(needName);</span>
+    }
+
+    /**
+     * @return 当前函数包中的所有函数的Map key 是函数的名字 value 是函数的值
+     */
+    public HashMap&lt;String, Function&gt; getFunctionMap() {
+<span class="nc" id="L347">        return this.functionMap;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,18 @@
+_netvar_:
+  key1: value1
+  key2: 100
+  other: { }
+test_gas:
+  - speed : 60
+  - speed : 63
+  - speed : 67
+  - speed : 71
+  - speed : 73
+  - speed : 76
+  - speed : 79
+  - speed : 81
+  - speed : 83
+  - speed : 85
+
+
+  

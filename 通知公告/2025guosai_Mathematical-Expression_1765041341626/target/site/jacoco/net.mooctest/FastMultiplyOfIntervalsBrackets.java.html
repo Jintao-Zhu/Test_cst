@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FastMultiplyOfIntervalsBrackets.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Mathematical-Expression</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">FastMultiplyOfIntervalsBrackets.java</span></div><h1>FastMultiplyOfIntervalsBrackets.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import java.util.ArrayList;
+
+/**
+ * 快速的将一个区间内所有元素的累积结果计算出来，该组件继承于“FastSumOfIntervalsBrackets” 父类中的“step” 字段在这里还是作为区间步长，默认为2
+ * &lt;p&gt;
+ * Quickly calculate the cumulative results of all elements in an interval. This component inherits the &quot;step&quot; field in the parent class of &quot;FastSumOfIntervalsBrackets&quot;. Here, it is still used as the interval step. The default value is 2
+ *
+ * @author zhao
+ */
+public class FastMultiplyOfIntervalsBrackets extends FastSumOfIntervalsBrackets {
+    protected FastMultiplyOfIntervalsBrackets(String name) {
+<span class="nc" id="L14">        super(name);</span>
+<span class="nc" id="L15">    }</span>
+
+
+    /**
+     * 从管理者中获取到指定名称的计算组件，注意 如果管理者中不存在该名称的组件，那么该组件就会自动的注册
+     * &lt;p&gt;
+     * Get the calculation component with the specified name from the manager. Note that if there is no component with this name in the manager, the component will be registered automatically
+     *
+     * @param CalculationName 组件的名字
+     * @return 解析括号类计算公式的计算组件
+     */
+    public static FastMultiplyOfIntervalsBrackets getInstance(String CalculationName) {
+<span class="nc bnc" id="L27" title="All 2 branches missed.">        if (CalculationManagement.isRegister(CalculationName)) {</span>
+<span class="nc" id="L28">            final Calculation calculationByName = CalculationManagement.getCalculationByName(CalculationName);</span>
+<span class="nc bnc" id="L29" title="All 2 branches missed.">            if (calculationByName instanceof FastMultiplyOfIntervalsBrackets) {</span>
+<span class="nc" id="L30">                return (FastMultiplyOfIntervalsBrackets) calculationByName;</span>
+            } else {
+<span class="nc" id="L32">                throw new ExtractException(</span>
+                        &quot;您需要的计算组件[&quot; + CalculationName + &quot;]被找到了，但是它似乎不属于 FastMultiplyOfIntervalsBrackets 类型\n请您重新定义一个名称。&quot;
+                );
+            }
+        } else {
+<span class="nc" id="L37">            FastMultiplyOfIntervalsBrackets FastMultiplyOfIntervalsBrackets = new FastMultiplyOfIntervalsBrackets(CalculationName);</span>
+<span class="nc" id="L38">            CalculationManagement.register(FastMultiplyOfIntervalsBrackets, false);</span>
+<span class="nc" id="L39">            FastMultiplyOfIntervalsBrackets.step = 2;</span>
+<span class="nc" id="L40">            return FastMultiplyOfIntervalsBrackets;</span>
+        }
+    }
+
+    /**
+     * 将两个结果对象，作为需要求和区间的起始与终止数值，以此进行区间的求和，不进行公式的计算
+     * &lt;p&gt;
+     * Take the two result objects as the starting and ending values of the interval to be summed, so as to sum the interval, without calculating the formula
+     *
+     * @param start 起始点结果数值
+     * @param end   终止点结果数值
+     * @return 区间求和的结果对象
+     * &lt;p&gt;
+     * Result object of interval summation
+     */
+    @Override
+    public CalculationNumberResults calculation(CalculationNumberResults start, CalculationNumberResults end) {
+<span class="nc" id="L57">        return new CalculationNumberResults(</span>
+<span class="nc" id="L58">                end.getResultLayers() + start.getResultLayers(),</span>
+<span class="nc" id="L59">                NumberUtils.MultiplyOfRange(start.getResult(), end.getResult(), step),</span>
+                this.Name
+        );
+    }
+
+    @Override
+    public PackExpression compile(String Formula, boolean formatRequired) {
+        // 如果是其他情况，代表共享池数据不可用，在这里获取出公式
+<span class="nc" id="L67">        ArrayList&lt;String&gt; arrayList = StrUtils.splitByChar(Formula, ConstantRegion.COMMA);</span>
+<span class="nc" id="L68">        String start = arrayList.get(0);</span>
+<span class="nc" id="L69">        String end = arrayList.get(1);</span>
+<span class="nc" id="L70">        return FastSumOfIntervalsBrackets.BRACKETS_CALCULATION_2.compile(NumberUtils.MultiplyOfRangeString(FastSumOfIntervalsBrackets.BRACKETS_CALCULATION_2.calculation(start).getResult(), FastSumOfIntervalsBrackets.BRACKETS_CALCULATION_2.calculation(end).getResult(), this.step), formatRequired);</span>
+    }
+
+    @Override
+    public PackExpression compileBigDecimal(String Formula, boolean formatRequired) {
+        // 如果是其他情况，代表共享池数据不可用，在这里获取出公式
+<span class="nc" id="L76">        ArrayList&lt;String&gt; arrayList = StrUtils.splitByChar(Formula, ConstantRegion.COMMA);</span>
+<span class="nc" id="L77">        String start = arrayList.get(0);</span>
+<span class="nc" id="L78">        String end = arrayList.get(1);</span>
+<span class="nc" id="L79">        return FastSumOfIntervalsBrackets.BRACKETS_CALCULATION_2.compileBigDecimal(NumberUtils.MultiplyOfRangeString(FastSumOfIntervalsBrackets.BRACKETS_CALCULATION_2.calculation(start).getResult(), FastSumOfIntervalsBrackets.BRACKETS_CALCULATION_2.calculation(end).getResult(), this.step), formatRequired);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

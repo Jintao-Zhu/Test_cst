@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JvmExpressionFunction.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Mathematical-Expression</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">JvmExpressionFunction.java</span></div><h1>JvmExpressionFunction.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+/**
+ * 基于 JVM 动态编译的多参数数值函数。
+ * 支持自定义静态函数注册。
+ * PS: 此类速度极快，和直接调用Java代码无异 但是编译速度很慢 且需要很大内存
+ */
+public class JvmExpressionFunction extends ExpressionFunction {
+<span class="nc" id="L14">    private static final Map&lt;String, String&gt; registeredMethods = new LinkedHashMap&lt;&gt;();</span>
+<span class="nc" id="L15">    private static final Pattern n = Pattern.compile(&quot;\\s*,\\s*&quot;);</span>
+    private final ManyToOneNumberFunction delegate;
+    private final ParsedSignature parsed;
+
+    /**
+     * 参数位置
+     */
+    private final Matcher matcher;
+
+    private JvmExpressionFunction(ParsedSignature parsed, ManyToOneNumberFunction delegate) {
+<span class="nc" id="L25">        super(null, parsed);</span>
+<span class="nc" id="L26">        this.delegate = delegate;</span>
+<span class="nc" id="L27">        this.parsed = parsed;</span>
+        // 生成正则表达式模式
+<span class="nc" id="L29">        final String regexPattern = Arrays.stream(parsed.paramNames)</span>
+<span class="nc" id="L30">                .map(param -&gt; String.format(&quot;\\Q%s\\E&quot;, param))</span>
+<span class="nc" id="L31">                .collect(Collectors.joining(&quot;|&quot;));</span>
+
+        // 预编译正则表达式
+<span class="nc" id="L34">        Pattern pattern = Pattern.compile(regexPattern);</span>
+<span class="nc" id="L35">        matcher = pattern.matcher(parsed.getExpression());</span>
+<span class="nc" id="L36">    }</span>
+
+    /**
+     * 解析函数表达式并返回 JvmExpressionFunction 对象
+     *
+     * @param signature 函数签名 f(x) = xxx 的 表达式
+     * @return JvmExpressionFunction 对象
+     */
+    public static JvmExpressionFunction parse(String signature) {
+<span class="nc" id="L45">        final ParsedSignature parsed = parseFunctionSignature(signature);</span>
+<span class="nc" id="L46">        ManyToOneNumberFunction dyn = DynamicFunctionCompiler.compile(parsed.name, parsed.expression, parsed.paramNames);</span>
+<span class="nc" id="L47">        return new JvmExpressionFunction(parsed, dyn);</span>
+    }
+
+    /**
+     * 解析函数表达式并返回 JvmExpressionFunction 对象
+     *
+     * @param signature 函数签名 f(x) = xxx 的 表达式
+     * @return JvmExpressionFunction 对象
+     */
+    public static JvmExpressionFunction parse(ExpressionFunction signature) {
+<span class="nc" id="L57">        return parse(signature.toString());</span>
+    }
+
+    /**
+     * 转换为静态方法源码
+     *
+     * @param expression 函数表达式
+     * @return 转换之后的静态方法源码
+     */
+    public static String convertToStaticMethodSource(String expression) {
+<span class="nc" id="L67">        final ParsedSignature parsed = parseFunctionSignature(expression);</span>
+<span class="nc" id="L68">        final StringBuilder sb = new StringBuilder();</span>
+<span class="nc" id="L69">        sb.append(&quot;public static double &quot;).append(parsed.name).append(&quot;(&quot;);</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">        for (int i = 0; i &lt; parsed.paramNames.length; i++) {</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">            if (i &gt; 0) sb.append(&quot;, &quot;);</span>
+<span class="nc" id="L72">            sb.append(&quot;double &quot;).append(parsed.paramNames[i]);</span>
+        }
+<span class="nc" id="L74">        sb.append(&quot;) { return &quot;).append(parsed.expression).append(&quot;; }&quot;);</span>
+<span class="nc" id="L75">        return sb.toString();</span>
+    }
+
+    /**
+     * 注册函数 到 JvmExpressionFunction
+     *
+     * @param methodExpr 函数表达式 f(x) = x + x 的数学格式即可！
+     */
+    public static void registerFunction(String methodExpr) {
+<span class="nc" id="L84">        registerJvmFunction(convertToStaticMethodSource(methodExpr));</span>
+<span class="nc" id="L85">    }</span>
+
+    /**
+     * 注册函数 到 JvmExpressionFunction
+     *
+     * @param methodSource 函数方法源码 需要是 Java 中的格式 如 public static double f(double x) { return x + x; }
+     */
+    public static void registerJvmFunction(String methodSource) {
+<span class="nc" id="L93">        String trim = methodSource.trim();</span>
+<span class="nc" id="L94">        List&lt;String&gt; parts = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L95">        int parenIndex = trim.indexOf('(');</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">        if (parenIndex != -1) {</span>
+<span class="nc" id="L97">            String sig = trim.substring(0, parenIndex);</span>
+<span class="nc" id="L98">            parts.add(sig);</span>
+<span class="nc" id="L99">            parts.add(trim.substring(parenIndex));</span>
+        }
+<span class="nc bnc" id="L101" title="All 2 branches missed.">        if (parts.size() &lt; 2) throw new IllegalArgumentException(&quot;函数方法格式错误：&quot; + trim);</span>
+<span class="nc" id="L102">        String sig = parts.get(0);</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">        if (!sig.startsWith(&quot;public static &quot;)) throw new IllegalArgumentException(&quot;函数方法签名格式错误：&quot; + sig);</span>
+<span class="nc" id="L104">        String key = sig.substring(&quot;public static &quot;.length());</span>
+<span class="nc" id="L105">        registeredMethods.put(key, methodSource);</span>
+<span class="nc" id="L106">    }</span>
+
+    public static Map&lt;String, String&gt; getRegisteredMethods() {
+<span class="nc" id="L109">        return registeredMethods;</span>
+    }
+
+    private static ParsedSignature parseFunctionSignature(String signature) {
+<span class="nc" id="L113">        ArrayList&lt;String&gt; parts = StrUtils.splitByChar(signature, '=');</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">        if (parts.size() &lt; 2) {</span>
+<span class="nc" id="L115">            throw new IllegalArgumentException(&quot;签名必须包含 '='; error: &quot; + signature);</span>
+        }
+
+<span class="nc bnc" id="L118" title="All 2 branches missed.">        if (parts.size() &gt; 2) {</span>
+<span class="nc" id="L119">            throw new IllegalArgumentException(&quot;签名不能包含多个 '='; error: &quot; + signature);</span>
+        }
+
+<span class="nc" id="L122">        String funcDef = parts.get(0).trim();</span>
+<span class="nc" id="L123">        String body = parts.get(1).trim();</span>
+
+<span class="nc" id="L125">        int openParen = funcDef.indexOf('(');</span>
+<span class="nc" id="L126">        int closeParen = funcDef.indexOf(')');</span>
+
+<span class="nc bnc" id="L128" title="All 4 branches missed.">        if (openParen &lt; 0 || closeParen &lt; 0) {</span>
+<span class="nc" id="L129">            throw new IllegalArgumentException(&quot;函数定义需要包含参数列表&quot;);</span>
+        }
+
+<span class="nc" id="L132">        final String funcName = funcDef.substring(0, openParen);</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">        if (StrUtils.containsNumber(funcName)) {</span>
+<span class="nc" id="L134">            throw new IllegalArgumentException(&quot;函数名称不能包含数字!!! =&gt; &quot; + funcName);</span>
+        }
+<span class="nc" id="L136">        final String paramsStr = funcDef.substring(openParen + 1, closeParen).trim();</span>
+
+<span class="nc bnc" id="L138" title="All 2 branches missed.">        final String[] paramNames = paramsStr.isEmpty() ? new String[0] : n.split(paramsStr);</span>
+
+<span class="nc" id="L140">        return new ParsedSignature(funcName, paramNames, body);</span>
+    }
+
+    @Override
+    public double run(double... numbers) {
+<span class="nc bnc" id="L145" title="All 2 branches missed.">        if (numbers.length != this.parsed.paramNames.length) {</span>
+<span class="nc" id="L146">            throw new IllegalArgumentException(&quot;参数数量不匹配: 应为 &quot; + this.parsed.paramNames.length + &quot; 个, 实际为 &quot; + numbers.length);</span>
+        }
+<span class="nc" id="L148">        return delegate.run(numbers);</span>
+    }
+
+    /**
+     * 解释计算表达式，我们可以在这里传递一些参数，这些参数将做为函数的输入参数，在这里返回的就是函数带有数值的内部表达式
+     * &lt;p&gt;
+     * Explain the calculation expression. We can pass some parameters here, which will be used as input parameters for the function. Here, we return the internal expression of the function with numerical values
+     *
+     * @param numbers 这里是函数的数据输入对象，由框架向这里传递数据输入参数
+     *                &lt;p&gt;
+     *                This is the data input object for the function, and the framework passes the data input parameters here
+     * @return 这里是数据经过函数转换之后的带有参数的表达式数据，用于构建数学表达式的！
+     * &lt;p&gt;
+     * This is the expression data with parameters after function conversion, used to construct mathematical expressions!
+     */
+    @Override
+    public String explain(double... numbers) {
+<span class="nc bnc" id="L165" title="All 2 branches missed.">        if (numbers.length != this.parsed.paramNames.length) {</span>
+<span class="nc" id="L166">            throw new IllegalArgumentException(&quot;参数数量不匹配 需要 &quot; + this.parsed.paramNames.length + &quot; 个, 实际为 &quot; + numbers.length);</span>
+        }
+
+        // 构建参数名到值的映射表
+<span class="nc" id="L170">        final Map&lt;String, String&gt; paramMap = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L171" title="All 2 branches missed.">        for (int i = 0; i &lt; parsed.paramNames.length; i++) {</span>
+<span class="nc" id="L172">            paramMap.put(parsed.paramNames[i], String.valueOf(numbers[i]));</span>
+        }
+
+        // 执行替换
+<span class="nc" id="L176">        final StringBuffer result = new StringBuffer();</span>
+<span class="nc bnc" id="L177" title="All 2 branches missed.">        while (matcher.find()) {</span>
+<span class="nc" id="L178">            final String paramName = matcher.group();</span>
+<span class="nc" id="L179">            final String replacement = paramMap.get(paramName);</span>
+<span class="nc bnc" id="L180" title="All 2 branches missed.">            if (replacement != null) {</span>
+<span class="nc" id="L181">                matcher.appendReplacement(result, replacement);</span>
+            }
+<span class="nc" id="L183">        }</span>
+<span class="nc" id="L184">        matcher.appendTail(result);</span>
+<span class="nc" id="L185">        matcher.reset();</span>
+<span class="nc" id="L186">        return result.toString();</span>
+    }
+
+    /**
+     * 解释计算表达式，我们可以在这里传递一些参数，这些参数将做为函数的输入参数，在这里返回的就是函数带有数值的内部表达式
+     * &lt;p&gt;
+     * Explain the calculation expression. We can pass some parameters here, which will be used as input parameters for the function. Here, we return the internal expression of the function with numerical values
+     *
+     * @param numbers 这里是函数的数据输入对象，由框架向这里传递数据输入参数
+     *                &lt;p&gt;
+     *                This is the data input object for the function, and the framework passes the data input parameters here
+     * @return 这里是数据经过函数转换之后的带有参数的表达式数据，用于构建数学表达式的！
+     * &lt;p&gt;
+     * This is the expression data with parameters after function conversion, used to construct mathematical expressions!
+     */
+    public String explain(Object... numbers) {
+<span class="nc bnc" id="L202" title="All 2 branches missed.">        if (numbers.length != this.parsed.paramNames.length) {</span>
+<span class="nc" id="L203">            throw new IllegalArgumentException(&quot;参数数量不匹配 需要 &quot; + this.parsed.paramNames.length + &quot; 个, 实际为 &quot; + numbers.length);</span>
+        }
+
+        // 构建参数名到值的映射表
+<span class="nc" id="L207">        final Map&lt;String, String&gt; paramMap = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L208" title="All 2 branches missed.">        for (int i = 0; i &lt; parsed.paramNames.length; i++) {</span>
+<span class="nc" id="L209">            paramMap.put(parsed.paramNames[i], String.valueOf(numbers[i]));</span>
+        }
+
+        // 执行替换
+<span class="nc" id="L213">        final StringBuffer result = new StringBuffer();</span>
+<span class="nc bnc" id="L214" title="All 2 branches missed.">        while (matcher.find()) {</span>
+<span class="nc" id="L215">            final String paramName = matcher.group();</span>
+<span class="nc" id="L216">            final String replacement = paramMap.get(paramName);</span>
+<span class="nc bnc" id="L217" title="All 2 branches missed.">            if (replacement != null) {</span>
+<span class="nc" id="L218">                matcher.appendReplacement(result, replacement);</span>
+            }
+<span class="nc" id="L220">        }</span>
+<span class="nc" id="L221">        matcher.appendTail(result);</span>
+<span class="nc" id="L222">        matcher.reset();</span>
+<span class="nc" id="L223">        return result.toString();</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L228">        return parsed.toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

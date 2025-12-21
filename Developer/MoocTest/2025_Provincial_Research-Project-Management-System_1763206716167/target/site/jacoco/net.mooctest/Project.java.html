@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Project.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Research-Project-Management-System</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">Project.java</span></div><h1>Project.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import java.util.*;
+
+public class Project {
+    private final long id;
+    private String name;
+    private final Map&lt;Long, Task&gt; tasks;
+    private final Map&lt;Long, Researcher&gt; researchers;
+    private final List&lt;Risk&gt; risks;
+    private Budget budget;
+
+<span class="fc" id="L13">    public Project(String name) {</span>
+<span class="fc" id="L14">        this.id = IdGenerator.nextId();</span>
+<span class="fc bfc" id="L15" title="All 2 branches covered.">        this.name = name == null ? &quot;&quot; : name;</span>
+<span class="fc" id="L16">        this.tasks = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L17">        this.researchers = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L18">        this.risks = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L19">        this.budget = new Budget();</span>
+<span class="fc" id="L20">    }</span>
+
+<span class="fc" id="L22">    public long getId() { return id; }</span>
+<span class="fc" id="L23">    public String getName() { return name; }</span>
+<span class="fc bfc" id="L24" title="All 2 branches covered.">    public void setName(String n) { this.name = n == null ? &quot;&quot; : n; }</span>
+<span class="fc" id="L25">    public Budget getBudget() { return budget; }</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">    public void setBudget(Budget b) { if (b != null) this.budget = b; }</span>
+
+    public Task addTask(Task t) {
+<span class="fc bfc" id="L29" title="All 2 branches covered.">        if (t == null) return null;</span>
+<span class="fc" id="L30">        tasks.put(t.getId(), t);</span>
+<span class="fc" id="L31">        return t;</span>
+    }
+
+    public Researcher addResearcher(Researcher r) {
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        if (r == null) return null;</span>
+<span class="fc" id="L36">        researchers.put(r.getId(), r);</span>
+<span class="fc" id="L37">        return r;</span>
+    }
+
+    public void addRisk(Risk r) {
+<span class="fc bfc" id="L41" title="All 2 branches covered.">        if (r != null) risks.add(r);</span>
+<span class="fc" id="L42">    }</span>
+
+<span class="fc" id="L44">    public Task getTask(long id) { return tasks.get(id); }</span>
+<span class="fc" id="L45">    public Researcher getResearcher(long id) { return researchers.get(id); }</span>
+<span class="fc" id="L46">    public Collection&lt;Task&gt; getTasks() { return tasks.values(); }</span>
+<span class="fc" id="L47">    public Collection&lt;Researcher&gt; getResearchers() { return researchers.values(); }</span>
+<span class="fc" id="L48">    public List&lt;Risk&gt; getRisks() { return new ArrayList&lt;&gt;(risks); }</span>
+
+    public Map&lt;Task.Status, Long&gt; statusCounts() {
+<span class="fc" id="L51">        Map&lt;Task.Status, Long&gt; m = new EnumMap&lt;&gt;(Task.Status.class);</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        for (Task.Status s : Task.Status.values()) m.put(s, 0L);</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        for (Task t : tasks.values()) m.put(t.getStatus(), m.get(t.getStatus()) + 1);</span>
+<span class="fc" id="L54">        return m;</span>
+    }
+
+    public int criticalPathDuration() {
+<span class="fc" id="L58">        return GraphUtils.longestPathDuration(tasks.values());</span>
+    }
+
+    public List&lt;MatchingEngine.Assignment&gt; planAssignments() {
+<span class="fc" id="L62">        MatchingEngine engine = new MatchingEngine();</span>
+<span class="fc" id="L63">        return engine.match(new ArrayList&lt;&gt;(researchers.values()), new ArrayList&lt;&gt;(tasks.values()));</span>
+    }
+
+    public RiskAnalyzer.SimulationResult analyzeRisk(int iterations) {
+<span class="fc" id="L67">        RiskAnalyzer analyzer = new RiskAnalyzer();</span>
+<span class="fc" id="L68">        return analyzer.simulate(risks, iterations);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

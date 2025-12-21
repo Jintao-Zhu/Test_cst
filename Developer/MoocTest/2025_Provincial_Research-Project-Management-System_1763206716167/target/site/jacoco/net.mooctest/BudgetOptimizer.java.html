@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BudgetOptimizer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Research-Project-Management-System</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">BudgetOptimizer.java</span></div><h1>BudgetOptimizer.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import java.util.*;
+
+<span class="fc" id="L5">public class BudgetOptimizer {</span>
+    public static final class Selection {
+        private final List&lt;Budget.Item&gt; items;
+        private final double totalCost;
+        private final double totalValue;
+
+<span class="fc" id="L11">        public Selection(List&lt;Budget.Item&gt; items, double totalCost, double totalValue) {</span>
+<span class="fc" id="L12">            this.items = items;</span>
+<span class="fc" id="L13">            this.totalCost = totalCost;</span>
+<span class="fc" id="L14">            this.totalValue = totalValue;</span>
+<span class="fc" id="L15">        }</span>
+
+<span class="fc" id="L17">        public List&lt;Budget.Item&gt; getItems() { return items; }</span>
+<span class="fc" id="L18">        public double getTotalCost() { return totalCost; }</span>
+<span class="fc" id="L19">        public double getTotalValue() { return totalValue; }</span>
+    }
+
+    public Selection optimize(Budget budget, double limit) {
+<span class="fc bfc" id="L23" title="All 2 branches covered.">        if (budget == null) throw new DomainException(&quot;budget null&quot;);</span>
+<span class="fc bfc" id="L24" title="All 2 branches covered.">        if (limit &lt; 0) limit = 0;</span>
+<span class="fc" id="L25">        List&lt;Budget.Item&gt; items = budget.getItems();</span>
+<span class="fc" id="L26">        int n = items.size();</span>
+<span class="fc" id="L27">        int cap = (int)Math.round(limit);</span>
+<span class="fc" id="L28">        double[][] dp = new double[n + 1][cap + 1];</span>
+<span class="fc" id="L29">        boolean[][] take = new boolean[n + 1][cap + 1];</span>
+<span class="fc bfc" id="L30" title="All 2 branches covered.">        for (int i = 1; i &lt;= n; i++) {</span>
+<span class="fc" id="L31">            Budget.Item it = items.get(i - 1);</span>
+<span class="fc" id="L32">            int w = (int)Math.round(it.getCost());</span>
+<span class="fc" id="L33">            double val = it.getValue();</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">            for (int c = 0; c &lt;= cap; c++) {</span>
+<span class="fc" id="L35">                double best = dp[i - 1][c];</span>
+<span class="fc" id="L36">                boolean choose = false;</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">                if (w &lt;= c) {</span>
+<span class="fc" id="L38">                    double cand = dp[i - 1][c - w] + val;</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">                    if (cand &gt; best) { best = cand; choose = true; }</span>
+                }
+<span class="fc" id="L41">                dp[i][c] = best;</span>
+<span class="fc" id="L42">                take[i][c] = choose;</span>
+            }
+        }
+<span class="fc" id="L45">        double totalValue = dp[n][cap];</span>
+<span class="fc" id="L46">        List&lt;Budget.Item&gt; picked = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L47">        double totalCost = 0;</span>
+<span class="fc" id="L48">        int c = cap;</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        for (int i = n; i &gt;= 1; i--) {</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">            if (take[i][c]) {</span>
+<span class="fc" id="L51">                Budget.Item it = items.get(i - 1);</span>
+<span class="fc" id="L52">                picked.add(it);</span>
+<span class="fc" id="L53">                int w = (int)Math.round(it.getCost());</span>
+<span class="fc" id="L54">                totalCost += it.getCost();</span>
+<span class="fc" id="L55">                c -= w;</span>
+            }
+        }
+<span class="fc" id="L58">        Collections.reverse(picked);</span>
+<span class="fc" id="L59">        return new Selection(picked, totalCost, totalValue);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FastSumOfIntervalsBrackets.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Mathematical-Expression</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">FastSumOfIntervalsBrackets.java</span></div><h1>FastSumOfIntervalsBrackets.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import java.util.ArrayList;
+import java.util.Objects;
+
+/**
+ * 快速的将一个等差区间中的所有数值之和计算出来，在该计算组件中的公式由两个组成，例如 &quot;a+b,a+b+10&quot;，会将a+b+1 + a+b+2 + a+b+3 +...+a+b+10 的结果计算出来。
+ * &lt;p&gt;
+ * Quickly calculate the sum of all values in an isochromatic interval. The formula in this calculation component consists of two components, such as &quot;a+b, a+b+10&quot;. The result of a+b+1+a+b+2+a+b+3+...+a+b+10 will be calculated.
+ *
+ * @author zhao
+ */
+public class FastSumOfIntervalsBrackets extends BracketsCalculation2 implements SharedCalculation {
+
+<span class="nc" id="L15">    public final static BracketsCalculation2 BRACKETS_CALCULATION_2 = BracketsCalculation2.getInstance(CalculationManagement.BRACKETS_CALCULATION_2_NAME);</span>
+    public int step;
+<span class="nc" id="L17">    private boolean StartSharedPool = true;</span>
+    private String CurrentOwner;
+    private String left;
+    private String right;
+    private CalculationNumberResults shareNumberCalculation;
+
+    protected FastSumOfIntervalsBrackets(String name) {
+<span class="nc" id="L24">        super(name);</span>
+<span class="nc" id="L25">    }</span>
+
+    /**
+     * 从管理者中获取到指定名称的计算组件，注意 如果管理者中不存在该名称的组件，那么该组件就会自动的注册
+     * &lt;p&gt;
+     * Get the calculation component with the specified name from the manager. Note that if there is no component with this name in the manager, the component will be registered automatically
+     *
+     * @param CalculationName 组件的名字
+     * @return 解析括号类计算公式的计算组件
+     */
+    public static FastSumOfIntervalsBrackets getInstance(String CalculationName) {
+<span class="nc bnc" id="L36" title="All 2 branches missed.">        if (CalculationManagement.isRegister(CalculationName)) {</span>
+<span class="nc" id="L37">            final Calculation calculationByName = CalculationManagement.getCalculationByName(CalculationName);</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">            if (calculationByName instanceof FastSumOfIntervalsBrackets) {</span>
+<span class="nc" id="L39">                return (FastSumOfIntervalsBrackets) calculationByName;</span>
+            } else {
+<span class="nc" id="L41">                throw new ExtractException(</span>
+                        &quot;您需要的计算组件[&quot; + CalculationName + &quot;]被找到了，但是它似乎不属于 FastSumOfIntervalsBrackets 类型\n请您重新定义一个名称。&quot;
+                );
+            }
+        } else {
+<span class="nc" id="L46">            FastSumOfIntervalsBrackets FastSumOfIntervalsBrackets = new FastSumOfIntervalsBrackets(CalculationName);</span>
+<span class="nc" id="L47">            CalculationManagement.register(FastSumOfIntervalsBrackets, false);</span>
+<span class="nc" id="L48">            FastSumOfIntervalsBrackets.step = 1;</span>
+<span class="nc" id="L49">            return FastSumOfIntervalsBrackets;</span>
+        }
+    }
+
+
+    /**
+     * 格式化一个公式 使得其可以被该计算组件进行运算
+     * &lt;p&gt;
+     * Format a formula so that it can be calculated by the calculation component
+     *
+     * @param string 数学运算公式
+     * @return 格式化之后的数学运算公式
+     */
+    @Override
+    public String formatStr(String string) {
+<span class="nc" id="L64">        return string.trim();</span>
+    }
+
+    /**
+     * 检查公式格式是否正确，如果不正确就会抛出一个异常
+     * &lt;p&gt;
+     * Check whether the formula format is correct. If not, an exception will be thrown
+     *
+     * @param string 需要被判断格式的数学运算公式
+     *               &lt;p&gt;
+     *               Mathematical operation formula of the format to be judged
+     */
+    @Override
+    public void check(String string) throws WrongFormat {
+<span class="nc bnc" id="L78" title="All 4 branches missed.">        if (this.StartSharedPool &amp;&amp; string.equals(this.CurrentOwner)) {</span>
+            // 如果共享池开启，同时共享池中的数据所属身份属于当前公式，并且有计算结果，就直接停止检查，因为这个公式之前检查过
+<span class="nc" id="L80">            return;</span>
+        }
+        // 在这里获取到前后两个公式
+<span class="nc" id="L83">        ArrayList&lt;String&gt; arrayList = StrUtils.splitByChar(string, ConstantRegion.COMMA);</span>
+<span class="nc" id="L84">        int size = arrayList.size();</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        if (size == 2) {</span>
+<span class="nc" id="L86">            String l = arrayList.get(0);</span>
+<span class="nc" id="L87">            String r = arrayList.get(1);</span>
+<span class="nc" id="L88">            FastSumOfIntervalsBrackets.BRACKETS_CALCULATION_2.check(l);</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">            if (!l.equals(r)) {</span>
+<span class="nc" id="L90">                FastSumOfIntervalsBrackets.BRACKETS_CALCULATION_2.check(r);</span>
+            }
+<span class="nc bnc" id="L92" title="All 2 branches missed.">            if (this.StartSharedPool) {</span>
+                // 如果检查无误，就将检查之后的结果存储到共享池
+<span class="nc" id="L94">                this.left = l;</span>
+<span class="nc" id="L95">                this.right = r;</span>
+<span class="nc" id="L96">                this.CurrentOwner = string;</span>
+            }
+<span class="nc" id="L98">        } else {</span>
+<span class="nc" id="L99">            throw new WrongFormat(&quot;区间求和表达式解析错误，在该组件中的表达式，需要两个以逗号分割的表达式组成累加区间中的两个边界值。\n&quot; +</span>
+                    &quot;Error parsing the interval summation expression. The expression in this component needs two expressions separated by commas to form two boundary values in the cumulative interval.&quot; +
+                    &quot;Number of expressions you provide =&gt; &quot; + size);
+        }
+<span class="nc" id="L103">    }</span>
+
+    /**
+     * 计算一个数学表达式，并将计算细节与计算结果存储到数值结果集中。
+     * &lt;p&gt;
+     * Compute a mathematical expression and store the calculation details and results in the numerical result set.
+     *
+     * @param Formula 被计算的表达式，要求返回值是一个数值。
+     *                &lt;p&gt;
+     *                The returned value of the evaluated expression is required to be a numeric value.
+     * @return 数值结果对象，该返回值是一个专用于存储数值计算结果的包装类，其中有着计算数据的记录以及结果的保存，可以直接获取到
+     * &lt;p&gt;
+     * Numerical result object. The returned value is a wrapper class dedicated to storing numerical calculation results. It contains the records of calculation data and the saving of results, which can be directly obtained
+     * @see CalculationNumberResults
+     */
+    @Override
+    public CalculationNumberResults calculation(String Formula) {
+<span class="nc" id="L120">        return this.calculation(Formula, true);</span>
+    }
+
+    /**
+     * 计算一个数学表达式，并将计算细节与计算结果存储到数值结果集中。
+     * &lt;p&gt;
+     * Compute a mathematical expression and store the calculation details and results in the numerical result set.
+     *
+     * @param Formula        被计算的表达式，要求返回值是一个数值。
+     *                       &lt;p&gt;
+     *                       The returned value of the evaluated expression is required to be a numeric value.
+     * @param formatRequired 是否需要被格式化，用于确保公式格式正确。
+     *                       &lt;p&gt;
+     *                       Whether it needs to be formatted to ensure that the formula format is correct.
+     * @return 数值结果集对象，其中保存着每一步的操作数据，以及最终结果数值
+     * &lt;p&gt;
+     * Numerical result set object, which stores the operation data of each step and the final result value
+     */
+    @Override
+    public CalculationNumberResults calculation(String Formula, boolean formatRequired) {
+        final String start;
+        final String end;
+<span class="nc bnc" id="L142" title="All 4 branches missed.">        final boolean equals = this.StartSharedPool &amp;&amp; Formula.equals(this.CurrentOwner);</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">        if (equals) {</span>
+            // 如果共享池开启，同时共享池中数据所属没有错误，就使用共享池数据进行计算
+<span class="nc bnc" id="L145" title="All 2 branches missed.">            if (this.shareNumberCalculation != null) {</span>
+<span class="nc" id="L146">                return this.shareNumberCalculation;</span>
+            }
+<span class="nc" id="L148">            start = left;</span>
+<span class="nc" id="L149">            end = right;</span>
+        } else {
+            // 如果是其他情况，代表共享池数据不可用，在这里获取出公式
+<span class="nc" id="L152">            ArrayList&lt;String&gt; arrayList = StrUtils.splitByChar(Formula, ConstantRegion.COMMA);</span>
+<span class="nc" id="L153">            start = arrayList.get(0);</span>
+<span class="nc" id="L154">            end = arrayList.get(1);</span>
+        }
+        // 计算出结果数值
+<span class="nc" id="L157">        CalculationNumberResults calculationNumberResults = calculation(start, end);</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">        if (equals) {</span>
+<span class="nc" id="L159">            this.shareNumberCalculation = calculationNumberResults;</span>
+        }
+<span class="nc" id="L161">        return calculationNumberResults;</span>
+    }
+
+    /**
+     * 将两个公式作为求和区间的起始与种植点，以此进行区间的求和，不进行共享池的相关判断
+     * &lt;p&gt;
+     * The two formulas are used as the starting point and planting point of the summation interval, so as to sum the interval without making relevant judgments on the shared pool
+     *
+     * @param f1 起始点计算公式
+     * @param f2 终止点计算公式
+     * @return 区间求和的结果对象
+     * &lt;p&gt;
+     * Result object of interval summation
+     */
+    public CalculationNumberResults calculation(String f1, String f2) {
+<span class="nc bnc" id="L176" title="All 2 branches missed.">        if (f1.equals(f2)) {</span>
+<span class="nc" id="L177">            return FastSumOfIntervalsBrackets.BRACKETS_CALCULATION_2.calculation(f1);</span>
+        }
+<span class="nc" id="L179">        return calculation(</span>
+<span class="nc" id="L180">                FastSumOfIntervalsBrackets.BRACKETS_CALCULATION_2.calculation(f1),</span>
+<span class="nc" id="L181">                FastSumOfIntervalsBrackets.BRACKETS_CALCULATION_2.calculation(f2)</span>
+        );
+    }
+
+    /**
+     * 将两个结果对象，作为需要求和区间的起始与终止数值，以此进行区间的求和，不进行公式的计算
+     * &lt;p&gt;
+     * Take the two result objects as the starting and ending values of the interval to be summed, so as to sum the interval, without calculating the formula
+     *
+     * @param start 起始点结果数值
+     * @param end   终止点结果数值
+     * @return 区间求和的结果对象
+     * &lt;p&gt;
+     * Result object of interval summation
+     */
+    public CalculationNumberResults calculation(CalculationNumberResults start, CalculationNumberResults end) {
+<span class="nc" id="L197">        return new CalculationNumberResults(</span>
+<span class="nc" id="L198">                start.getResultLayers() + end.getResultLayers(),</span>
+<span class="nc" id="L199">                NumberUtils.sumOfRange(start.getResult(), end.getResult(), this.step),</span>
+                this.Name
+        );
+    }
+
+    /**
+     * @return 该组件是否有启动共享池，一个布尔值，如果返回true代表共享池已经启动
+     */
+    @Override
+    public boolean isStartSharedPool() {
+<span class="nc" id="L209">        return this.StartSharedPool;</span>
+    }
+
+    /**
+     * 设置共享池开关，共享池是在JavaApi中，1.1版本衍生出来的一种新特性，由于计算量的需求，引入该功能
+     * &lt;p&gt;
+     * Set the shared pool switch. The shared pool is a new feature derived from version 1.1 in JavaApi. Due to the requirement of computing load, this function is introduced
+     *
+     * @param startSharedPool 共享池如果设置为true，代表被打开，将会共享检查与
+     */
+    @Override
+    public void setStartSharedPool(boolean startSharedPool) {
+<span class="nc" id="L221">        this.StartSharedPool = startSharedPool;</span>
+<span class="nc" id="L222">    }</span>
+
+    /**
+     * 是否已经缓存了指定字符串的数据
+     *
+     * @param name 要检查的字符串
+     * @return 如果已经缓存则返回true，否则返回false
+     */
+    @Override
+    public boolean isCache(String name) {
+<span class="nc" id="L232">        return Objects.equals(this.CurrentOwner, name);</span>
+    }
+
+    /**
+     * 清理缓存数据
+     */
+    @Override
+    public void clearCache() {
+<span class="nc" id="L240">        this.left = null;</span>
+<span class="nc" id="L241">        this.right = null;</span>
+<span class="nc" id="L242">        this.CurrentOwner = null;</span>
+<span class="nc" id="L243">    }</span>
+
+    @Override
+    public PackExpression compile(String Formula, boolean formatRequired) {
+        // 如果是其他情况，代表共享池数据不可用，在这里获取出公式
+<span class="nc" id="L248">        ArrayList&lt;String&gt; arrayList = StrUtils.splitByChar(Formula, ConstantRegion.COMMA);</span>
+<span class="nc" id="L249">        String start = arrayList.get(0);</span>
+<span class="nc" id="L250">        String end = arrayList.get(1);</span>
+<span class="nc" id="L251">        return FastSumOfIntervalsBrackets.BRACKETS_CALCULATION_2.compile(NumberUtils.sumOfRangeString(FastSumOfIntervalsBrackets.BRACKETS_CALCULATION_2.calculation(start).getResult(), FastSumOfIntervalsBrackets.BRACKETS_CALCULATION_2.calculation(end).getResult(), this.step), formatRequired);</span>
+    }
+
+    @Override
+    public PackExpression compileBigDecimal(String Formula, boolean formatRequired) {
+        // 如果是其他情况，代表共享池数据不可用，在这里获取出公式
+<span class="nc" id="L257">        ArrayList&lt;String&gt; arrayList = StrUtils.splitByChar(Formula, ConstantRegion.COMMA);</span>
+<span class="nc" id="L258">        String start = arrayList.get(0);</span>
+<span class="nc" id="L259">        String end = arrayList.get(1);</span>
+<span class="nc" id="L260">        return FastSumOfIntervalsBrackets.BRACKETS_CALCULATION_2.compileBigDecimal(NumberUtils.sumOfRangeString(FastSumOfIntervalsBrackets.BRACKETS_CALCULATION_2.calculation(start).getResult(), FastSumOfIntervalsBrackets.BRACKETS_CALCULATION_2.calculation(end).getResult(), this.step), formatRequired);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

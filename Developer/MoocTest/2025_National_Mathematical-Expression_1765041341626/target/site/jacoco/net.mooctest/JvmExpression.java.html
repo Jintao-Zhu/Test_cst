@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JvmExpression.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Mathematical-Expression</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">JvmExpression.java</span></div><h1>JvmExpression.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.DoubleStream;
+
+/**
+ * JvmExpression 表达式对象
+ *
+ * @author 赵凌宇
+ */
+public class JvmExpression extends NameExpression implements CloneExpression {
+
+<span class="nc" id="L16">    private final static Pattern numberPattern = Pattern.compile(&quot;\\d+&quot;);</span>
+    /**
+     * 存储是每个操作数的值
+     */
+    final double[] allNumber;
+
+    private final JvmExpressionFunction jvmExpressionFunction;
+
+    JvmExpression(String calculationName, double[] allNumber, JvmExpressionFunction jvmExpressionFunction, String expression) {
+<span class="nc" id="L25">        super(expression, calculationName);</span>
+<span class="nc" id="L26">        this.allNumber = allNumber;</span>
+<span class="nc" id="L27">        this.jvmExpressionFunction = jvmExpressionFunction;</span>
+<span class="nc" id="L28">    }</span>
+
+    public static JvmExpression compile(String expression) {
+<span class="nc" id="L31">        return compile(expression, expression);</span>
+    }
+
+    public static JvmExpression compile(String expression, String calculationName) {
+<span class="nc" id="L35">        ArrayList&lt;Double&gt; allNumber = new ArrayList&lt;&gt;();</span>
+        // 表达式的签名 fun_XXX(x1,x2...)
+<span class="nc" id="L37">        final StringBuilder params = new StringBuilder(&quot;funLingYuZhao&quot; + StrUtils.randomString(8)).append('(');</span>
+        // 表达式体 x1 + x2 ...
+<span class="nc" id="L39">        final StringBuilder stringBuilder = new StringBuilder(&quot;) = &quot;);</span>
+<span class="nc" id="L40">        int count = -1;</span>
+<span class="nc" id="L41">        int lastIndex = 0;</span>
+<span class="nc" id="L42">        final Matcher matcher = numberPattern.matcher(expression);</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">        while (matcher.find()) {</span>
+<span class="nc" id="L44">            final String group = matcher.group();</span>
+<span class="nc" id="L45">            allNumber.add(Double.parseDouble(group));</span>
+<span class="nc" id="L46">            final String p = &quot;param&quot; + ++count;</span>
+<span class="nc" id="L47">            params.append(p).append(',');</span>
+            // 构建表达式体
+<span class="nc" id="L49">            stringBuilder.append(expression, lastIndex, matcher.start()).append(p);</span>
+<span class="nc" id="L50">            lastIndex = matcher.end();</span>
+<span class="nc" id="L51">        }</span>
+<span class="nc" id="L52">        params.deleteCharAt(params.length() - 1);</span>
+<span class="nc" id="L53">        final String string = params.append(stringBuilder).append(expression, lastIndex, expression.length()).toString();</span>
+        // 开始编译
+<span class="nc" id="L55">        return new JvmExpression(</span>
+                calculationName,
+<span class="nc" id="L57">                allNumber.stream().mapToDouble(Double::doubleValue).toArray(),</span>
+<span class="nc" id="L58">                JvmExpressionFunction.parse(string),</span>
+                string
+        );
+    }
+
+    public DoubleStream iterator() {
+<span class="nc" id="L64">        return Arrays.stream(this.allNumber);</span>
+    }
+
+    public double getParamNumber(int index) {
+<span class="nc" id="L68">        return this.allNumber[index];</span>
+    }
+
+    public void setParamNumber(int index, double value) {
+<span class="nc" id="L72">        this.allNumber[index] = value;</span>
+<span class="nc" id="L73">    }</span>
+
+    public int getLength() {
+<span class="nc" id="L76">        return this.allNumber.length;</span>
+    }
+
+    public JvmExpressionFunction getJvmExpressionFunction() {
+<span class="nc" id="L80">        return jvmExpressionFunction;</span>
+    }
+
+    /**
+     * 获取当前计算表达式是否为 BigDecimal 类型的计算表达式
+     * &lt;p&gt;
+     * Get whether the current calculation expression is a BigDecimal type calculation expression
+     *
+     * @return 当前计算表达式是否为 BigDecimal 类型的计算表达式
+     * &lt;p&gt;
+     * Whether the current calculation expression is a BigDecimal type calculation expression
+     */
+    @Override
+    public boolean isBigDecimal() {
+<span class="nc" id="L94">        return false;</span>
+    }
+
+    /**
+     * 如果当前的计算表达式对象支持非高精度的计算模式，则返回 true
+     *
+     * @return If the current calculation expression object supports non high-precision calculation modes, return true
+     */
+    @Override
+    public boolean isUnBigDecimal() {
+<span class="nc" id="L104">        return true;</span>
+    }
+
+    /**
+     * 转换计算表达式为多精度支持形式
+     * &lt;p&gt;
+     * Transforms the current calculation expression into a form that supports both high precision and standard precision evaluations.
+     */
+    @Override
+    public void convertToMultiPrecisionSupported() {
+<span class="nc" id="L114">        throw new UnsupportedOperationException(&quot;JvmExpression does not support BigDecimal mode.&quot;);</span>
+    }
+
+    /**
+     * 将当前计算表达式类的结果计算出来！
+     * &lt;p&gt;
+     * Calculate the result of the current calculation expression class!
+     *
+     * @param isCopy 在计算操作进行的时候，如果您期望可以重负使用用此表达式的编译的类的所有数据，您需要在这里设置为 true；
+     *               若不设置为 true 则表达式内部的一些栈数据将会消失，这可能导致此表达式的一些操作失去作用。
+     *               &lt;p&gt;
+     *               When performing a calculation operation, if you expect to be able to load all the data of the compiled class using this expression, you need to set it to true here;
+     *               If not set to true, some stack data inside the expression will disappear, which may cause some operations of this expression to become ineffective.
+     * @return 当前计算表达式类的结果对象！
+     * &lt;p&gt;
+     * The result object of the current calculation expression class!
+     */
+    @Override
+    public CalculationNumberResults calculation(boolean isCopy) {
+<span class="nc" id="L133">        double run = this.jvmExpressionFunction.run(this.allNumber);</span>
+<span class="nc" id="L134">        return new CalculationNumberResults(1, run, this.getExpressionStr());</span>
+    }
+
+    /**
+     * 将当前计算表达式类的结果计算出来！
+     * &lt;p&gt;
+     * Calculate the result of the current calculation expression class!
+     *
+     * @param isCopy 在计算操作进行的时候，如果您期望可以重负使用用此表达式的编译的类的所有数据，您需要在这里设置为 true；
+     *               若不设置为 true 则表达式内部的一些栈数据将会消失，这可能导致此表达式的一些操作失去作用。
+     *               &lt;p&gt;
+     *               When performing a calculation operation, if you expect to be able to load all the data of the compiled class using this expression, you need to set it to true here;
+     *               If not set to true, some stack data inside the expression will disappear, which may cause some operations of this expression to become ineffective.
+     * @return 当前计算表达式类的结果对象！
+     * &lt;p&gt;
+     * The result object of the current calculation expression class!
+     */
+    @Override
+    public CalculationNumberResults calculationBigDecimals(boolean isCopy) {
+<span class="nc" id="L153">        throw new UnsupportedOperationException(&quot;JvmExpression does not support BigDecimal mode.&quot;);</span>
+    }
+
+    @Override
+    public JvmExpression cloneExpression() {
+<span class="nc" id="L158">        return new JvmExpression(</span>
+<span class="nc" id="L159">                this.getCalculationName() + &quot;_clone&quot;,</span>
+<span class="nc" id="L160">                this.allNumber.clone(),</span>
+                this.jvmExpressionFunction,
+<span class="nc" id="L162">                this.getExpressionStr()</span>
+        );
+    }
+
+    /**
+     * @return 带有参数的具体的参数表达式
+     */
+    public String getExpressionStrAndNumber() {
+<span class="nc" id="L170">        return this.jvmExpressionFunction.explain(this.allNumber);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

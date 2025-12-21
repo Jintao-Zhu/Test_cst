@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ComplexExpression.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Mathematical-Expression</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">ComplexExpression.java</span></div><h1>ComplexExpression.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import java.util.PrimitiveIterator;
+
+/**
+ * 复数表达式对象 其可以将一个复数字符串编译为一个复数对象。
+ * &lt;p&gt;
+ * A complex expression object can compile a complex string into a complex object.
+ *
+ * @author zhao
+ */
+public class ComplexExpression extends NameExpression {
+    /**
+     * 左右两边的函数表达式对象 分别是 实部 和 虚部
+     */
+    private final FunctionExpression functionExpression1, functionExpression2;
+    /**
+     * 操作运算符，两个复数对象之间的运算符！
+     */
+    private final char sign;
+
+    public ComplexExpression(String expression, String calculationName, FunctionExpression functionExpression1, FunctionExpression functionExpression2, char sign) {
+<span class="nc" id="L23">        super(expression, calculationName);</span>
+<span class="nc" id="L24">        this.functionExpression1 = functionExpression1;</span>
+<span class="nc" id="L25">        this.functionExpression2 = functionExpression2;</span>
+<span class="nc" id="L26">        this.sign = sign;</span>
+<span class="nc" id="L27">    }</span>
+
+    /**
+     * 将一个复数表达式编译为表达式的对象。
+     *
+     * @param expression      需要被编译的表达式，表达式中可以支持 (a+b-f(c)) + 2 - 1 i 这样的表达式，会将第一个无括号包裹的操作符做为实部 与 虚部 的运算符！
+     * @param calculationName 表达式的名字，通常情况下，在计算组件中会使用到！
+     * @return 表达式的对象
+     */
+    public static ComplexExpression compile(String expression, String calculationName) {
+        // 准备容器 存储左右两边的复数表达式
+        FunctionExpression functionExpression1, functionExpression2;
+        // 首先准备计数器，当前面的右括号与左括号一样的时候 此数值应为0
+<span class="nc" id="L40">        int count = 0;</span>
+        char sign;
+<span class="nc" id="L42">        final StringBuilder stringBuilder = new StringBuilder(expression.length());</span>
+<span class="nc" id="L43">        final PrimitiveIterator.OfInt iterator = expression.chars().iterator();</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">        while (iterator.hasNext()) {</span>
+<span class="nc" id="L45">            final char c1 = (char) iterator.next().intValue();</span>
+<span class="nc bnc" id="L46" title="All 4 branches missed.">            switch (c1) {</span>
+                case ConstantRegion.LEFT_BRACKET:
+<span class="nc" id="L48">                    ++count;</span>
+<span class="nc" id="L49">                    break;</span>
+                case ConstantRegion.RIGHT_BRACKET:
+<span class="nc" id="L51">                    --count;</span>
+<span class="nc" id="L52">                    break;</span>
+                case ConstantRegion.PLUS_SIGN:
+                case ConstantRegion.MINUS_SIGN:
+<span class="nc bnc" id="L55" title="All 2 branches missed.">                    if (count == 0) {</span>
+                        // 代表当前的括号结束了 且是运算符 因此直接处理 在这里编译出表达式 这里是实部的
+<span class="nc" id="L57">                        functionExpression1 = FunctionExpression.compile(stringBuilder.toString(), calculationName + &quot;.left&quot;);</span>
+                        // 然后编译出剩下的部分 但是要在这里找一下 i 的位置
+<span class="nc" id="L59">                        final int i = expression.lastIndexOf('i');</span>
+                        // 将虚部解析出来
+<span class="nc" id="L61">                        functionExpression2 = FunctionExpression.compile(expression.substring(stringBuilder.length(), i), calculationName + &quot;.right&quot;);</span>
+                        // 然后获取到运算符
+<span class="nc" id="L63">                        sign = c1;</span>
+                        // 结束循环
+<span class="nc" id="L65">                        return new ComplexExpression(expression, calculationName, functionExpression1, functionExpression2, sign);</span>
+                    }
+            }
+<span class="nc" id="L68">            stringBuilder.append(c1);</span>
+<span class="nc" id="L69">        }</span>
+<span class="nc" id="L70">        throw new RuntimeException(expression + &quot; is not a complex expression.&quot;);</span>
+    }
+
+    @Override
+    public boolean isBigDecimal() {
+<span class="nc" id="L75">        return this.functionExpression1.isBigDecimal();</span>
+    }
+
+    @Override
+    public boolean isUnBigDecimal() {
+<span class="nc" id="L80">        return this.functionExpression1.isUnBigDecimal();</span>
+    }
+
+    @Override
+    public void convertToMultiPrecisionSupported() {
+<span class="nc" id="L85">        this.functionExpression1.convertToMultiPrecisionSupported();</span>
+<span class="nc" id="L86">        this.functionExpression2.convertToMultiPrecisionSupported();</span>
+<span class="nc" id="L87">    }</span>
+
+    @Override
+    public CalculationComplexResults calculation(boolean isCopy) {
+        // 左边计算出来
+<span class="nc" id="L92">        final CalculationResults calculation0 = this.functionExpression1.calculationCache(isCopy);</span>
+        // 右边计算出来
+<span class="nc" id="L94">        final CalculationResults calculation1 = this.functionExpression2.calculationCache(isCopy);</span>
+        // 使用计算结果
+<span class="nc" id="L96">        return new CalculationComplexResults(</span>
+<span class="nc" id="L97">                calculation0.getResultLayers() + calculation1.getResultLayers(),</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">                (double) calculation0.getResult(), this.sign == ConstantRegion.MINUS_SIGN ? -(double) calculation1.getResult() : (double) calculation1.getResult(),</span>
+<span class="nc" id="L99">                this.getCalculationName()</span>
+        );
+
+    }
+
+    @Override
+    public CalculationComplexResults calculationBigDecimals(boolean isCopy) {
+        // 左边计算出来
+<span class="nc" id="L107">        final CalculationResults calculation0 = this.functionExpression1.calculationBigDecimalsCache(isCopy);</span>
+        // 右边计算出来
+<span class="nc" id="L109">        final CalculationResults calculation1 = this.functionExpression2.calculationBigDecimalsCache(isCopy);</span>
+        // 使用计算结果
+<span class="nc" id="L111">        return new CalculationComplexResults(</span>
+<span class="nc" id="L112">                calculation0.getResultLayers() + calculation1.getResultLayers(),</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">                (double) calculation0.getResult(), this.sign == ConstantRegion.MINUS_SIGN ? -(double) calculation1.getResult() : (double) calculation1.getResult(),</span>
+<span class="nc" id="L114">                this.getCalculationName()</span>
+        );
+    }
+
+    @Override
+    public CalculationComplexResults calculationCache(boolean isCopy) {
+<span class="nc" id="L120">        return (CalculationComplexResults) super.calculationCache(isCopy);</span>
+    }
+
+    @Override
+    public CalculationComplexResults calculationBigDecimalsCache(boolean isCopy) {
+<span class="nc" id="L125">        return (CalculationComplexResults) super.calculationBigDecimalsCache(isCopy);</span>
+    }
+
+    /**
+     * 获取实部
+     *
+     * @return 将当前复数对象中的实部获取到，并返回实部的表达式对象。
+     * &lt;p&gt;
+     * Retrieve the real part of the current complex object and return the expression object for the real part.
+     */
+    public FunctionExpression getFunctionExpression1() {
+<span class="nc" id="L136">        return functionExpression1;</span>
+    }
+
+    /**
+     * 获取虚部
+     *
+     * @return 将当前复数对象中的虚部获取到，并返回虚部的表达式对象。
+     * &lt;p&gt;
+     * Retrieve the imaginary part of the current complex object and return the expression object for the imaginary part.
+     */
+    public FunctionExpression getFunctionExpression2() {
+<span class="nc" id="L147">        return functionExpression2;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Scheduler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Research-Project-Management-System</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">Scheduler.java</span></div><h1>Scheduler.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import java.util.*;
+
+<span class="fc" id="L5">public class Scheduler {</span>
+    public void schedule(Collection&lt;Task&gt; tasks) {
+<span class="fc" id="L7">        List&lt;Task&gt; order = GraphUtils.topologicalSort(tasks);</span>
+<span class="fc" id="L8">        Map&lt;Task, Integer&gt; finish = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L9" title="All 2 branches covered.">        for (Task t : order) {</span>
+<span class="fc" id="L10">            int est = 0;</span>
+<span class="fc bfc" id="L11" title="All 2 branches covered.">            for (Task d : t.getDependencies()) est = Math.max(est, finish.getOrDefault(d, 0));</span>
+<span class="fc" id="L12">            int eft = est + t.getDuration();</span>
+<span class="fc" id="L13">            t.setSchedule(est, eft, est, eft);</span>
+<span class="fc" id="L14">            finish.put(t, eft);</span>
+<span class="fc" id="L15">        }</span>
+<span class="fc" id="L16">        int projectFinish = 0;</span>
+<span class="fc bfc" id="L17" title="All 2 branches covered.">        for (int v : finish.values()) projectFinish = Math.max(projectFinish, v);</span>
+<span class="fc" id="L18">        ListIterator&lt;Task&gt; it = order.listIterator(order.size());</span>
+<span class="fc" id="L19">        Map&lt;Task, Integer&gt; startLatest = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L20" title="All 2 branches covered.">        while (it.hasPrevious()) {</span>
+<span class="fc" id="L21">            Task t = it.previous();</span>
+<span class="fc" id="L22">            int lft = projectFinish;</span>
+<span class="fc bfc" id="L23" title="All 2 branches covered.">            for (Task d : t.getDependencies()) lft = Math.min(lft, startLatest.getOrDefault(d, projectFinish));</span>
+<span class="fc" id="L24">            int lst = Math.max(0, lft - t.getDuration());</span>
+<span class="fc" id="L25">            t.setSchedule(t.getEst(), t.getEft(), lst, lft);</span>
+<span class="fc" id="L26">            startLatest.put(t, lst);</span>
+<span class="fc" id="L27">        }</span>
+<span class="fc" id="L28">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

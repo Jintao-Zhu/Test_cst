@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WebShellDetector.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Aliyun-Safe-Match</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">WebShellDetector.java</span></div><h1>WebShellDetector.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+/** 
+ * WebShell 检测器
+ * @author mindw
+ */
+<span class="nc" id="L7">public final class WebShellDetector {</span>
+
+	/** 是否是异常数据 */
+	public static final boolean isWebShell(String postData){	
+		// 分解参数 
+<span class="fc" id="L12">		String[] parameters = postData.split(&quot;&amp;&quot;);</span>
+	
+		// 处理每一个参数 :key=value
+<span class="fc bfc" id="L15" title="All 2 branches covered.">		for(String parameter : parameters){</span>
+			
+			// 寻找分隔符 = 
+<span class="fc" id="L18">			int beginIndex = parameter.indexOf('=');</span>
+<span class="fc bfc" id="L19" title="All 2 branches covered.">			if(beginIndex==-1) {</span>
+<span class="fc" id="L20">				continue;</span>
+			}
+			
+			// 获得参数
+<span class="fc" id="L24">			parameter = parameter.substring(beginIndex+1);		</span>
+			
+			// 顺序逆序都判断一下 
+<span class="fc bfc" id="L27" title="All 4 branches covered.">			if(isParameterDangerous(parameter) || isParameterDangerous(reverse(parameter))) {</span>
+<span class="fc" id="L28">				return true;</span>
+			}
+		}
+<span class="fc" id="L31">		return false;</span>
+	}
+	
+	
+	/** 判断参数是否有问题 */
+	private static boolean isParameterDangerous(String str){
+	
+<span class="fc bfc" id="L38" title="All 2 branches covered.">		if(isDangerous(str)){</span>
+<span class="fc" id="L39">			return true;</span>
+		}
+		
+		// URL 解码
+<span class="fc bfc" id="L43" title="All 2 branches covered.">		if(str.contains(&quot;%&quot;)){</span>
+<span class="fc" id="L44">			str = Decoder.decodeURL(str);	</span>
+			// 解码后，判断字符串本身 和 ROT13 解码
+<span class="pc bpc" id="L46" title="3 of 4 branches missed.">			if(isDangerous(str) || isDangerous(Decoder.decodeRot13(str))){</span>
+<span class="fc" id="L47">				return true;</span>
+			}
+			
+		}
+
+<span class="fc" id="L52">		str = Decoder.decodeBASE64(str);</span>
+		// 解码后，判断字符串本身 和 ROT13 解码
+<span class="fc bfc" id="L54" title="All 4 branches covered.">		if(isDangerous(str)||isDangerous(Decoder.decodeRot13(str))) {</span>
+<span class="fc" id="L55">			return true;</span>
+		}
+		
+<span class="fc" id="L58">		return false;</span>
+	}
+	
+	/** 判断内容是否危险 */
+	private static boolean isDangerous(String content) {
+<span class="fc" id="L63">		return TextChecker.isExecutable(content);</span>
+	}
+	
+	/** 字符串反转 */
+	private static String reverse(String s) {
+<span class="fc" id="L68">		return new StringBuilder(s).reverse().toString();</span>
+	}
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

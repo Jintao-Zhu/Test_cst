@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DomainConflictChecker.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Aliyun-Safe-Match</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">DomainConflictChecker.java</span></div><h1>DomainConflictChecker.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import java.net.URL;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+/**
+ * 从网页本身中找出域名
+ * 
+ * @author mindw
+ */
+<span class="nc" id="L15">public class DomainConflictChecker {</span>
+
+<span class="fc" id="L17">	private static final Set&lt;String&gt; SELF_KEYS = new HashSet&lt;String&gt;();</span>
+	static {
+<span class="fc" id="L19">		SELF_KEYS.add(&quot;首页&quot;);</span>
+<span class="fc" id="L20">		SELF_KEYS.add(&quot;网站首页&quot;);</span>
+<span class="fc" id="L21">		SELF_KEYS.add(&quot;主页&quot;);</span>
+<span class="fc" id="L22">		SELF_KEYS.add(&quot;登录&quot;);</span>
+<span class="fc" id="L23">		SELF_KEYS.add(&quot;注册&quot;);</span>
+<span class="fc" id="L24">		SELF_KEYS.add(&quot;关于我们&quot;);</span>
+<span class="fc" id="L25">		SELF_KEYS.add(&quot;关于&quot;);</span>
+<span class="fc" id="L26">	}</span>
+
+	public static Result check(PageInfo pageInfo) {
+
+<span class="fc" id="L30">		String host = pageInfo.getHost();</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">		if (host.matches(&quot;\\d+\\.\\d+\\.\\d+\\.\\d+&quot;) // 124.0.0.1 不考虑</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">				|| host.contains(&quot;xn--&quot;)// 中文不考虑</span>
+<span class="fc bfc" id="L33" title="All 6 branches covered.">				|| host.endsWith(&quot;.com.cn&quot;) || host.endsWith(&quot;.com&quot;) || host.endsWith(&quot;.net&quot;)) {</span>
+<span class="fc" id="L34">			return Result.UNKNOWN;</span>
+		}
+
+<span class="fc" id="L37">		String domain = pageInfo.getDomain();</span>
+<span class="fc" id="L38">		Elements elements = pageInfo.getDocument().select(&quot;a[href]&quot;);</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">		for (Element element : elements) {</span>
+
+<span class="fc" id="L41">			String href = element.attr(&quot;href&quot;);</span>
+<span class="fc" id="L42">			String text = element.text().replaceAll(&quot;(\\s)+&quot;, &quot;&quot;);</span>
+
+			// qq 聊天
+<span class="fc bfc" id="L45" title="All 4 branches covered.">			if (href.contains(&quot;.qq.com&quot;) || href.contains(&quot;.baidu.com&quot;)) {</span>
+<span class="fc" id="L46">				continue;</span>
+			}
+
+<span class="fc bfc" id="L49" title="All 2 branches covered.">			if (SELF_KEYS.contains(text)) {</span>
+
+<span class="fc bfc" id="L51" title="All 2 branches covered.">				if (!href.startsWith(&quot;http&quot;)) { // 当前目录一类</span>
+<span class="fc" id="L52">					return Result.UNKNOWN;</span>
+				}
+
+<span class="fc" id="L55">				String hrefHost = null;</span>
+
+				try {
+					
+<span class="fc" id="L59">					hrefHost = new URL(href).getHost();</span>
+					
+					// 首页指向ip地址威胁不大，而且容易暴露，一般是企业自己知道的
+<span class="pc bpc" id="L62" title="1 of 4 branches missed.">					if (hrefHost != null &amp;&amp; hrefHost.matches(&quot;\\d+\\.\\d+\\.\\d+\\.\\d+&quot;)</span>
+<span class="fc bfc" id="L63" title="All 4 branches covered.">							|| hrefHost.equals(&quot;localhost&quot;) || hrefHost.endsWith(&quot;wezhan.cn&quot;)) { // 微站</span>
+<span class="fc" id="L64">						continue;</span>
+					}
+					
+					// 获得域名
+<span class="fc" id="L68">					String hrefDomain = PageInfo.getDomainByHost(hrefHost);</span>
+<span class="pc bpc" id="L69" title="1 of 4 branches missed.">					if (hrefDomain != null &amp;&amp; hrefDomain.length() &gt; 0) {</span>
+						// url 更难申请，或者很短
+<span class="fc bfc" id="L71" title="All 2 branches covered.">						if (domain.length() &lt;= hrefDomain.length()) {</span>
+<span class="fc" id="L72">							return Result.UNKNOWN;</span>
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">						} else if (domain.equals(hrefDomain.toLowerCase())) {</span>
+<span class="nc" id="L74">							return Result.GOOD;</span>
+						} else {
+<span class="fc" id="L76">							return Result.FISH;</span>
+						}
+					}
+					
+<span class="nc" id="L80">				} catch (Exception e) {}</span>
+			}
+		}
+
+<span class="fc" id="L84">		return Result.UNKNOWN;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

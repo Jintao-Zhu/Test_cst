@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CalculationBigDecimalResults.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Mathematical-Expression</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">CalculationBigDecimalResults.java</span></div><h1>CalculationBigDecimalResults.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import java.math.BigDecimal;
+
+/**
+ * 适用于 BigDecimal 操作的计算结果
+ *
+ * @author zhao
+ */
+public class CalculationBigDecimalResults extends CalculationNumberResults {
+    private final BigDecimal result;
+
+    /**
+     * @param layers 结果的计算层数
+     *               &lt;p&gt;
+     *               Calculation level of results
+     * @param result 已经计算出结果数值的情况下，使用该形参进行赋值
+     *               &lt;p&gt;
+     *               If the result value has been calculated, use this parameter for assignment
+     * @param source 来源，表明该结果对象的计算来源。
+     *               &lt;p&gt;
+     *               Source indicates the calculation source of the result object.
+     */
+    public CalculationBigDecimalResults(int layers, BigDecimal result, String source) {
+<span class="nc" id="L25">        super(layers, result.doubleValue(), source);</span>
+<span class="nc" id="L26">        this.result = result;</span>
+<span class="nc" id="L27">    }</span>
+
+    @Override
+    public BigDecimal getBigDecimalResult() {
+<span class="nc" id="L31">        return this.result;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

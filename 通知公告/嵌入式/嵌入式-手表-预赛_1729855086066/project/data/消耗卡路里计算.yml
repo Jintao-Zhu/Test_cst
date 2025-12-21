@@ -1,0 +1,5 @@
+info:
+  - gender: 2  # 1:female, 2:male
+    age: 20
+    height: 180
+    weight: 70

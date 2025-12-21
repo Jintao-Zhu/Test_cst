@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Mathematical_Expression.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Mathematical-Expression</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">Mathematical_Expression.java</span></div><h1>Mathematical_Expression.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import java.io.*;
+import java.nio.file.Files;
+import java.util.AbstractMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+/**
+ * 数学表达式解析库的门户类，在该类中能够直接获取到需要的计算组件并进行相对应的函数注册操作。
+ * &lt;p&gt;
+ * The portal class of the mathematical expression parsing library, in which the required calculation components can be directly obtained and corresponding function registration operations can be performed.
+ *
+ * @author 赵凌宇
+ * 2023/2/20 15:30
+ */
+<span class="nc" id="L18">public enum Mathematical_Expression {</span>
+
+<span class="nc" id="L20">    bracketsCalculation2 {</span>
+        @Override
+        public BracketsCalculation2 getInstance(String calculationName) {
+<span class="nc" id="L23">            return BracketsCalculation2.getInstance(calculationName);</span>
+        }
+<span class="nc" id="L25">    }, cumulativeCalculation {</span>
+        @Override
+        public CumulativeCalculation getInstance(String calculationName) {
+<span class="nc" id="L28">            return CumulativeCalculation.getInstance(calculationName);</span>
+        }
+    },
+<span class="nc" id="L31">    fastMultiplyOfIntervalsBrackets {</span>
+        @Override
+        public FastMultiplyOfIntervalsBrackets getInstance(String calculationName) {
+<span class="nc" id="L34">            return FastMultiplyOfIntervalsBrackets.getInstance(calculationName);</span>
+        }
+<span class="nc" id="L36">    }, fastSumOfIntervalsBrackets {</span>
+        @Override
+        public FastSumOfIntervalsBrackets getInstance(String calculationName) {
+<span class="nc" id="L39">            return FastSumOfIntervalsBrackets.getInstance(calculationName);</span>
+        }
+    },
+<span class="nc" id="L42">    functionFormulaCalculation {</span>
+        @Override
+        public FunctionFormulaCalculation getInstance(String calculationName) {
+<span class="nc" id="L45">            return FunctionFormulaCalculation.getInstance(calculationName);</span>
+        }
+<span class="nc" id="L47">    }, functionFormulaCalculation2 {</span>
+        @Override
+        public FunctionFormulaCalculation2 getInstance(String calculationName) {
+<span class="nc" id="L50">            return FunctionFormulaCalculation2.getInstance(calculationName);</span>
+        }
+    },
+<span class="nc" id="L53">    prefixExpressionOperation {</span>
+        @Override
+        public PrefixExpressionOperation getInstance(String calculationName) {
+<span class="nc" id="L56">            return PrefixExpressionOperation.getInstance(calculationName);</span>
+        }
+<span class="nc" id="L58">    }, booleanCalculation2 {</span>
+        @Override
+        public BooleanCalculation2 getInstance(String calculationName) {
+<span class="nc" id="L61">            return BooleanCalculation2.getInstance(calculationName);</span>
+        }
+    },
+<span class="nc" id="L64">    complexCalculation {</span>
+        @Override
+        public ComplexCalculation getInstance(String calculationName) {
+<span class="nc" id="L67">            return ComplexCalculation.getInstance(calculationName);</span>
+        }
+    },
+<span class="nc" id="L70">    jvmCalculation {</span>
+        @Override
+        public JvmCalculation getInstance(String calculationName) {
+<span class="nc" id="L73">            return JvmCalculation.getInstance(calculationName);</span>
+        }
+    },
+<span class="nc" id="L76">    singleEquationSolving {</span>
+        @Override
+        public SingletonEquationSolving getInstance(String calculationName) {
+<span class="nc" id="L79">            return SingletonEquationSolving.getInstance(calculationName);</span>
+        }
+    },
+<span class="nc" id="L82">    singleEquationSolving2 {</span>
+        @Override
+        public SingletonEquationSolvingTwo getInstance(String calculationName) {
+<span class="nc" id="L85">            return SingletonEquationSolvingTwo.getInstance(calculationName);</span>
+        }
+    };
+
+    /**
+     * 使用枚举的方式获取到一个计算组件对象。
+     * &lt;p&gt;
+     * Obtain a calculated component object by enumerating.
+     *
+     * @param calculation 计算组件对象的类型。您可以直接传递枚举累中的各个选项选择出您需要使用的计算组件。
+     *                    &lt;p&gt;
+     *                    Calculate the type of component object. You can directly pass the options in the enumeration to select the calculation components you need to use.
+     * @return 计算组件对象。
+     * &lt;p&gt;
+     * Calculate Component Object.
+     */
+    public static Calculation getInstance(Mathematical_Expression calculation) {
+<span class="nc" id="L102">        return getInstance(calculation, calculation.toString());</span>
+    }
+
+    /**
+     * 注册一个函数到函数库中，使得所有需要使用函数计算的组件都可以获取到函数对象的数据类型。
+     * &lt;p&gt;
+     * Register a function into the function library, so that all components that need to use the function calculation can obtain the data type of the function object.
+     *
+     * @param function 函数的表达式，您可以使用数学中的格式来定义一个函数，例如 f(x) = 2 * x
+     *                 &lt;p&gt;
+     *                 The expression of a function, you can use mathematical formats to define a function, such as f (x)=2 * x
+     */
+    public static void register_jvm_function(String function) {
+<span class="nc" id="L115">        JvmExpressionFunction.registerFunction(function);</span>
+<span class="nc" id="L116">    }</span>
+
+    /**
+     * 注册一个函数到函数库中，使得所有需要使用函数计算的组件都可以获取到函数对象的数据类型。
+     * &lt;p&gt;
+     * Register a function into the function library, so that all components that need to use the function calculation can obtain the data type of the function object.
+     *
+     * @param function 函数的表达式，您可以使用数学中的格式来定义一个函数，例如 f(x) = 2 * x
+     *                 &lt;p&gt;
+     *                 The expression of a function, you can use mathematical formats to define a function, such as f (x)=2 * x
+     * @return 如果返回true 则代表函数注册操作成功!!!
+     * &lt;p&gt;
+     * If true is returned, the function registration operation is successful!!!
+     */
+    public static boolean register_jvm_function(Class&lt;?&gt; function) {
+<span class="nc" id="L131">        final Functions annotation = function.getAnnotation(Functions.class);</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">        if (annotation != null) {</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">            for (String functionExpression : annotation.value()) {</span>
+<span class="nc" id="L134">                Mathematical_Expression.register_jvm_function(functionExpression);</span>
+            }
+        } else {
+<span class="nc" id="L137">            return false;</span>
+        }
+<span class="nc" id="L139">        return true;</span>
+    }
+
+    /**
+     * 注册一个函数到函数库中，使得所有需要使用函数计算的组件都可以获取到函数对象的数据类型。
+     * &lt;p&gt;
+     * Register a function into the function library, so that all components that need to use the function calculation can obtain the data type of the function object.
+     *
+     * @param function 函数的表达式，您可以使用数学中的格式来定义一个函数，例如 f(x) = 2 * x
+     *                 &lt;p&gt;
+     *                 The expression of a function, you can use mathematical formats to define a function, such as f (x)=2 * x
+     * @return 如果返回true 则代表函数注册操作成功!!!
+     * &lt;p&gt;
+     * If true is returned, the function registration operation is successful!!!
+     * @throws WrongFormat 函数的格式发生错误则会抛出此异常
+     */
+    public static boolean register_function(String function) throws WrongFormat {
+<span class="nc" id="L156">        return CalculationManagement.register(ExpressionFunction.parse(function));</span>
+    }
+
+    /**
+     * 注册一个函数到函数库中，使得所有需要使用函数计算的组件都可以获取到函数对象的数据类型。
+     * &lt;p&gt;
+     * Register a function into the function library, so that all components that need to use the function calculation can obtain the data type of the function object.
+     *
+     * @param function 被 Functions 注解的类的实例，此示例中的 Functions 中所有的函数表达式将会被注册。
+     *                 &lt;p&gt;
+     *                 The instance of the class annotated by Functions, all function expressions in the Functions in this example will be registered.
+     * @return 如果返回true 则代表函数注册操作成功!!!
+     * &lt;p&gt;
+     * If true is returned, the function registration operation is successful!!!
+     * @throws WrongFormat 函数的格式发生错误则会抛出此异常
+     */
+    public static boolean register_function(Class&lt;?&gt; function) throws WrongFormat {
+<span class="nc" id="L173">        final Functions annotation = function.getAnnotation(Functions.class);</span>
+<span class="nc bnc" id="L174" title="All 2 branches missed.">        if (annotation != null) {</span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">            for (String functionExpression : annotation.value()) {</span>
+<span class="nc" id="L176">                Mathematical_Expression.register_function(functionExpression);</span>
+            }
+        } else {
+<span class="nc" id="L179">            return false;</span>
+        }
+<span class="nc" id="L181">        return true;</span>
+    }
+
+    /**
+     * 注册一个函数到函数库中，使得所有需要使用函数计算的组件都可以获取到函数对象的数据类型。
+     * &lt;p&gt;
+     * Register a function into the function library, so that all components that need to use the function calculation can obtain the data type of the function object.
+     *
+     * @param function 函数的序列化文件，您可以在这里指定一个函数文件的路径，并将自动的注册进来
+     *                 &lt;p&gt;
+     *                 The expression of a function, you can use mathematical formats to define a function, such as f (x)=2 * x
+     * @return 如果返回true 则代表函数注册操作成功!!!
+     * &lt;p&gt;
+     * If true is returned, the function registration operation is successful!!!
+     * @throws IOException            针对函数文件的反序列化操作出现错误的时候会抛出此异常对象
+     * @throws ClassNotFoundException Class of a serialized object cannot be found.
+     */
+    public static boolean register_function(File function) throws IOException, ClassNotFoundException {
+<span class="nc" id="L199">        try (final ObjectInputStream objectInputStream = new ObjectInputStream(Files.newInputStream(function.toPath()))) {</span>
+<span class="nc" id="L200">            final Object o = objectInputStream.readObject();</span>
+<span class="nc bnc" id="L201" title="All 2 branches missed.">            if (o instanceof Function) {</span>
+<span class="nc" id="L202">                return CalculationManagement.register((Function) o);</span>
+            }
+<span class="nc" id="L204">            return false;</span>
+        }
+    }
+
+
+    /**
+     * 将一个数据流中所包含的函数对象的序列化数据进行读取并进行解析和注册，最终返回注册结果！
+     *
+     * @param inputStream 包含函数对象序列化数据的数据流对象。
+     * @return 返回一个 二元组，其中 k 代表的就是注册成功的函数对象的数量，v 代表的是注册失败的函数对象的数量。
+     * @throws WrongFormat 如果在格式化操作进行的时候出现了格式错误，则在这里打印出此异常。
+     * @throws IOException 如果发生了 IO 错误直接抛出此异常。
+     */
+    public static Map.Entry&lt;Integer, Integer&gt; register_function(InputStream inputStream) throws WrongFormat, IOException {
+<span class="nc" id="L218">        try (final ObjectInputStream objectInputStream = new ObjectInputStream(inputStream)) {</span>
+<span class="nc" id="L219">            int count = 0, errrorCount = 0;</span>
+            do {
+                try {
+<span class="nc" id="L222">                    final Object o = objectInputStream.readObject();</span>
+<span class="nc bnc" id="L223" title="All 4 branches missed.">                    if (o instanceof Function &amp;&amp; CalculationManagement.register((Function) o)) {</span>
+<span class="nc" id="L224">                        ++count;</span>
+                    } else {
+<span class="nc" id="L226">                        ++errrorCount;</span>
+                    }
+<span class="nc" id="L228">                } catch (EOFException e) {</span>
+<span class="nc" id="L229">                    break;</span>
+<span class="nc" id="L230">                }</span>
+            } while (true);
+<span class="nc" id="L232">            return new AbstractMap.SimpleEntry&lt;&gt;(count, errrorCount);</span>
+<span class="nc" id="L233">        } catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L234">            throw new WrongFormat(&quot;The data stream you provided has an unknown class and cannot continue parsing functions in the file!&quot;);</span>
+        }
+    }
+
+    /**
+     * 注册一个函数到函数库中，使得所有需要使用函数计算的组件都可以获取到函数对象的数据类型。
+     * &lt;p&gt;
+     * Register a function into the function library, so that all components that need to use the function calculation can obtain the data type of the function object.
+     *
+     * @param function 函数实现类所示例化出来的对象。
+     *                 &lt;p&gt;
+     *                 The object instantiated by the function implementation class.
+     * @return 如果返回true 则代表函数注册操作成功!!!
+     * &lt;p&gt;
+     * If true is returned, the function registration operation is successful!!!
+     */
+    public static boolean register_function(Function function) {
+<span class="nc" id="L251">        return CalculationManagement.register(function);</span>
+    }
+
+    /**
+     * 将一个函数包注册到管理者中，这将会导致函数包中的所有函数被注册。
+     * &lt;p&gt;
+     * Registering a function package with the manager will result in all functions in the package being registered.
+     *
+     * @param functionPackage 包含需要被注册的所有函数的函数包
+     *                        &lt;p&gt;
+     *                        A function package containing all the functions that need to be registered
+     */
+    public static void register_function(FunctionPackage functionPackage) {
+<span class="nc" id="L264">        CalculationManagement.register(functionPackage);</span>
+<span class="nc" id="L265">    }</span>
+
+    /**
+     * 获取一个函数对象
+     *
+     * @param functionName 函数的名称。
+     * @return 函数对应的函数对象
+     */
+    public static ManyToOneNumberFunction getFunction(String functionName) {
+<span class="nc" id="L274">        return CalculationManagement.getFunctionByName(functionName);</span>
+    }
+
+    /**
+     * 获取到所有已注册的函数的名字
+     * &lt;p&gt;
+     * Get the names of all registered functions
+     *
+     * @return 所有已注册的函数的名字的集合
+     * &lt;p&gt;
+     * A collection of the names of all registered functions
+     */
+    public static Set&lt;String&gt; getFunctionMap() {
+<span class="nc" id="L287">        return CalculationManagement.getFunctionMap();</span>
+    }
+
+    /**
+     * 将当前的函数对象输出并保存
+     * &lt;p&gt;
+     * Output and save the current function object
+     *
+     * @param manyToOneNumberFunction 需要被导出为序列化文件的函数对象。
+     *                                &lt;p&gt;
+     *                                The function object that needs to be exported as a serialized file.
+     * @param file                    当前函数对象要保存到的目标位置
+     *                                &lt;p&gt;
+     *                                The target location to save the current function object to
+     * @throws IOException IO异常
+     *                     &lt;p&gt;
+     *                     IO exception
+     */
+    public static void saveFunction(ManyToOneNumberFunction manyToOneNumberFunction, File file) throws IOException {
+<span class="nc" id="L306">        try (final OutputStream outputStream = Files.newOutputStream(file.toPath())) {</span>
+<span class="nc" id="L307">            saveFunction(outputStream, manyToOneNumberFunction);</span>
+        }
+<span class="nc" id="L309">    }</span>
+
+    /**
+     * 将当前的函数对象输出并保存
+     * &lt;p&gt;
+     * Output and save the current function object
+     *
+     * @param outputStream            当序列化数据产生之后，需要通过此数据流来进行数据输出操作，因此您可以直接在这里传递外界已经建立好的数据流对象。
+     *                                &lt;p&gt;
+     *                                After the serialized data is generated, it is necessary to perform data output operations through this data stream, so you can directly pass the established data stream objects from the outside world here.
+     * @param manyToOneNumberFunction 需要被导出为序列化文件的函数对象。
+     *                                &lt;p&gt;
+     *                                The function object that needs to be exported as a serialized file.
+     * @throws IOException IO异常
+     *                     &lt;p&gt;
+     *                     IO exception
+     */
+    public static void saveFunction(OutputStream outputStream, ManyToOneNumberFunction... manyToOneNumberFunction) throws IOException {
+<span class="nc" id="L327">        try (final ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream)) {</span>
+<span class="nc bnc" id="L328" title="All 2 branches missed.">            for (ManyToOneNumberFunction toOneNumberFunction : manyToOneNumberFunction) {</span>
+<span class="nc bnc" id="L329" title="All 2 branches missed.">                if (toOneNumberFunction.AllowSerialization()) {</span>
+<span class="nc" id="L330">                    objectOutputStream.writeObject(toOneNumberFunction);</span>
+                }
+            }
+        }
+<span class="nc" id="L334">    }</span>
+
+    /**
+     * 将一个已经注册的函数从函数库中注销注册，释放其所占用的内存空间。
+     * &lt;p&gt;
+     * Unregister a registered function from the function library to free the memory space it occupies.
+     *
+     * @param functionName 函数的名称。
+     *                     &lt;p&gt;
+     *                     The name of the function.
+     * @return 如果返回 true 代表函数注销的操作执行成功!!!
+     * &lt;p&gt;
+     * If true is returned, the function logout operation is successful!!!
+     */
+    public static boolean unregister_function(String functionName) {
+<span class="nc" id="L349">        return CalculationManagement.unregisterF(functionName);</span>
+    }
+
+    /**
+     * 将一个已经注册的函数从函数库中注销注册，释放其所占用的内存空间。
+     * &lt;p&gt;
+     * Unregister a registered function from the function library to free the memory space it occupies.
+     *
+     * @param function 函数的实现类对象。
+     *                 &lt;p&gt;
+     *                 The implementation class object of the function.
+     * @return 如果返回 true 代表函数注销的操作执行成功!!!
+     * &lt;p&gt;
+     * If true is returned, the function logout operation is successful!!!
+     */
+    public static boolean unregister_function(Function function) {
+<span class="nc" id="L365">        return unregister_function(function.getName());</span>
+    }
+
+    /**
+     * 传递一个名称，获取到一个计算组件，您不需要调用计算组件的 getInstance 函数。
+     * &lt;p&gt;
+     * Pass a name to get a calculation component. You don't need to call the getInstance function of the calculation component。
+     *
+     * @param calculation     计算组件的类型
+     * @param calculationName 计算组件的名称.
+     *                        &lt;p&gt;
+     *                        Name of calculation component.
+     * @return 计算组件对象。
+     * &lt;p&gt;
+     * Calculate component objects.
+     */
+    public static Calculation getInstance(Mathematical_Expression calculation, String calculationName) {
+<span class="nc" id="L382">        return calculation.getInstance(calculationName);</span>
+    }
+
+    /**
+     * 获取到一个指定名称的计算组件。
+     *
+     * @param calculationName 计算组件的名称，该参数将会被用于内存地址中的编号映射，能够通过名称获取到指定的实例化号的计算组件对象。
+     * @return 计算组件对象
+     */
+    public abstract Calculation getInstance(String calculationName);
+
+    /**
+     * 运算组件的设置模块，通过此类，您可以对于运算的逻辑等操作进行一些设置~
+     * &lt;p&gt;
+     * The setting module for calculation components, through which you can make some settings for the logic and other operations of calculations~
+     */
+<span class="nc" id="L398">    public final static class Options {</span>
+<span class="nc" id="L399">        private final static HashMap&lt;Integer, Number&gt; HASH_MAP = new HashMap&lt;&gt;();</span>
+        /**
+         * 表达式对象的缓存池！
+         */
+<span class="nc" id="L403">        private final static HashMap&lt;String, PackExpression&gt; Formula_NameExpression = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L404">        private static boolean useBigDecimal = false;</span>
+<span class="nc" id="L405">        private static boolean useCache = false;</span>
+
+        /**
+         * 手动添加一个 hash 的缓存，此函数请勿随意调用，因为随意调用，会带来 hash 冲突
+         *
+         * @param hashCode hash
+         * @param number   数值
+         */
+        public static void cacheCalculation(int hashCode, Number number) {
+<span class="nc" id="L414">            HASH_MAP.put(hashCode, number);</span>
+<span class="nc" id="L415">        }</span>
+
+        /**
+         * 手动获取一个 hash 的缓存
+         *
+         * @param hashCode hash
+         * @return 提前缓存好的结果
+         */
+        public static Number getCacheCalculation(int hashCode) {
+<span class="nc" id="L424">            return HASH_MAP.get(hashCode);</span>
+        }
+
+        /**
+         * 手动添加一个 hash 的缓存，此函数请勿随意调用，因为随意调用，会带来 hash 冲突
+         *
+         * @param Formula        hash
+         * @param packExpression 表达式对象
+         */
+        public static void cacheCalculation(String Formula, PackExpression packExpression) {
+<span class="nc" id="L434">            Formula_NameExpression.put(Formula, packExpression);</span>
+<span class="nc" id="L435">        }</span>
+
+        /**
+         * 手动获取一个 hash 的缓存
+         *
+         * @param Formula hash
+         * @return 提前缓存好的结果
+         */
+        public static PackExpression getCacheCalculation(String Formula) {
+<span class="nc" id="L444">            return Formula_NameExpression.get(Formula);</span>
+        }
+
+        /**
+         * 调用此函数将会返回一个布尔对象，用来描述当前计算组件是否要使用 BigDecimal 进行计算，这将能够有效避免精度问题。
+         * &lt;p&gt;
+         * Calling this function will return a Boolean object that describes whether the current calculation component needs to use BigDecimal for calculation, which can effectively avoid accuracy issues.
+         *
+         * @return 如果当前的运算模式是BigDecimal，则返回true。反之则返回false。
+         * If the current operation mode is BigDecimal, return true. Otherwise, return false.
+         */
+        public static boolean isUseBigDecimal() {
+<span class="nc" id="L456">            return useBigDecimal;</span>
+        }
+
+        /**
+         * 设置是否使用 BigDecimal 进行计算。
+         * 调用此函数将会返回一个布尔对象，用来描述当前计算组件是否要使用 BigDecimal 进行计算，这将能够有效避免精度问题。
+         * &lt;p&gt;
+         * Calling this function will return a Boolean object that describes whether the current calculation component needs to use BigDecimal for calculation, which can effectively avoid accuracy issues.
+         *
+         * @param useBigDecimal 如果您需要使用 BigDecimal 进行计算，请将此参数设置为 true。
+         *                      &lt;p&gt;
+         *                      If you need to use BigDecimal for calculation, set this parameter to true.
+         */
+        public static void setUseBigDecimal(boolean useBigDecimal) {
+<span class="nc" id="L470">            Options.useBigDecimal = useBigDecimal;</span>
+<span class="nc" id="L471">        }</span>
+
+        /**
+         * @return 是否开启计算数值的缓存功能，开启之后，所有的计算结果将会被缓存，这将会有效减少计算量，但是也会造成一定的内存占用。
+         * &lt;p&gt;
+         * Do you want to enable the caching function for calculating numerical values? Once enabled, all calculation results will be cached, which will effectively reduce computational complexity but also cause some memory usage.
+         */
+        public static Boolean isUseCache() {
+<span class="nc" id="L479">            return useCache;</span>
+        }
+
+        /**
+         * @param useCache 是否开启计算数值的缓存功能，开启之后，所有的计算结果将会被缓存，这将会有效减少计算量，但是也会造成一定的内存占用。
+         *                 &lt;p&gt;
+         *                 Do you want to enable the caching function for calculating numerical values? Once enabled, all calculation results will be cached, which will effectively reduce computational complexity but also cause some memory usage.
+         */
+        public static void setUseCache(boolean useCache) {
+<span class="nc bnc" id="L488" title="All 2 branches missed.">            if (!useCache) {</span>
+<span class="nc" id="L489">                HASH_MAP.clear();</span>
+<span class="nc" id="L490">                Formula_NameExpression.clear();</span>
+            }
+<span class="nc" id="L492">            Options.useCache = useCache;</span>
+<span class="nc" id="L493">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

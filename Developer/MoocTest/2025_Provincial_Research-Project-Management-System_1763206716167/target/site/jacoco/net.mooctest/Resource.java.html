@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Resource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Research-Project-Management-System</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">Resource.java</span></div><h1>Resource.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import java.time.LocalDateTime;
+import java.util.*;
+
+public class Resource {
+    private final long id;
+    private String name;
+    private String type;
+    private final NavigableMap&lt;LocalDateTime, LocalDateTime&gt; bookings;
+
+<span class="fc" id="L12">    public Resource(String name, String type) {</span>
+<span class="fc" id="L13">        this.id = IdGenerator.nextId();</span>
+<span class="fc bfc" id="L14" title="All 2 branches covered.">        this.name = name == null ? &quot;&quot; : name;</span>
+<span class="fc bfc" id="L15" title="All 2 branches covered.">        this.type = type == null ? &quot;GENERIC&quot; : type;</span>
+<span class="fc" id="L16">        this.bookings = new TreeMap&lt;&gt;();</span>
+<span class="fc" id="L17">    }</span>
+
+<span class="fc" id="L19">    public long getId() { return id; }</span>
+<span class="fc" id="L20">    public String getName() { return name; }</span>
+<span class="fc" id="L21">    public String getType() { return type; }</span>
+<span class="fc bfc" id="L22" title="All 2 branches covered.">    public void setName(String n) { this.name = n == null ? &quot;&quot; : n; }</span>
+<span class="fc bfc" id="L23" title="All 2 branches covered.">    public void setType(String t) { this.type = t == null ? &quot;GENERIC&quot; : t; }</span>
+
+    public boolean isAvailable(LocalDateTime start, LocalDateTime end) {
+<span class="fc bfc" id="L26" title="All 4 branches covered.">        if (start == null || end == null) return false;</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">        if (!end.isAfter(start)) return false;</span>
+<span class="fc" id="L28">        Map.Entry&lt;LocalDateTime, LocalDateTime&gt; floor = bookings.floorEntry(start);</span>
+<span class="fc bfc" id="L29" title="All 4 branches covered.">        if (floor != null &amp;&amp; !floor.getValue().isBefore(start)) return false;</span>
+<span class="fc" id="L30">        return true;</span>
+    }
+
+    public boolean book(LocalDateTime start, LocalDateTime end) {
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        if (!isAvailable(start, end)) return false;</span>
+<span class="fc" id="L35">        bookings.put(start, end);</span>
+<span class="fc" id="L36">        return true;</span>
+    }
+
+    public void cancel(LocalDateTime start) {
+<span class="fc bfc" id="L40" title="All 2 branches covered.">        if (start == null) return;</span>
+<span class="fc" id="L41">        bookings.remove(start);</span>
+<span class="fc" id="L42">    }</span>
+
+    public List&lt;Map.Entry&lt;LocalDateTime, LocalDateTime&gt;&gt; listBookings() {
+<span class="fc" id="L45">        return new ArrayList&lt;&gt;(bookings.entrySet());</span>
+    }
+
+    public boolean conflicts(LocalDateTime start, LocalDateTime end) {
+<span class="fc" id="L49">        return false;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

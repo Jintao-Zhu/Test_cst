@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ChineseDns.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Aliyun-Safe-Match</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">ChineseDns.java</span></div><h1>ChineseDns.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 根据中文查询域名
+ * @author mindw
+ */
+<span class="nc" id="L12">public class ChineseDns {</span>
+
+	// 官网 、 网站 、官方网站 、中国网站 、全球门户网站 、公司、首页
+<span class="nc" id="L15">	private static final List&lt;String&gt; SUFFIX_LIST = Arrays.asList(&quot;全球门户网站&quot;, &quot;中国网站&quot;, &quot;门户网站&quot;, &quot;官方网站&quot;, &quot;官网&quot;, &quot;网站&quot;, &quot;公司&quot;, &quot;首页&quot;,</span>
+			&quot;公共主页&quot;, &quot;主页&quot;, &quot;手机银行&quot;, &quot;手机网&quot;, &quot;手机版&quot;, &quot;移动版&quot;);
+	
+<span class="nc" id="L18">	private static final Map&lt;String, String&gt; CHINESE_TO_DOMAIN = new LinkedHashMap&lt;&gt;();</span>
+
+	static {
+
+<span class="nc" id="L22">		Map&lt;String, String&gt; chinese2website = DataLoader.loadAllWhiteList();</span>
+		// 放入一些热门的映射
+<span class="nc" id="L24">		chinese2website.putAll(DataLoader.loadHotWhiteList());</span>
+		
+		// 进行筛选，去除加载中等
+<span class="nc bnc" id="L27" title="All 2 branches missed.">		for (Map.Entry&lt;String, String&gt; entry : chinese2website.entrySet()) {</span>
+
+<span class="nc" id="L29">			String chinese = entry.getKey();</span>
+<span class="nc" id="L30">			String website = entry.getValue();</span>
+
+<span class="nc" id="L32">			chinese = removeSuffix(chinese);</span>
+
+<span class="nc bnc" id="L34" title="All 2 branches missed.">			if (chinese.length() == 0 || </span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">					CHINESE_TO_DOMAIN.containsKey(chinese) </span>
+<span class="nc bnc" id="L36" title="All 2 branches missed.">					|| chinese.contains(&quot;加载中&quot;)</span>
+<span class="nc bnc" id="L37" title="All 2 branches missed.">					|| chinese.contains(&quot;正在加载&quot;) </span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">					|| chinese.contains(&quot;�&quot;) </span>
+<span class="nc bnc" id="L39" title="All 2 branches missed.">					|| chinese.contains(&quot;建设中&quot;)</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">					|| chinese.length() &lt;= 1) {</span>
+<span class="nc" id="L41">				continue;</span>
+			}
+
+<span class="nc" id="L44">			String domain = PageInfo.getDomainByHost(website);</span>
+
+<span class="nc bnc" id="L46" title="All 2 branches missed.">			if (domain.length() == 0) {</span>
+<span class="nc" id="L47">				continue;</span>
+			}
+		
+<span class="nc" id="L50">			CHINESE_TO_DOMAIN.put(chinese, domain);</span>
+<span class="nc" id="L51">		}</span>
+		
+<span class="nc" id="L53">	}</span>
+
+	/**
+	 * 根据中文名称查找域名
+	 * 
+	 * @param chineseName
+	 *            中文名称
+	 * @return 域名，没有则为空
+	 */
+	public static String getDomainByChineseName(String chineseName) {
+		
+<span class="nc bnc" id="L64" title="All 2 branches missed.">		if(chineseName==null) {</span>
+<span class="nc" id="L65">			return null;</span>
+		}
+
+		// 一些特殊名称
+<span class="nc bnc" id="L69" title="All 6 branches missed.">		if (chineseName.equals(&quot;中国早教网&quot;) || chineseName.equals(&quot;美橙互联&quot;) || chineseName.equals(&quot;建站之星&quot;)</span>
+<span class="nc bnc" id="L70" title="All 6 branches missed.">				|| chineseName.equals(&quot;ecshop&quot;) || chineseName.equals(&quot;机械科学研究总院&quot;) || chineseName.equals(&quot;户户通&quot;)</span>
+<span class="nc bnc" id="L71" title="All 4 branches missed.">				|| chineseName.endsWith(&quot;有限公司&quot;) || chineseName.endsWith(&quot;大学&quot;)) {</span>
+<span class="nc" id="L72">			return null;</span>
+		}
+
+		// 去后缀
+<span class="nc" id="L76">		chineseName = removeSuffix(chineseName);</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">		if (chineseName.length() &lt; 2) {</span>
+<span class="nc" id="L78">			return null;</span>
+		}
+
+<span class="nc" id="L81">		return CHINESE_TO_DOMAIN.get(chineseName);</span>
+	}
+
+	// 去后缀
+	private static String removeSuffix(String websiteName) {
+<span class="nc bnc" id="L86" title="All 2 branches missed.">		for (String suffix : SUFFIX_LIST) {</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">			if (websiteName.endsWith(suffix)) {</span>
+<span class="nc" id="L88">				int index = websiteName.lastIndexOf(suffix);</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">				if (index != -1) {</span>
+<span class="nc" id="L90">					return websiteName.substring(0, index);</span>
+				}
+			}
+<span class="nc" id="L93">		}</span>
+<span class="nc" id="L94">		return websiteName;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

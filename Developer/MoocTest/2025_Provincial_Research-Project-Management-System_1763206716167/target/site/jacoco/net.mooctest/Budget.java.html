@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Budget.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Research-Project-Management-System</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">Budget.java</span></div><h1>Budget.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import java.util.*;
+
+public class Budget {
+    public static final class Item {
+        private final String name;
+        private final double cost;
+        private final double value;
+        private final String category;
+
+<span class="fc" id="L12">        public Item(String name, double cost, double value, String category) {</span>
+<span class="fc bfc" id="L13" title="All 2 branches covered.">            this.name = name == null ? &quot;&quot; : name;</span>
+<span class="fc bfc" id="L14" title="All 2 branches covered.">            this.cost = cost &lt; 0 ? 0 : cost;</span>
+<span class="fc bfc" id="L15" title="All 2 branches covered.">            this.value = value &lt; 0 ? 0 : value;</span>
+<span class="fc bfc" id="L16" title="All 2 branches covered.">            this.category = category == null ? &quot;GENERAL&quot; : category;</span>
+<span class="fc" id="L17">        }</span>
+
+<span class="fc" id="L19">        public String getName() { return name; }</span>
+<span class="fc" id="L20">        public double getCost() { return cost; }</span>
+<span class="fc" id="L21">        public double getValue() { return value; }</span>
+<span class="fc" id="L22">        public String getCategory() { return category; }</span>
+    }
+
+    private final List&lt;Item&gt; items;
+    private double reserveRatio;
+
+<span class="fc" id="L28">    public Budget() {</span>
+<span class="fc" id="L29">        this.items = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L30">        this.reserveRatio = 0.1;</span>
+<span class="fc" id="L31">    }</span>
+
+    public void add(Item item) {
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        if (item == null) return;</span>
+<span class="fc" id="L35">        items.add(item);</span>
+<span class="fc" id="L36">    }</span>
+
+<span class="fc" id="L38">    public List&lt;Item&gt; getItems() { return new ArrayList&lt;&gt;(items); }</span>
+
+    public double totalCost() {
+<span class="fc" id="L41">        double s = 0;</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        for (Item i : items) s += i.getCost();</span>
+<span class="fc" id="L43">        return s;</span>
+    }
+
+    public double totalValue() {
+<span class="fc" id="L47">        double s = 0;</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        for (Item i : items) s += i.getValue();</span>
+<span class="fc" id="L49">        return s;</span>
+    }
+
+    public double forecastCost(double inflationRate) {
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        if (inflationRate &lt; -0.5) inflationRate = -0.5;</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        if (inflationRate &gt; 1.0) inflationRate = 1.0;</span>
+<span class="fc" id="L55">        return totalCost() * (1 + inflationRate);</span>
+    }
+
+    public double requiredReserve() {
+<span class="fc" id="L59">        double base = totalCost();</span>
+<span class="fc" id="L60">        double r = base * reserveRatio;</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        if (r &lt; 1000) r = 1000;</span>
+<span class="fc" id="L62">        return r;</span>
+    }
+
+    public void setReserveRatio(double r) {
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        if (r &lt; 0) r = 0;</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        if (r &gt; 0.5) r = 0.5;</span>
+<span class="fc" id="L68">        this.reserveRatio = r;</span>
+<span class="fc" id="L69">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

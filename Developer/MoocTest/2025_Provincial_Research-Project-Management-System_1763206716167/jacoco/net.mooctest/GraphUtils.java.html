@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GraphUtils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Research-Project-Management-System</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">GraphUtils.java</span></div><h1>GraphUtils.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import java.util.*;
+
+public final class GraphUtils {
+    private GraphUtils() {}
+
+    public static List&lt;Task&gt; topologicalSort(Collection&lt;Task&gt; tasks) {
+<span class="fc" id="L9">        Map&lt;Task, Integer&gt; indeg = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L10" title="All 2 branches covered.">        for (Task t : tasks) indeg.put(t, 0);</span>
+<span class="fc bfc" id="L11" title="All 4 branches covered.">        for (Task t : tasks) for (Task d : t.getDependencies()) indeg.put(d, indeg.getOrDefault(d, 0) + 1);</span>
+<span class="fc" id="L12">        Deque&lt;Task&gt; q = new ArrayDeque&lt;&gt;();</span>
+<span class="fc bfc" id="L13" title="All 4 branches covered.">        for (Map.Entry&lt;Task, Integer&gt; e : indeg.entrySet()) if (e.getValue() == 0) q.add(e.getKey());</span>
+<span class="fc" id="L14">        List&lt;Task&gt; res = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L15" title="All 2 branches covered.">        while (!q.isEmpty()) {</span>
+<span class="fc" id="L16">            Task u = q.removeFirst();</span>
+<span class="fc" id="L17">            res.add(u);</span>
+<span class="fc bfc" id="L18" title="All 2 branches covered.">            for (Task d : u.getDependencies()) {</span>
+<span class="fc" id="L19">                int v = indeg.getOrDefault(d, 0) - 1;</span>
+<span class="fc" id="L20">                indeg.put(d, v);</span>
+<span class="fc bfc" id="L21" title="All 2 branches covered.">                if (v == 0) q.add(d);</span>
+<span class="fc" id="L22">            }</span>
+<span class="fc" id="L23">        }</span>
+<span class="fc bfc" id="L24" title="All 2 branches covered.">        if (res.size() != indeg.size()) throw new DomainException(&quot;cycle detected&quot;);</span>
+<span class="fc" id="L25">        return res;</span>
+    }
+
+    public static boolean hasCycle(Collection&lt;Task&gt; tasks) {
+        try {
+<span class="fc" id="L30">            topologicalSort(tasks);</span>
+<span class="fc" id="L31">            return false;</span>
+<span class="fc" id="L32">        } catch (DomainException e) {</span>
+<span class="fc" id="L33">            return true;</span>
+        }
+    }
+
+    public static int longestPathDuration(Collection&lt;Task&gt; tasks) {
+<span class="fc" id="L38">        List&lt;Task&gt; order = topologicalSort(tasks);</span>
+<span class="fc" id="L39">        Map&lt;Task, Integer&gt; dp = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L40">        int best = 0;</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">        for (Task t : order) {</span>
+<span class="fc" id="L42">            int base = 0;</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">            for (Task d : t.getDependencies()) base = Math.max(base, dp.getOrDefault(d, 0));</span>
+<span class="fc" id="L44">            int v = base + t.getDuration();</span>
+<span class="fc" id="L45">            dp.put(t, v);</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">            if (v &gt; best) best = v;</span>
+<span class="fc" id="L47">        }</span>
+<span class="fc" id="L48">        return best;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

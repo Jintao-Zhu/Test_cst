@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PageKeyChecker.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Aliyun-Safe-Match</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">PageKeyChecker.java</span></div><h1>PageKeyChecker.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
+/**
+ * 网页中的关键字检查
+ * @author mindw
+ */
+<span class="nc" id="L13">public class PageKeyChecker {</span>
+
+	/** 关键字映射到主域名 */
+<span class="fc" id="L16">	private static final Map&lt;String, String&gt; KEY_TO_DOMAIN = DataLoader.loadKeysMap();</span>
+
+	public static Result check(PageInfo pageInfo) {
+
+<span class="fc" id="L20">		String host = pageInfo.getHost();</span>
+<span class="fc" id="L21">		String domain = pageInfo.getDomain();</span>
+<span class="fc" id="L22">		Document document = pageInfo.getDocument();</span>
+<span class="fc" id="L23">		String htmlContent = document.text();</span>
+
+		// 关键词
+<span class="fc bfc" id="L26" title="All 2 branches covered.">		for (String pageKey : KEY_TO_DOMAIN.keySet()) {</span>
+<span class="pc bpc" id="L27" title="1 of 2 branches missed.">			if (htmlContent.contains(pageKey)) {</span>
+<span class="nc" id="L28">				String realDomain = KEY_TO_DOMAIN.get(pageKey);</span>
+<span class="nc bnc" id="L29" title="All 2 branches missed.">				return domain.equals(realDomain) ? Result.GOOD : Result.FISH;</span>
+			}
+		}
+		
+<span class="fc" id="L33">		Result result = Result.UNKNOWN;</span>
+
+		// 标题
+<span class="fc" id="L36">		String title = document.title();</span>
+<span class="pc bpc" id="L37" title="1 of 4 branches missed.">		if (title != null &amp;&amp; title.length() &gt; 0) {</span>
+<span class="fc" id="L38">			result = checkByPageKey(title, domain);</span>
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">			if (result != Result.UNKNOWN) {</span>
+<span class="nc" id="L40">				return result;</span>
+			}
+		}
+
+		// 版权所有
+<span class="fc" id="L45">		String copyright = getCopyright(document).toLowerCase().trim();</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">		if (copyright.length() &gt; 0) {</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">			if (!host.startsWith(&quot;www.&quot;)) {</span>
+<span class="fc" id="L48">				result = checkByPageKey(copyright, domain);</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">				if (result != Result.UNKNOWN) {</span>
+<span class="nc" id="L50">					return result;</span>
+				}
+			}
+		}
+
+		// 内容
+<span class="fc" id="L56">		String websiteName = getWebsiteName(htmlContent);</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">		if (websiteName.length() &gt; 0) {</span>
+<span class="fc" id="L58">			result = checkByPageKey(websiteName, domain);</span>
+<span class="pc bpc" id="L59" title="1 of 2 branches missed.">			if (result != Result.UNKNOWN) {</span>
+<span class="nc" id="L60">				return result;</span>
+			}
+		}
+
+<span class="fc" id="L64">		return result;</span>
+	}
+
+	/**
+	 * 按网站名称检测
+	 * 
+	 * @param chineseName
+	 *            网站名称
+	 * @param pageInfo
+	 *            网页信息
+	 * @return 检测结果
+	 */
+	private static Result checkByPageKey(String pageKey, String domain) {
+
+<span class="fc" id="L78">		String realDomain = ChineseDns.getDomainByChineseName(pageKey);</span>
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">		if (realDomain == null) {</span>
+<span class="fc" id="L80">			return Result.UNKNOWN;</span>
+		}
+
+<span class="nc bnc" id="L83" title="All 2 branches missed.">		if (domain.length() &lt;= realDomain.length()) { // 如果域名较短则应该是安全的</span>
+<span class="nc" id="L84">			return Result.GOOD;</span>
+		} else {
+<span class="nc bnc" id="L86" title="All 2 branches missed.">			return domain.endsWith(realDomain) ? Result.GOOD : Result.FISH;</span>
+		}
+	}
+
+	// Copyright © 2016 qianpinxiu.com 版权所有 苏ICP备16034059号
+	// Copyright?2014 蘑菇云? 地址：福建泉州市丰泽区东海大街东海湾中心一号楼1502? 电话：0595-22891399?
+	// 经营许可证：闽ICP备15025789号-1
+	// Copyright 信用网 All Rights Reserved
+	// zhaojingdm.com 版权所有
+	// 邮箱：1028249634@qq.com 版权所有：磁县巧莲医院有限公司
+	
+<span class="fc" id="L97">	private static Pattern pattern_welcome_0 = Pattern.compile(&quot;欢迎(来到|光临|访问|浏览)([\u4E00-\u9FA50-9a-zA-Z]+)&quot;);</span>
+<span class="fc" id="L98">	private static Pattern pattern_welcome_1 = Pattern.compile(&quot;([\u4E00-\u9FA50-9a-zA-Z]+)欢迎您&quot;);</span>
+<span class="fc" id="L99">	private static Pattern pattern_copyright1 = Pattern.compile(&quot;版权所有\\s*[：|:]\\s*([\u4E00-\u9FA5\\w\\.@]+)&quot;);</span>
+<span class="fc" id="L100">	private static Pattern pattern_copyright2 = Pattern.compile(&quot;([\u4E00-\u9FA5\\w\\.@]+)\\s*版权所有&quot;);</span>
+
+	private static String getCopyright(Document document) {
+
+<span class="fc bfc" id="L104" title="All 2 branches covered.">		for (Element element : document.getAllElements()) {</span>
+<span class="fc bfc" id="L105" title="All 2 branches covered.">			if (element.getAllElements().size() &gt; 1) {</span>
+<span class="fc" id="L106">				continue;</span>
+			}
+<span class="fc" id="L108">			String copyright = _getCopyright(element.text());</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">			if (copyright != null) {</span>
+<span class="fc" id="L110">				return copyright;</span>
+			}
+		}
+<span class="fc" id="L113">		return &quot;&quot;;</span>
+	}
+
+	private static String _getCopyright(String input) {
+<span class="fc" id="L117">		Matcher matcher = null;</span>
+<span class="fc" id="L118">		matcher = pattern_copyright1.matcher(input);</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">		if (matcher.find()) {</span>
+<span class="fc" id="L120">			return matcher.group(1);</span>
+		}
+<span class="fc" id="L122">		matcher = pattern_copyright2.matcher(input);</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">		if (matcher.find()) {</span>
+<span class="fc" id="L124">			return matcher.group(1);</span>
+		}
+<span class="fc" id="L126">		return null;</span>
+	}
+
+	private static String getWebsiteName(String input) {
+
+<span class="fc bfc" id="L131" title="All 8 branches covered.">		if (input.contains(&quot;欢迎来到&quot;) || input.contains(&quot;欢迎光临&quot;) || input.contains(&quot;欢迎访问&quot;) || input.contains(&quot;欢迎浏览&quot;)) {</span>
+
+<span class="fc" id="L133">			Matcher matcher = null;</span>
+<span class="fc" id="L134">			matcher = pattern_welcome_0.matcher(input);</span>
+<span class="pc bpc" id="L135" title="1 of 2 branches missed.">			if (matcher.find()) {</span>
+<span class="fc" id="L136">				return matcher.group(2);</span>
+			}
+
+<span class="nc" id="L139">			matcher = pattern_welcome_1.matcher(input);</span>
+<span class="nc bnc" id="L140" title="All 2 branches missed.">			if (matcher.find()) {</span>
+<span class="nc" id="L141">				return matcher.group(1);</span>
+			}
+
+		}
+<span class="fc" id="L145">		return &quot;&quot;;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

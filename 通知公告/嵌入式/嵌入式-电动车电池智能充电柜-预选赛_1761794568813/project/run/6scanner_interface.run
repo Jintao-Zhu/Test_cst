@@ -1,0 +1,81 @@
+{
+    "version": 4,
+    "data": {
+        "envValue": "env.env",
+        "title": "",
+        "remarks": "",
+        "testCode": "",
+        "config": {},
+        "deviceList": [
+            {
+                "id": "J_8sbtt20QI-Qw-faLRRS",
+                "name": "scanner",
+                "luaVal": "lua/6scanner_input_port.lua",
+                "kind": "SIMU"
+            },
+            {
+                "id": "kAzxicaqdWfMPUYcrVyJc",
+                "name": "server",
+                "kind": "SIMU"
+            }
+        ],
+        "channelList": [
+            {
+                "id": "hPw8m6iesynIDWg9jvgtT",
+                "name": "scanner",
+                "items": [
+                    {
+                        "name": "COM",
+                        "checked": false
+                    }
+                ]
+            },
+            {
+                "id": "TUqrmvGJMyuaE19TYBMWD",
+                "name": "server",
+                "items": [
+                    {
+                        "name": "COM",
+                        "checked": false
+                    }
+                ]
+            },
+            {
+                "id": "J7z2DykDWQ1O4mtko5_t2",
+                "name": "controller",
+                "items": [
+                    {
+                        "name": "COM_SCANNER",
+                        "checked": false
+                    },
+                    {
+                        "name": "COM_SERVER",
+                        "checked": false
+                    }
+                ]
+            }
+        ],
+        "protocolList": [
+            {
+                "name": "Prot_scanner_receive",
+                "uri": "prot/Prot_scanner_receive.prot",
+                "checked": false
+            },
+            {
+                "name": "Prot_scanner_send",
+                "uri": "prot/Prot_scanner_send.prot",
+                "checked": false
+            },
+            {
+                "name": "Prot_server_receive",
+                "uri": "prot/Prot_server_receive.prot",
+                "checked": false
+            },
+            {
+                "name": "Prot_server_send",
+                "uri": "prot/Prot_server_send.prot",
+                "checked": false
+            }
+        ]
+    }
+}

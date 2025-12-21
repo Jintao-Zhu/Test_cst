@@ -1,0 +1,71 @@
+* Starting client
+* Connecting to master process on port 9937
+* Analyzing classpath: 
+  - D:\Softwares\Java\Java_practice\NIOServer\target\test-classes
+  - D:\Softwares\Java\Java_practice\NIOServer\target\classes
+  - D:\Softwares\Java\apache-maven-3.8.6-bin\Repository\junit\junit\4.12\junit-4.12.jar
+  - D:\Softwares\Java\apache-maven-3.8.6-bin\Repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar
+* Finished analyzing classpath
+* Generating tests for class net.mooctest.HttpMessageReaderFactory
+* Test criteria:
+  - Line Coverage
+  - Branch Coverage
+  - Exception
+  - Mutation testing (weak)
+  - Method-Output Coverage
+  - Top-Level Method Coverage
+  - No-Exception Top-Level Method Coverage
+  - Context Branch Coverage
+* Setting up search algorithm for whole suite generation
+* Loaded 4 tests from D:\Softwares\Java\Java_practice\NIOServer\.evosuite\evosuite-seeds\net.mooctest.HttpMessageReaderFactory.seed
+* Total number of test goals: 
+  - Line 3
+  - Branch 2
+  - Exception 0
+  - MutationFactory 0
+  - Output 2
+  - Method 2
+  - MethodNoException 2
+  - CBranchFitnessFactory 2
+* Using seed 1666462007239
+* Starting evolution
+* Search finished after 31s and 1637 generations, 229870 statements, best individual has fitness: 2.0
+* Writing sequences to pool
+* Minimizing test suite
+* Going to analyze the coverage criteria
+* Coverage analysis for criterion LINE
+* Coverage of criterion LINE: 100%
+* Total number of goals: 3
+* Number of covered goals: 3
+* Coverage analysis for criterion BRANCH
+* Coverage of criterion BRANCH: 100%
+* Total number of goals: 2
+* Number of covered goals: 2
+* Coverage analysis for criterion EXCEPTION
+* Coverage of criterion EXCEPTION: 100% (no goals)
+* Coverage analysis for criterion WEAKMUTATION
+* Coverage of criterion WEAKMUTATION: 100% (no goals)
+* Coverage analysis for criterion OUTPUT
+* Coverage of criterion OUTPUT: 50%
+* Total number of goals: 2
+* Number of covered goals: 1
+* Coverage analysis for criterion METHOD
+* Coverage of criterion METHOD: 100%
+* Total number of goals: 2
+* Number of covered goals: 2
+* Coverage analysis for criterion METHODNOEXCEPTION
+* Coverage of criterion METHODNOEXCEPTION: 100%
+* Total number of goals: 2
+* Number of covered goals: 2
+* Coverage analysis for criterion CBRANCH
+* Coverage of criterion CBRANCH: 100%
+* Total number of goals: 2
+* Number of covered goals: 2
+* Generated 1 tests with total length 2
+* Resulting test suite's coverage: 94% (average coverage for all fitness functions)
+* Generating assertions
+* Resulting test suite's mutation score: 100%
+* Compiling and checking tests
+* Writing JUnit test case 'HttpMessageReaderFactory_ESTest' to D:\Softwares\Java\Java_practice\NIOServer\.evosuite\tmp_2022_10_23_02_03_14\tests
+* Done!
+

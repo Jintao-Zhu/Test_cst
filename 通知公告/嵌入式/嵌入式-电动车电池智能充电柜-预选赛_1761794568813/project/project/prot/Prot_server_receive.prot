@@ -1,0 +1,356 @@
+{
+    "version": 4,
+    "data": {
+        "kind": "protocol",
+        "alignment": "right",
+        "title": "名称",
+        "items": [
+            {
+                "id": "c9b_uEcI9",
+                "kind": "seg_integer",
+                "name": "header",
+                "title": "名称",
+                "autoValue": "0xAA55",
+                "signed": "false",
+                "bitCount": "16",
+                "bigOrder": "true",
+                "encode": "complement"
+            },
+            {
+                "id": "a_dj-0chcv",
+                "kind": "seg_integer",
+                "name": "data_length",
+                "title": "名称",
+                "autoValue": "0x0B",
+                "signed": "false",
+                "bitCount": "8",
+                "bigOrder": "false",
+                "encode": "complement"
+            },
+            {
+                "id": "Ie5x8tUBLN",
+                "kind": "seg_integer",
+                "name": "cmd_type",
+                "title": "名称",
+                "autoValue": "0x0",
+                "signed": "false",
+                "bitCount": "8",
+                "bigOrder": "false",
+                "encode": "complement"
+            },
+            {
+                "id": "Si-*9ke/Dm|!wU%uZ41i",
+                "kind": "seg_oneof",
+                "items": [
+                    {
+                        "id": "l68vQIc1L",
+                        "kind": "oneofitem",
+                        "when": "this.cmd_type==1",
+                        "alias": "lend_result",
+                        "items": [
+                            {
+                                "id": "3+AS6,F|*`.L`?OA6nT[",
+                                "kind": "seg_integer",
+                                "name": "result",
+                                "title": "名称",
+                                "autoValue": "0x01",
+                                "signed": "false",
+                                "bitCount": "8",
+                                "bigOrder": "false",
+                                "encode": "complement"
+                            },
+                            {
+                                "id": "rydr.O1V`?d63CUSdU^U",
+                                "kind": "seg_oneof",
+                                "items": [
+                                    {
+                                        "id": "d8t2kfwGIL",
+                                        "kind": "oneofitem",
+                                        "when": "this.result==1",
+                                        "alias": "alias0",
+                                        "items": [
+                                            {
+                                                "id": "xAZI4a:eJ=}]Xf,3I_bZ",
+                                                "kind": "seg_buffer",
+                                                "name": "battery_id",
+                                                "title": "名称",
+                                                "autoValue": "47 58 43 44 42 2D 31 30 30 31",
+                                                "lengthMax": "10",
+                                                "lengthMin": "0",
+                                                "length": "10"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "id": "aZhRidVm7H",
+                                        "kind": "oneofitem",
+                                        "when": "1",
+                                        "alias": "alias1",
+                                        "items": [
+                                            {
+                                                "id": "x_B0C|qLNHiLUicar8Y~",
+                                                "kind": "seg_nil",
+                                                "name": "seg_xxx"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "bHSqA-4_Dp",
+                        "kind": "oneofitem",
+                        "when": "this.cmd_type==2",
+                        "alias": "return_result",
+                        "items": [
+                            {
+                                "id": "V6)+wo}WhYzU)~FnN=WV",
+                                "kind": "seg_integer",
+                                "name": "result",
+                                "title": "名称",
+                                "autoValue": "0x01",
+                                "signed": "false",
+                                "bitCount": "8",
+                                "bigOrder": "false",
+                                "encode": "complement"
+                            },
+                            {
+                                "id": "_Pr(0qm`TnLGT2)rkqo+",
+                                "kind": "seg_oneof",
+                                "items": [
+                                    {
+                                        "id": "9gr2w1Lx4N",
+                                        "kind": "oneofitem",
+                                        "when": "this.result==1",
+                                        "alias": "alias0",
+                                        "items": [
+                                            {
+                                                "id": "8KMgcaOB_9",
+                                                "kind": "seg_buffer",
+                                                "name": "battery_id",
+                                                "title": "名称",
+                                                "autoValue": "47 58 43 44 42 2D 31 30 30 31",
+                                                "lengthMax": "10",
+                                                "lengthMin": "0",
+                                                "length": "10"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "id": "jQxiybqAXx",
+                                        "kind": "oneofitem",
+                                        "when": "1",
+                                        "alias": "alias1",
+                                        "items": [
+                                            {
+                                                "id": ")ux@P%R,0@@nrZ)s#611",
+                                                "kind": "seg_nil",
+                                                "name": "seg_xxx"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "ayzovAKkPl",
+                        "kind": "oneofitem",
+                        "when": "this.cmd_type==3",
+                        "alias": "query_result",
+                        "items": [
+                            {
+                                "id": "/v_mSq[J_}Kf7g/C},X$",
+                                "kind": "seg_integer",
+                                "name": "battery_num",
+                                "title": "名称",
+                                "autoValue": "0x0",
+                                "signed": "false",
+                                "bitCount": "8",
+                                "bigOrder": "false",
+                                "encode": "complement"
+                            },
+                            {
+                                "id": "Z@WhL-:t%@#`C`9R2/_^",
+                                "kind": "seg_oneof",
+                                "items": [
+                                    {
+                                        "id": "_xWJ1MtnOO",
+                                        "kind": "oneofitem",
+                                        "when": "this.battery_num>0",
+                                        "alias": "alias0",
+                                        "items": [
+                                            {
+                                                "id": "1EfC8UTu:EaM,B7R$B33",
+                                                "kind": "arr_group",
+                                                "name": "array_battery_id",
+                                                "title": "名称",
+                                                "items": [
+                                                    {
+                                                        "id": "KT2e2v195Q",
+                                                        "kind": "seg_buffer",
+                                                        "name": "battery_id",
+                                                        "title": "名称",
+                                                        "autoValue": "47 58 43 44 42 2D 31 30 30 31",
+                                                        "lengthMax": "10",
+                                                        "lengthMin": "10",
+                                                        "length": "10"
+                                                    }
+                                                ],
+                                                "repeated": "this.battery_num",
+                                                "repeatedMin": "1",
+                                                "repeatedMax": "10"
+                                            },
+                                            {
+                                                "id": "a_-kx(Y1yj}G4T81S*_%",
+                                                "kind": "seg_integer",
+                                                "name": "flag",
+                                                "title": "名称",
+                                                "autoValue": "0xFF",
+                                                "signed": "false",
+                                                "bitCount": "8",
+                                                "bigOrder": "false",
+                                                "encode": "complement"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "id": "9CRKJQNUsI",
+                                        "kind": "oneofitem",
+                                        "when": "this.battery_num==0",
+                                        "alias": "alias1",
+                                        "items": [
+                                            {
+                                                "id": "RM)_humSBM.)2z#hnDb9",
+                                                "kind": "seg_integer",
+                                                "name": "flag",
+                                                "title": "名称",
+                                                "autoValue": "0xFF",
+                                                "signed": "false",
+                                                "bitCount": "8",
+                                                "bigOrder": "false",
+                                                "encode": "complement"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "DxSUyv-eNZ",
+                        "kind": "oneofitem",
+                        "when": "this.cmd_type==4",
+                        "alias": "failure_result",
+                        "items": [
+                            {
+                                "id": "8$A0`F;{+hrY[uZN/Ny!",
+                                "kind": "seg_integer",
+                                "name": "failure_battery_num",
+                                "title": "名称",
+                                "autoValue": "0x0",
+                                "signed": "false",
+                                "bitCount": "8",
+                                "bigOrder": "false",
+                                "encode": "complement"
+                            },
+                            {
+                                "id": "yqTI2RgJ$6.yMKy3=4~f",
+                                "kind": "seg_oneof",
+                                "items": [
+                                    {
+                                        "id": "c-3Jl2sVsn",
+                                        "kind": "oneofitem",
+                                        "when": "this.failure_battery_num>0",
+                                        "alias": "alias0",
+                                        "items": [
+                                            {
+                                                "id": "(A/Ng7e5+}xV%CeRI6az",
+                                                "kind": "arr_group",
+                                                "name": "array_failure_battery_id",
+                                                "title": "名称",
+                                                "items": [
+                                                    {
+                                                        "id": "S/|bkd|!a`vBodGU@;f8",
+                                                        "kind": "seg_buffer",
+                                                        "name": "battery_id",
+                                                        "title": "名称",
+                                                        "autoValue": "47 58 43 44 42 2D 31 30 30 31",
+                                                        "lengthMax": "10",
+                                                        "lengthMin": "10",
+                                                        "length": "10"
+                                                    }
+                                                ],
+                                                "repeated": "this.failure_battery_num",
+                                                "repeatedMin": "1",
+                                                "repeatedMax": "10"
+                                            },
+                                            {
+                                                "id": "mlGTFt]AQC/F0QxL4Y|D",
+                                                "kind": "seg_integer",
+                                                "name": "flag",
+                                                "title": "名称",
+                                                "autoValue": "0x0F",
+                                                "signed": "false",
+                                                "bitCount": "8",
+                                                "bigOrder": "false",
+                                                "encode": "complement"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "id": "QAozL9gb4Z",
+                                        "kind": "oneofitem",
+                                        "when": "this.failure_battery_num==0",
+                                        "alias": "alias1",
+                                        "items": [
+                                            {
+                                                "id": "3b*Wai_%B?f2m1tVsC6+",
+                                                "kind": "seg_integer",
+                                                "name": "flag",
+                                                "title": "名称",
+                                                "autoValue": "0x0F",
+                                                "signed": "false",
+                                                "bitCount": "8",
+                                                "bigOrder": "false",
+                                                "encode": "complement"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": "~G_rw[.*awBCgv82dU3h",
+                "kind": "seg_nil",
+                "name": "seg_placeholder"
+            },
+            {
+                "id": "CjtK=A!xVS|70;nQ%W.z",
+                "kind": "seg_integer",
+                "name": "checkSum",
+                "title": "名称",
+                "autoValue": "CheckCode(XOR_8,this.data_length,this.seg_placeholder)",
+                "signed": "false",
+                "bitCount": "8",
+                "bigOrder": "false",
+                "encode": "complement"
+            },
+            {
+                "id": "5f*RO.F;xWgpa*^71a2y",
+                "kind": "seg_integer",
+                "name": "tail",
+                "title": "名称",
+                "autoValue": "0x55AA",
+                "signed": "false",
+                "bitCount": "8",
+                "bigOrder": "true",
+                "encode": "complement"
+            }
+        ]
+    }
+}

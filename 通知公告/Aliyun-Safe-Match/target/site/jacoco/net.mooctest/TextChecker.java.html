@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TextChecker.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Aliyun-Safe-Match</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">TextChecker.java</span></div><h1>TextChecker.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * 验证文本是否可执行
+ * @author mindw
+ */
+<span class="nc" id="L15">public class TextChecker {</span>
+	
+<span class="nc" id="L17">	static String cmd = &quot;([\\W]|^)(&quot;</span>
+			+ &quot;eval&quot;
+			+ &quot;|assert&quot;
+			+ &quot;|exec&quot;
+			+ &quot;|execute&quot;
+			+ &quot;|curl_exec&quot;
+			+ &quot;|system&quot;
+			+ &quot;|shell_exec&quot;
+			+ &quot;|pcntl_exec&quot;
+			+ &quot;|popen&quot;
+			+ &quot;|proc_open&quot;
+			+ &quot;|passthru&quot;
+			+ &quot;|call_user_func&quot;
+			+ &quot;|ReflectionMethod&quot;
+			+ &quot;|ReflectionFunction&quot;
+			+ &quot;|ExecuteGlobal&quot;
+			+ &quot;|escapeshellcmd&quot;
+			+ &quot;)+&quot;;
+	
+
+
+	
+	/** 正则表达式 */
+<span class="nc" id="L40">	static List&lt;String&gt; regexs = Arrays</span>
+<span class="nc" id="L41">			.asList(</span>
+					
+					&quot;function_exists\\s*\\(\\s*[\'|\&quot;](popen|exec|proc_open|system|passthru)+[\'|\&quot;]\\s*\\)&quot;,
+					cmd+&quot;\\s*\\(\\s*\\$_(\\w+)\\[(.*)\\]\\s*\\)&quot;,
+				    &quot;((udp|tcp)://(.*);)+&quot;,
+				    &quot;preg_replace\\s*\\((.*)/e(.*),\\s*\\$_(.*),(.*)\\)&quot;,
+				    &quot;preg_replace\\s*\\((.*)\\(base64_decode\\(\\$&quot;,
+				    &quot;(eval|assert|include|require|include_once|require_once)+\\s*\\(\\s*(base64_decode|str_rot13|gz(\\w+)|file_(\\w+)_contents|(.*)php://input)+&quot;,
+				    &quot;(eval|assert|include|require|include_once|require_once|array_map|array_walk)+\\s*\\(\\s*\\$_(GET|POST|REQUEST|COOKIE|SERVER|SESSION)+\\[(.*)\\]\\s*\\)&quot;,
+				    cmd+&quot;\\s*\\(\\s*\\(\\s*\\$\\$(\\w+)&quot;,
+				    &quot;(include|require|include_once|require_once)+\\s*\\(\\s*[\'|\&quot;](\\w+)\\.(jpg|gif|ico|bmp|png|txt|zip|rar|htm|css|js)+[\'|\&quot;]\\s*\\)&quot;,
+				    &quot;\\$_(\\w+)(.*)(eval|assert|include|require|include_once|require_once)+\\s*\\(\\s*\\$(\\w+)\\s*\\)&quot;,
+				    &quot;\\(\\s*\\$_FILES\\[(.*)\\]\\[(.*)\\]\\s*,\\s*\\$_(GET|POST|REQUEST|FILES)+\\[(.*)\\]\\[(.*)\\]\\s*\\)&quot;,
+				    &quot;(fopen|fwrite|fputs|file_put_contents)+\\s*\\((.*)\\$_(GET|POST|REQUEST|COOKIE|SERVER)+\\[(.*)\\](.*)\\)&quot;,
+				    &quot;echo\\s*curl_exec\\s*\\(\\s*\\$(\\w+)\\s*\\)&quot;,
+				    &quot;new com\\s*\\(\\s*[\'|\&quot;]shell(.*)[\'|\&quot;]\\s*\\)&quot;,
+				    &quot;\\$(.*)\\s*\\((.*)/e(.*),\\s*\\$_(.*),(.*)\\)&quot;,
+				    &quot;\\$_=(.*)\\$_&quot;,
+				    &quot;\\$_(GET|POST|REQUEST|COOKIE|SERVER)+\\[(.*)\\]\\(\\s*\\$(.*)\\)&quot;,
+				    &quot;\\$(\\w+)\\s*\\(\\s*\\$_(GET|POST|REQUEST|COOKIE|SERVER)+\\[(.*)\\]\\s*\\)&quot;,
+				    &quot;\\$(\\w+)\\s*\\(\\s*\\$\\{(.*)\\}&quot;,
+				    &quot;\\$(\\w+)\\s*\\(\\s*chr\\(\\d+\\)&quot;,
+				    
+				    // --------------------
+				    // eval request(&quot;sb&quot;)
+				    cmd+&quot;\\s+request\\s*\\(\\s*\&quot;(.)*\&quot;\\)&quot;,
+				    // execute(request(&quot;sb&quot;)
+				    cmd+&quot;\\s*\\(\\s*request\\s*\\(\\s*\&quot;(.)*\&quot;\\)&quot;,
+				    //eval (eval(chr(114)+chr(101)+chr(113)+chr(117)+chr(101)+chr(115)+chr(116))(&quot;a&quot;))
+				    cmd+&quot;\\s*\\(\\s*chr\\s*\\(\\s*\\d+\\s*\\)\\s*\\+\\s*chr\\s*\\(&quot;,
+				    // eval(&quot;e&quot;&amp;&quot;v&quot;&amp;&quot;a&quot;&amp;&quot;l&quot;&amp;&quot;(&quot;&amp;&quot;r&quot;&amp;&quot;e&quot;&amp;&quot;q&quot;&amp;&quot;u&quot;&amp;&quot;e&quot;&amp;&quot;s&quot;&amp;&quot;t&quot;&amp;&quot;(&quot;&amp;&quot;0″&amp;&quot;-&quot;&amp;&quot;2″&amp;&quot;-&quot;&amp;&quot;5″&amp;&quot;)&quot;&amp;&quot;)&quot;)
+				    cmd+&quot;\\s*\\(\\s*[\&quot;|\'](\\w)+[\&quot;|\']\\s*&amp;\\s*[\&quot;|\'](\\w)+[\&quot;|\']&quot;,
+				    // eval(Request.Item[&quot;pass&quot;],&quot;unsafe&quot;);
+				    cmd+&quot;\\s*\\(\\s*Request\\.Item\\[\\s*\&quot;(\\w+)\&quot;\\s*\\]\\s*&quot;,
+				    // new ReflectionFunction($_GET[m])
+				    &quot;([\\W]|^)new\\s+ReflectionFunction\\s*\\(\\s*\\$_&quot;,
+				    // eval($fatezero);
+				    cmd+&quot;\\s*\\(\\$\\w+\\)&quot;,
+				    // eval^($_POST[c]^);
+				    cmd+&quot;\\W*\\(\\W*\\$_POST\\[&quot;,
+				    // shell.php?m=system&amp;c=wget http://xxx.xxx/igenus/images/suffix/test.php 
+				    &quot;([\\W]|^)wget\\s*http://&quot;,
+				    // @eval(get_magic_quotes_gpc()
+				    cmd+&quot;\\s*\\(\\s*get_magic_quotes_gpc&quot;,
+				    // new java.io.FileOutputStream().write(request.getParameter(  
+				    &quot;\\.write\\s*\\(\\s*request\\.(form|item|getparameter)&quot;,
+				    &quot;echo\\s+`(.)*`&quot;,
+				    cmd+&quot;\\s*\\(\\s*System\\.Text\\.Encoding.GetEncoding\\(&quot;,
+				    cmd+&quot;\\s*\\(\\s*System\\.Convert\\.FromBase64String\\(&quot;,
+				    cmd+&quot;(\\W)*\\((\\W)*\\$\\{(\\W)*[\&quot;|\']_(GET|POST|REQUEST|COOKIE|SERVER)[\&quot;|\']\\}&quot;
+					 
+			);
+
+<span class="nc" id="L94">	static List&lt;Pattern&gt; patterns = new LinkedList&lt;&gt;();</span>
+
+	static {
+<span class="nc bnc" id="L97" title="All 2 branches missed.">		for (String regex : regexs) {</span>
+<span class="nc" id="L98">			patterns.add(Pattern.compile(regex, Pattern.CASE_INSENSITIVE));</span>
+<span class="nc" id="L99">		}</span>
+	}		
+	
+	// &gt;&gt;&gt; asp
+	
+	private static boolean _check(String input){
+		
+<span class="nc bnc" id="L106" title="All 2 branches missed.">		for (Pattern pattern : patterns) {</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">			if (pattern.matcher(input).find()) {</span>
+<span class="nc" id="L108">				return true;</span>
+			}
+<span class="nc" id="L110">		}</span>
+		
+<span class="nc" id="L112">		return false;</span>
+	}
+	
+<span class="nc" id="L115">	static List&lt;String&gt; keys = Arrays.asList(&quot;eval&quot;, &quot;assert&quot;, &quot;exec&quot;,</span>
+			&quot;execute&quot;, &quot;curl_exec&quot;, &quot;system&quot;, &quot;shell_exec&quot;, &quot;pcntl_exec&quot;,
+			&quot;popen&quot;, &quot;proc_open&quot;, &quot;passthru&quot;, &quot;call_user_func&quot;,
+			&quot;ReflectionMethod&quot;, &quot;ReflectionFunction&quot;, &quot;ExecuteGlobal&quot;,
+			&quot;escapeshellcmd&quot;, &quot;$_GET&quot;, &quot;$_POST&quot;, &quot;$_REQUEST&quot;, &quot;$_COOKIE&quot;,
+			&quot;$_SERVER&quot;);
+
+   static boolean isDangerous(String input){
+<span class="nc bnc" id="L123" title="All 2 branches missed.">		for(String key : keys){</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">			if(input.contains(key))</span>
+<span class="nc" id="L125">				return true;</span>
+<span class="nc" id="L126">		}</span>
+<span class="nc" id="L127">		return false;</span>
+	}
+
+	
+	
+	static boolean isExecutable(String input){
+		
+		// 去注释
+<span class="nc" id="L135">		input = removeZhushi(input);</span>
+		
+<span class="nc" id="L137">		boolean isDangerous = isDangerous(input);</span>
+		
+		// 字符串拼接
+<span class="nc" id="L140">		input = input.replaceAll(&quot;\&quot;\\s*\\.\\s*\&quot;&quot;, &quot;&quot;)</span>
+<span class="nc" id="L141">		.replaceAll(&quot;'\\s*\\.\\s*'&quot;, &quot;&quot;)</span>
+<span class="nc" id="L142">		.replaceAll(&quot;\&quot;\\s*\\+\\s*\&quot;&quot;, &quot;&quot;)</span>
+<span class="nc" id="L143">		.replaceAll(&quot;'\\s*\\+\\s*'&quot;, &quot;&quot;)</span>
+<span class="nc" id="L144">		.replaceAll(&quot;'\\s*&amp;\\s*'&quot;, &quot;&quot;)</span>
+<span class="nc" id="L145">		.replaceAll(&quot;\&quot;\\s*&amp;\\s*\&quot;&quot;, &quot;&quot;);</span>
+		
+<span class="nc bnc" id="L147" title="All 2 branches missed.">		if(!isDangerous){</span>
+<span class="nc bnc" id="L148" title="All 2 branches missed.">			if(isDangerous(input))</span>
+<span class="nc" id="L149">				return true;</span>
+		}
+		
+		
+		// base64_decode|str_rot13|urldecode|gzinflate|gzdecode
+<span class="nc bnc" id="L154" title="All 2 branches missed.">		if(input.contains(&quot;base64_decode&quot;)</span>
+<span class="nc bnc" id="L155" title="All 2 branches missed.">				||input.contains(&quot;str_rot13&quot;)</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">				||input.contains(&quot;urldecode&quot;)</span>
+<span class="nc bnc" id="L157" title="All 2 branches missed.">				||input.contains(&quot;gzinflate&quot;)</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">				||input.contains(&quot;gzdecode&quot;)			</span>
+<span class="nc bnc" id="L159" title="All 2 branches missed.">				||input.contains(&quot;Request.Files.Count&quot;)</span>
+<span class="nc bnc" id="L160" title="All 2 branches missed.">				||input.contains(&quot;Request.Files[&quot;)</span>
+<span class="nc bnc" id="L161" title="All 2 branches missed.">				||input.contains(&quot;System.Convert.FromBase64String&quot;)</span>
+<span class="nc bnc" id="L162" title="All 2 branches missed.">				||input.contains(&quot;request.getParameter&quot;)</span>
+<span class="nc bnc" id="L163" title="All 2 branches missed.">				||input.contains(&quot;Runtime.getRuntime().exec(&quot;)</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">				||input.contains(&quot;Class.forName(&quot;))</span>
+			
+<span class="nc" id="L166">			return true;</span>
+		
+		
+//		if (input.contains(&quot;(&quot;) &amp;&amp; input.contains(&quot;)&quot;)) {
+
+<span class="nc bnc" id="L171" title="All 2 branches missed.">			if (_check(input)) {</span>
+<span class="nc" id="L172">				return true;</span>
+			}
+
+<span class="nc bnc" id="L175" title="All 2 branches missed.">			for (int i = 0; i &lt; 2; ++i) {</span>
+				// chr(99).chr(104).chr(114) -&gt; 'c'.'h'.'r' -&gt; 'chr'
+<span class="nc" id="L177">				input = charNumberToChar(input);</span>
+<span class="nc" id="L178">				input = input.replace(&quot;'.'&quot;, &quot;&quot;);</span>
+<span class="nc" id="L179">				input = variableNameToVariable(input);</span>
+<span class="nc bnc" id="L180" title="All 2 branches missed.">				if (_check(input)) {</span>
+<span class="nc" id="L181">					return true;</span>
+				}
+			}
+
+//		}
+
+<span class="nc" id="L187">		return false;</span>
+	}
+	
+
+	
+	
+	// chr(数字)
+<span class="nc" id="L194">	private static Pattern pat_fun_char = Pattern.compile(&quot;chr\\(([\\d]{1,3})\\)&quot;);</span>
+	// chr(99).chr(104).chr(114) -&gt; 'c'.'h'.'r'
+	private static String charNumberToChar(String input){
+<span class="nc" id="L197">		Matcher matcher = pat_fun_char.matcher(input);</span>
+<span class="nc bnc" id="L198" title="All 2 branches missed.">		while(matcher.find()){</span>
+			try{
+<span class="nc" id="L200">				String charStr = matcher.group(0);</span>
+<span class="nc" id="L201">				String number = matcher.group(1);</span>
+<span class="nc" id="L202">				input = input.replace(charStr,&quot;'&quot;+(char)Integer.parseInt(number)+&quot;'&quot;);</span>
+<span class="nc" id="L203">			}catch(Exception e){</span>
+<span class="nc" id="L204">				continue;</span>
+<span class="nc" id="L205">			}</span>
+		}
+<span class="nc" id="L207">		return input;</span>
+	}
+	
+	// $_uU(118) -&gt; char(118)  $_uU='chr' ${_uU}='chr'
+<span class="nc" id="L211">	private static Pattern pat_var_name = Pattern.compile(&quot;(\\$[_a-zA-Z]+[0-9a-zA-Z]*)='((.)*)';&quot;);</span>
+	private static String variableNameToVariable(String input){
+		
+<span class="nc" id="L214">		Map&lt;String,String&gt; variableMap = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L215">		Matcher matcher = pat_var_name.matcher(input);</span>
+<span class="nc bnc" id="L216" title="All 2 branches missed.">		while(matcher.find()){	</span>
+<span class="nc" id="L217">			String key  = matcher.group(1);</span>
+<span class="nc" id="L218">			variableMap.put(key, matcher.group(2));	</span>
+			
+			// $_uU ${_uU}
+<span class="nc" id="L221">			StringBuilder builder = new StringBuilder();</span>
+<span class="nc" id="L222">			builder.append(&quot;${&quot;);</span>
+<span class="nc" id="L223">			builder.append(key.substring(1));			</span>
+<span class="nc" id="L224">			builder.append(&quot;}&quot;);</span>
+<span class="nc" id="L225">			key = builder.toString();</span>
+			
+<span class="nc" id="L227">			variableMap.put(key, matcher.group(2));	</span>
+<span class="nc" id="L228">		}</span>
+		
+<span class="nc bnc" id="L230" title="All 2 branches missed.">		for(Map.Entry&lt;String, String&gt; entry : variableMap.entrySet()){</span>
+<span class="nc" id="L231">			input = input.replace(entry.getKey(), entry.getValue());</span>
+<span class="nc" id="L232">		}</span>
+<span class="nc" id="L233">		return input;</span>
+	}
+	
+	
+	// 去掉 /* */
+		private static String removeZhushi(String str) {
+
+			while (true) {
+
+<span class="nc" id="L242">				int start = str.indexOf(&quot;/*&quot;);</span>
+<span class="nc bnc" id="L243" title="All 2 branches missed.">				if (start == -1)</span>
+<span class="nc" id="L244">					return str;</span>
+
+<span class="nc" id="L246">				int end = str.indexOf(&quot;*/&quot;, start + 2);</span>
+<span class="nc bnc" id="L247" title="All 2 branches missed.">				if (end == -1)</span>
+<span class="nc" id="L248">					return str;</span>
+
+<span class="nc" id="L250">				end += 2;</span>
+<span class="nc" id="L251">				StringBuilder builder = new StringBuilder();</span>
+<span class="nc bnc" id="L252" title="All 2 branches missed.">				for (int i = 0; i &lt; str.length(); ++i) {</span>
+<span class="nc bnc" id="L253" title="All 4 branches missed.">					if (i &gt;= start &amp;&amp; i &lt; end)</span>
+<span class="nc" id="L254">						continue;</span>
+<span class="nc" id="L255">					builder.append(str.charAt(i));</span>
+				}
+<span class="nc" id="L257">				str = builder.toString();</span>
+<span class="nc" id="L258">			}</span>
+		}
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

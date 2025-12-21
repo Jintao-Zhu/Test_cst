@@ -1,0 +1,81 @@
+* Starting client
+* Connecting to master process on port 8003
+* Analyzing classpath: 
+  - D:\Softwares\Java\Java_practice\NIOServer\target\test-classes
+  - D:\Softwares\Java\Java_practice\NIOServer\target\classes
+  - D:\Softwares\Java\apache-maven-3.8.6-bin\Repository\junit\junit\4.12\junit-4.12.jar
+  - D:\Softwares\Java\apache-maven-3.8.6-bin\Repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar
+* Finished analyzing classpath
+* Generating tests for class net.mooctest.Socket
+* Test criteria:
+  - Line Coverage
+  - Branch Coverage
+  - Exception
+  - Mutation testing (weak)
+  - Method-Output Coverage
+  - Top-Level Method Coverage
+  - No-Exception Top-Level Method Coverage
+  - Context Branch Coverage
+* Setting up search algorithm for whole suite generation
+* Loaded 12 tests from D:\Softwares\Java\Java_practice\NIOServer\.evosuite\evosuite-seeds\net.mooctest.Socket.seed
+* Total number of test goals: 
+  - Line 27
+  - Branch 10
+  - Exception 0
+  - MutationFactory 64
+  - Output 6
+  - Method 4
+  - MethodNoException 4
+  - CBranchFitnessFactory 10
+* Using seed 1666461901945
+* Starting evolution
+* Search finished after 53s and 270 generations, 41380 statements, best individual has fitness: 109.06593406593407
+* Writing sequences to pool
+* Minimizing test suite
+* Going to analyze the coverage criteria
+* Coverage analysis for criterion LINE
+* Coverage of criterion LINE: 56%
+* Total number of goals: 27
+* Number of covered goals: 15
+* Coverage analysis for criterion BRANCH
+* Coverage of criterion BRANCH: 20%
+* Total number of goals: 10
+* Number of covered goals: 2
+* Coverage analysis for criterion EXCEPTION
+* Coverage of criterion EXCEPTION: 100%
+* Total number of goals: 6
+* Number of covered goals: 6
+* Coverage analysis for criterion WEAKMUTATION
+* Coverage of criterion WEAKMUTATION: 0%
+* Total number of goals: 64
+* Number of covered goals: 0
+* Coverage analysis for criterion OUTPUT
+* Coverage of criterion OUTPUT: 0%
+* Total number of goals: 6
+* Number of covered goals: 0
+* Coverage analysis for criterion METHOD
+* Coverage of criterion METHOD: 100%
+* Total number of goals: 4
+* Number of covered goals: 4
+* Coverage analysis for criterion METHODNOEXCEPTION
+* Coverage of criterion METHODNOEXCEPTION: 50%
+* Total number of goals: 4
+* Number of covered goals: 2
+* Coverage analysis for criterion CBRANCH
+* Coverage of criterion CBRANCH: 20%
+* Total number of goals: 10
+* Number of covered goals: 2
+* Generated 6 tests with total length 24
+* Resulting test suite's coverage: 42% (average coverage for all fitness functions)
+* Generating assertions
+* Resulting test suite's mutation score: 3%
+* Compiling and checking tests
+* Permissions denied during test execution: 
+  - java.net.SocketPermission: 
+         connect,resolve 200.42.42.0:1222: 1
+         connect,resolve 192.168.1.42:261: 1
+         listen,resolve localhost:117: 1
+         and other 98 cases of action/name for this exception class
+* Writing JUnit test case 'Socket_ESTest' to D:\Softwares\Java\Java_practice\NIOServer\.evosuite\tmp_2022_10_23_02_03_14\tests
+* Done!
+

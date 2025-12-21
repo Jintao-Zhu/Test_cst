@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StrUtils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Mathematical-Expression</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">StrUtils.java</span></div><h1>StrUtils.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Random;
+
+/**
+ * 字符串工具类
+ */
+<span class="nc" id="L10">public final class StrUtils {</span>
+
+<span class="nc" id="L12">    private static final char[] dict = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};</span>
+<span class="nc" id="L13">    private static final Random random = new Random();</span>
+
+    /**
+     * 删除一个字符串中所有的空字符
+     *
+     * @param s 需要被删除的字符串
+     * @return 删除后的字符串
+     */
+    public static String removeEmpty(String s) {
+<span class="nc" id="L22">        StringBuilder stringBuilder = new StringBuilder(s.length());</span>
+<span class="nc bnc" id="L23" title="All 2 branches missed.">        for (int i = 0; i &lt; s.length(); i++) {</span>
+<span class="nc" id="L24">            final char c = s.charAt(i);</span>
+<span class="nc bnc" id="L25" title="All 2 branches missed.">            if (c != ConstantRegion.EMPTY) {</span>
+<span class="nc" id="L26">                stringBuilder.append(c);</span>
+            }
+        }
+<span class="nc" id="L29">        return stringBuilder.toString();</span>
+    }
+
+/*
+    /**
+     * 将一个数值字符传换成一个数值
+     *
+     * @param c 需要被转换的字符
+     * @return 转换之后的数值
+     * /
+    public static int charToInteger(char c) {
+        if (StrUtils.IsANumber(c)) {
+            return c - 0x30;
+        } else {
+            throw new RuntimeException(&quot;您在进行字符与数值之间的转换时，由于字符的不正确导致无法成功转换，错误字符：&quot; + c +
+                    &quot;\nWhen you are converting characters to numeric values, the conversion cannot be successful due to incorrect characters. Error characters:&quot; + c);
+        }
+    }
+*/
+
+    /**
+     * 将一个字符串转换为浮点数值
+     *
+     * @param s 需要被转换的字符串
+     * @return 字符串转换的浮点数值
+     */
+    public static double stringToDouble(String s) {
+<span class="nc" id="L56">        final Boolean useCache = Mathematical_Expression.Options.isUseCache();</span>
+<span class="nc" id="L57">        int hash = 0;</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">        if (useCache) {</span>
+<span class="nc" id="L59">            hash = s.hashCode();</span>
+<span class="nc" id="L60">            final Number cacheCalculation = Mathematical_Expression.Options.getCacheCalculation(hash);</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">            if (cacheCalculation != null) {</span>
+<span class="nc" id="L62">                return cacheCalculation.doubleValue();</span>
+            }
+        }
+<span class="nc" id="L65">        final int lastIndex = s.length() - 1;</span>
+        double res;
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        if (s.charAt(lastIndex) == ConstantRegion.FACTORIAL_SIGN) {</span>
+            // 代表要进行阶乘计算
+<span class="nc" id="L69">            final double v = Double.parseDouble(s.substring(0, lastIndex));</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">            if (v &lt; 0) {</span>
+<span class="nc" id="L71">                throw new UnsupportedOperationException(&quot;负数不支持计算阶乘:&quot; + v);</span>
+            }
+<span class="nc" id="L73">            res = NumberUtils.factorial(v);</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">            if (useCache) {</span>
+                // 缓存结果
+<span class="nc" id="L76">                Mathematical_Expression.Options.cacheCalculation(hash, res);</span>
+            }
+<span class="nc" id="L78">            return res;</span>
+        }
+<span class="nc" id="L80">        res = Double.parseDouble(s);</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">        if (useCache) {</span>
+            // 缓存结果
+<span class="nc" id="L83">            Mathematical_Expression.Options.cacheCalculation(hash, res);</span>
+        }
+<span class="nc" id="L85">        return res;</span>
+    }
+
+    /**
+     * 将一个字符串转换为浮点数值
+     *
+     * @param s 需要被转换的字符串
+     * @return 字符串转换的浮点数值
+     */
+    public static BigDecimal stringToBigDecimal(String s) {
+<span class="nc" id="L95">        final Boolean useCache = Mathematical_Expression.Options.isUseCache();</span>
+<span class="nc" id="L96">        int hash = s.hashCode();</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">        if (useCache) {</span>
+<span class="nc" id="L98">            final Number cacheCalculation = Mathematical_Expression.Options.getCacheCalculation(hash);</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">            if (cacheCalculation instanceof BigDecimal) {</span>
+<span class="nc" id="L100">                return (BigDecimal) cacheCalculation;</span>
+            }
+        }
+        BigDecimal res;
+<span class="nc" id="L104">        final int lastIndex = s.length() - 1;</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">        if (s.charAt(lastIndex) == ConstantRegion.FACTORIAL_SIGN) {</span>
+            // 代表要进行阶乘计算
+<span class="nc" id="L107">            final BigDecimal v = new BigDecimal(s.substring(0, lastIndex));</span>
+<span class="nc" id="L108">            final double v1 = v.doubleValue();</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">            if (v1 &lt; 0) {</span>
+<span class="nc" id="L110">                throw new UnsupportedOperationException(&quot;负数不支持计算阶乘:&quot; + v);</span>
+            }
+<span class="nc" id="L112">            res = BigDecimal.valueOf(NumberUtils.factorial(v1));</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">            if (useCache) {</span>
+<span class="nc" id="L114">                Mathematical_Expression.Options.cacheCalculation(hash, res);</span>
+            }
+<span class="nc" id="L116">            return res;</span>
+        }
+<span class="nc" id="L118">        res = new BigDecimal(s);</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        if (useCache) {</span>
+<span class="nc" id="L120">            Mathematical_Expression.Options.cacheCalculation(hash, res);</span>
+        }
+<span class="nc" id="L122">        return res;</span>
+    }
+
+    /**
+     * 判断一个字符是不是一个操作符
+     *
+     * @param c 需要被判断的字符
+     * @return 如果是一个操作符就返回True
+     */
+    public static boolean IsAnOperator(char c) {
+<span class="nc bnc" id="L132" title="All 2 branches missed.">        switch (c) {</span>
+            case ConstantRegion.PLUS_SIGN:
+            case ConstantRegion.MINUS_SIGN:
+            case ConstantRegion.MULTIPLICATION_SIGN:
+            case ConstantRegion.DIVISION_SIGN:
+            case ConstantRegion.REMAINDER_SIGN:
+            case ConstantRegion.POW_SIGN:
+<span class="nc" id="L139">                return true;</span>
+        }
+<span class="nc" id="L141">        return false;</span>
+    }
+
+/*
+    /**
+     * 判断一个字符串是不是一个数值 允许阶乘
+     *
+     * @param c              需要被判断的自读
+     * @param allowFactorial 允许阶乘则设置为 true
+     * @return 如果是一个数值，这里返回True
+     * /
+    public static boolean IsANumber(CharSequence c, boolean allowFactorial) {
+        final int i = c.length() - 1;
+        if (allowFactorial &amp;&amp; c.charAt(i) == ConstantRegion.FACTORIAL_SIGN) {
+            return IsANumber(c.subSequence(0, c.length()));
+        }
+        return IsANumber(c);
+    }
+*/
+
+    /**
+     * 判断一个字符串是不是一个数值
+     *
+     * @param c 需要被判断的自读
+     * @return 如果是一个数值，这里返回True
+     */
+    public static boolean IsANumber(CharSequence c) {
+<span class="nc bnc" id="L168" title="All 2 branches missed.">        for (int i = 0; i &lt; c.length(); i++) {</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">            if (!IsANumber(c.charAt(i))) {</span>
+<span class="nc" id="L170">                return false;</span>
+            }
+        }
+<span class="nc" id="L173">        return true;</span>
+    }
+
+    /**
+     * 判断一个字符是不是一个数值
+     *
+     * @param c 需要被判断的自读
+     * @return 如果是一个数值，这里返回True
+     */
+    public static boolean IsANumber(char c) {
+<span class="nc bnc" id="L183" title="All 4 branches missed.">        return c &gt;= 48 &amp;&amp; c &lt;= 57;</span>
+    }
+
+    /**
+     * 将一个字符串按照某个字符进行拆分
+     *
+     * @param s 需要被拆分的字符串
+     * @param c 需要被作为分割符的字符
+     * @return 字符串被拆分之后的列表
+     */
+    public static ArrayList&lt;String&gt; splitByChar(String s, char c) {
+<span class="nc" id="L194">        final int length = s.length();</span>
+<span class="nc" id="L195">        final ArrayList&lt;String&gt; arrayList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L196">        final StringBuilder stringBuilder = new StringBuilder(length);</span>
+<span class="nc bnc" id="L197" title="All 2 branches missed.">        for (int i = 0; i &lt; length; i++) {</span>
+<span class="nc" id="L198">            char c1 = s.charAt(i);</span>
+<span class="nc bnc" id="L199" title="All 2 branches missed.">            if (c1 == c) {</span>
+<span class="nc" id="L200">                arrayList.add(stringBuilder.toString().trim());</span>
+<span class="nc" id="L201">                stringBuilder.delete(0, stringBuilder.length());</span>
+            } else {
+<span class="nc" id="L203">                stringBuilder.append(c1);</span>
+            }
+        }
+<span class="nc" id="L206">        arrayList.add(stringBuilder.toString().trim());</span>
+<span class="nc" id="L207">        return arrayList;</span>
+    }
+
+    /**
+     * 将一个字符串按照某个字符进行拆分 括号内的会被忽略
+     *
+     * @param s 需要被拆分的字符串
+     * @param c 需要被作为分割符的字符
+     * @return 字符串被拆分之后的列表
+     */
+    public static ArrayList&lt;String&gt; splitByCharWhereNoB(String s, char c) {
+<span class="nc" id="L218">        int count = 0;</span>
+<span class="nc" id="L219">        final int length = s.length();</span>
+<span class="nc" id="L220">        final ArrayList&lt;String&gt; arrayList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L221">        final StringBuilder stringBuilder = new StringBuilder(length);</span>
+<span class="nc bnc" id="L222" title="All 2 branches missed.">        for (int i = 0; i &lt; length; i++) {</span>
+<span class="nc" id="L223">            char c1 = s.charAt(i);</span>
+<span class="nc bnc" id="L224" title="All 3 branches missed.">            switch (c1) {</span>
+                case ConstantRegion.LEFT_BRACKET:
+<span class="nc" id="L226">                    ++count;</span>
+<span class="nc" id="L227">                    break;</span>
+                case ConstantRegion.RIGHT_BRACKET:
+<span class="nc" id="L229">                    --count;</span>
+                    break;
+            }
+
+<span class="nc bnc" id="L233" title="All 4 branches missed.">            if (count == 0 &amp;&amp; c1 == c) {</span>
+<span class="nc" id="L234">                arrayList.add(stringBuilder.toString().trim());</span>
+<span class="nc" id="L235">                stringBuilder.delete(0, stringBuilder.length());</span>
+            } else {
+<span class="nc" id="L237">                stringBuilder.append(c1);</span>
+            }
+        }
+<span class="nc" id="L240">        arrayList.add(stringBuilder.toString().trim());</span>
+<span class="nc" id="L241">        return arrayList;</span>
+    }
+
+    public static String randomString(int length) {
+<span class="nc" id="L245">        StringBuilder sb = new StringBuilder(length);</span>
+<span class="nc bnc" id="L246" title="All 2 branches missed.">        for (int i = 0; i &lt; length; i++) {</span>
+<span class="nc" id="L247">            sb.append(dict[random.nextInt(dict.length)]);</span>
+        }
+<span class="nc" id="L249">        return sb.toString();</span>
+    }
+
+    public static boolean containsNumber(String s) {
+<span class="nc bnc" id="L253" title="All 2 branches missed.">        for (int i = 0; i &lt; s.length(); i++) {</span>
+<span class="nc bnc" id="L254" title="All 2 branches missed.">            if (IsANumber(s.charAt(i))) {</span>
+<span class="nc" id="L255">                return true;</span>
+            }
+        }
+<span class="nc" id="L258">        return false;</span>
+    }
+
+    /**
+     * 判断是否包含英文
+     *
+     * @param s 需要被判断的字符串
+     * @return 如果包含英文字符则返回 英文
+     */
+    public static Character containsEnChar(String s) {
+<span class="nc bnc" id="L268" title="All 2 branches missed.">        for (int i = 0; i &lt; s.length(); i++) {</span>
+<span class="nc" id="L269">            char c = s.charAt(i);</span>
+<span class="nc bnc" id="L270" title="All 8 branches missed.">            if (c &gt;= 65 &amp;&amp; c &lt;= 90 || c &gt;= 97 &amp;&amp; c &lt;= 122) {</span>
+<span class="nc" id="L271">                return c;</span>
+            }
+        }
+<span class="nc" id="L274">        return null;</span>
+    }
+
+/*
+    /**
+     * 替换字符串a中所有出现在字符集b中的字符为字符c。
+     *
+     * @param a          原始字符串
+     * @param replaceMap 替换字典，会按照字典来进行替换操作
+     * @return 新字符串，其中a中所有在b中存在的字符已被c替换
+     * /
+    public static String replaceCharsInString(String a, HashMap&lt;Character, String&gt; replaceMap) {
+        // 创建一个字符集合，用于存储字符b中的字符
+        StringBuilder result = new StringBuilder();
+        for (char ch : a.toCharArray()) {
+            // 检查当前字符是否在字符集中
+            String c = replaceMap.get(ch);
+            if (c != null) {
+                // 如果存在，则替换为字符c
+                result.append(c);
+            } else {
+                // 否则，保留原字符
+                result.append(ch);
+            }
+        }
+        return result.toString();
+    }
+*/
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

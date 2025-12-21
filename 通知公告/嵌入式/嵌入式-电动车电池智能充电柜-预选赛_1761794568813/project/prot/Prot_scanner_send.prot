@@ -1,0 +1,88 @@
+{
+    "version": 4,
+    "data": {
+        "kind": "protocol",
+        "alignment": "right",
+        "title": "名称",
+        "items": [
+            {
+                "id": "ZNDw:s%:tF9w$cKG|kn/",
+                "kind": "seg_integer",
+                "name": "header",
+                "title": "名称",
+                "autoValue": "0xAA55",
+                "signed": "false",
+                "bitCount": "16",
+                "bigOrder": "true",
+                "encode": "complement"
+            },
+            {
+                "id": "V1S5$aff~]jbs0]zZ,)a",
+                "kind": "seg_integer",
+                "name": "data_length",
+                "title": "名称",
+                "autoValue": "0x0B",
+                "signed": "false",
+                "bitCount": "8",
+                "bigOrder": "false",
+                "encode": "complement"
+            },
+            {
+                "id": "RFH_cGTz5",
+                "kind": "seg_buffer",
+                "name": "battery_id",
+                "title": "名称",
+                "autoValue": "47 58 43 44 42 2D 31 30 30 30",
+                "lengthMax": "10",
+                "lengthMin": "10",
+                "length": "10",
+                "operation": "normal",
+                "autoComplete": "true"
+            },
+            {
+                "id": "Ie5x8tUBLN",
+                "kind": "seg_integer",
+                "name": "StateofCharge",
+                "title": "名称",
+                "autoValue": "0x64",
+                "signed": "false",
+                "bitCount": "8",
+                "bigOrder": "false",
+                "encode": "complement"
+            },
+            {
+                "id": "}RBh?Kl:f+8a)w!y`%Sf",
+                "kind": "seg_integer",
+                "name": "data_flag",
+                "title": "名称",
+                "autoValue": "0xFF",
+                "signed": "false",
+                "bitCount": "8",
+                "bigOrder": "false",
+                "encode": "complement"
+            },
+            {
+                "id": "*XFrQRI|%9Sw_-yb6j7^",
+                "kind": "seg_integer",
+                "name": "check_code",
+                "title": "名称",
+                "autoValue": "CheckCode(XOR_8,this.data_length,this.data_flag)",
+                "signed": "false",
+                "bitCount": "8",
+                "bigOrder": "false",
+                "encode": "complement"
+            },
+            {
+                "id": "dBVe$)h$#6B`^LJak%,2",
+                "kind": "seg_integer",
+                "name": "tail",
+                "title": "名称",
+                "autoValue": "0x55AA",
+                "signed": "false",
+                "bitCount": "16",
+                "bigOrder": "true",
+                "encode": "complement"
+            }
+        ]
+    }
+}

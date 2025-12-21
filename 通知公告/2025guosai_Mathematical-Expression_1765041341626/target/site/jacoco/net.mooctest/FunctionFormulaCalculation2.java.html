@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FunctionFormulaCalculation2.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Mathematical-Expression</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">FunctionFormulaCalculation2.java</span></div><h1>FunctionFormulaCalculation2.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import top.lingyuzhao.varFormatter.utils.DataObj;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Stack;
+
+/**
+ * 新版函数数学表达式计算组件，该组件相对于父类，能够使用函数多参数进行数学表达式的计算，将多参函数的机制在此组件中使用了起来。
+ * &lt;p&gt;
+ * The new version of the function mathematical expression calculation component, which is relative to the parent class, can use multiple parameters of the function to calculate mathematical expressions, and uses the mechanism of multi parameter functions in this component.
+ *
+ * @author zhao
+ */
+public class FunctionFormulaCalculation2 extends FunctionFormulaCalculation implements SharedCalculation, Serializable, CompileCalculation {
+
+<span class="nc" id="L19">    private final static long serialVersionUID = &quot;FunctionFormulaCalculation2&quot;.hashCode();</span>
+
+<span class="nc" id="L21">    private final HashMap&lt;String, FunctionExpression&gt; ShareHashMap = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L22">    private final HashMap&lt;String, CalculationNumberResults&gt; ShareResultsHashMap = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L23">    private boolean StartSharedPool = true;</span>
+
+    protected FunctionFormulaCalculation2(String name) {
+<span class="nc" id="L26">        super(name);</span>
+<span class="nc" id="L27">    }</span>
+
+    protected FunctionFormulaCalculation2() {
+<span class="nc" id="L30">        this(Mathematical_Expression.functionFormulaCalculation2.name() + &quot;_temp&quot;);</span>
+<span class="nc" id="L31">    }</span>
+
+    /**
+     * 从管理者中获取到指定名称的计算组件，注意 如果管理者中不存在该名称的组件，那么该组件就会自动的注册
+     * &lt;p&gt;
+     * Get the calculation component with the specified name from the manager. Note that if there is no component with this name in the manager, the component will be registered automatically
+     *
+     * @param CalculationName 组件的名字
+     * @return 解析括号类计算公式的计算组件
+     */
+    public static FunctionFormulaCalculation2 getInstance(String CalculationName) {
+<span class="nc bnc" id="L42" title="All 2 branches missed.">        if (CalculationManagement.isRegister(CalculationName)) {</span>
+<span class="nc" id="L43">            final Calculation calculationByName = CalculationManagement.getCalculationByName(CalculationName);</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">            if (calculationByName instanceof FunctionFormulaCalculation2) {</span>
+<span class="nc" id="L45">                return (FunctionFormulaCalculation2) calculationByName;</span>
+            } else {
+<span class="nc" id="L47">                throw new ExtractException(</span>
+                        &quot;您需要的计算组件[&quot; + CalculationName + &quot;]被找到了，但是它似乎不属于 FunctionFormulaCalculation2 类型\n请您重新定义一个名称。&quot;
+                );
+            }
+        } else {
+<span class="nc" id="L52">            FunctionFormulaCalculation2 FunctionFormulaCalculation2 = new FunctionFormulaCalculation2(CalculationName);</span>
+<span class="nc" id="L53">            CalculationManagement.register(FunctionFormulaCalculation2, false);</span>
+<span class="nc" id="L54">            return FunctionFormulaCalculation2;</span>
+        }
+    }
+
+    /**
+     * 提取出来一个公式中所有函数的名称，以及其函数形参的起始与终止索引值
+     *
+     * @param string 需要被解析的数学运算公式
+     * @param start  公式中所有包含函数实参公式的起始索引值
+     * @param end    公式中所有包含函数实参公式的的终止索引值
+     * @param names  公式中所有包含函数的名字
+     */
+    public static void FunctionParameterExtraction(String string, Stack&lt;Integer&gt; start, Stack&lt;Integer&gt; end, Stack&lt;String&gt; names) {
+        // 创建一个标记，标记是否进入函数
+<span class="nc" id="L68">        boolean b = false;</span>
+<span class="nc" id="L69">        int count = 0;</span>
+        // 创建函数名称缓冲区
+<span class="nc" id="L71">        final StringBuilder stringBuilder = new StringBuilder();</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">        for (int i = 0; i &lt; string.length(); i++) {</span>
+<span class="nc" id="L73">            char aChar = string.charAt(i);</span>
+<span class="nc bnc" id="L74" title="All 10 branches missed.">            if (count == 0 &amp;&amp; ((aChar &gt;= ConstantRegion.BA_ASCII &amp;&amp; aChar &lt;= ConstantRegion.BZ_ASCII) || (aChar &gt;= ConstantRegion.SA_ASCII &amp;&amp; aChar &lt;= ConstantRegion.SZ_ASCII))) {</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">                if (!b) {</span>
+                    // 如果是刚刚进入函数，就将当前索引添加到栈
+<span class="nc" id="L77">                    b = true;</span>
+<span class="nc" id="L78">                    start.push(i + 1);</span>
+                }
+                // 将当前函数名字字符添加到函数名称缓冲区
+<span class="nc" id="L81">                stringBuilder.append(aChar);</span>
+                // 如果当前是函数的名字，就将函数起始索引继续移动，将函数名字部分的索引去除
+<span class="nc" id="L83">                start.push(start.pop() + 1);</span>
+<span class="nc bnc" id="L84" title="All 4 branches missed.">            } else if (b &amp;&amp; aChar == ConstantRegion.LEFT_BRACKET) {</span>
+<span class="nc" id="L85">                count += 1;</span>
+<span class="nc bnc" id="L86" title="All 6 branches missed.">            } else if (b &amp;&amp; aChar == ConstantRegion.RIGHT_BRACKET &amp;&amp; --count == 0) {</span>
+                // 如果是函数结束，就将函数的终止点索引添加到栈
+<span class="nc" id="L88">                b = false;</span>
+<span class="nc" id="L89">                end.push(i);</span>
+                // 将函数的名称添加到栈
+<span class="nc" id="L91">                names.push(stringBuilder.toString());</span>
+                // 清理名称缓冲区
+<span class="nc" id="L93">                stringBuilder.delete(0, stringBuilder.length());</span>
+            }
+        }
+<span class="nc" id="L96">    }</span>
+
+    /**
+     * @return 该组件是否有启动共享池，一个布尔值，如果返回true代表共享池已经启动
+     */
+    @Override
+    public boolean isStartSharedPool() {
+<span class="nc" id="L103">        return StartSharedPool;</span>
+    }
+
+    /**
+     * 设置共享池开关，共享池是在JavaApi中，1.1版本衍生出来的一种新特性，由于计算量的需求，引入该功能
+     * &lt;p&gt;
+     * Set the shared pool switch. The shared pool is a new feature derived from version 1.1 in JavaApi. Due to the requirement of computing load, this function is introduced
+     *
+     * @param startSharedPool 共享池如果设置为true，代表被打开，将会共享检查与
+     */
+    @Override
+    public void setStartSharedPool(boolean startSharedPool) {
+<span class="nc" id="L115">        StartSharedPool = startSharedPool;</span>
+<span class="nc" id="L116">    }</span>
+
+    /**
+     * 是否已经缓存了指定字符串的数据
+     *
+     * @param name 要检查的字符串
+     * @return 如果已经缓存则返回true，否则返回false
+     */
+    @Override
+    public boolean isCache(String name) {
+<span class="nc" id="L126">        return this.ShareHashMap.containsKey(name);</span>
+    }
+
+    /**
+     * 清理缓存数据
+     */
+    @Override
+    public void clearCache() {
+<span class="nc" id="L134">        this.ShareResultsHashMap.clear();</span>
+<span class="nc" id="L135">        this.ShareHashMap.clear();</span>
+<span class="nc" id="L136">    }</span>
+
+    /**
+     * 提取出来一个公式中所有函数的名称，以及其函数形参的起始与终止索引值
+     *
+     * @param string         需要被解析的数学运算公式
+     * @param start          公式中所有包含函数实参公式的起始索引值
+     * @param end            公式中所有包含函数实参公式的的终止索引值
+     * @param names          公式中所有包含函数的名字
+     * @param formulaBuilder 公式缓冲区，这个用于存储转换之后的公式，当需要进行公式检查的时候才会使用到该参数
+     */
+    public void FunctionParameterExtraction(String string, Stack&lt;Integer&gt; start, Stack&lt;Integer&gt; end, Stack&lt;String&gt; names, StringBuilder formulaBuilder) {
+        // 创建一个标记，标记是否进入函数
+<span class="nc" id="L149">        boolean b = false;</span>
+<span class="nc" id="L150">        int count = 0;</span>
+        // 创建函数名称缓冲区
+<span class="nc" id="L152">        final StringBuilder stringBuilder = new StringBuilder();</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">        for (int i = 0; i &lt; string.length(); i++) {</span>
+<span class="nc" id="L154">            final char aChar = string.charAt(i);</span>
+<span class="nc bnc" id="L155" title="All 10 branches missed.">            if (count == 0 &amp;&amp; ((aChar &gt;= ConstantRegion.BA_ASCII &amp;&amp; aChar &lt;= ConstantRegion.BZ_ASCII) || (aChar &gt;= ConstantRegion.SA_ASCII &amp;&amp; aChar &lt;= ConstantRegion.SZ_ASCII))) {</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">                if (!b) {</span>
+                    // 如果是刚刚进入函数，就将当前索引添加到栈
+<span class="nc" id="L158">                    b = true;</span>
+<span class="nc" id="L159">                    start.push(i + 1);</span>
+                    // 然后为缓冲的公式进行 0 的追加
+<span class="nc" id="L161">                    formulaBuilder.append('0');</span>
+                }
+                // 将当前函数名字字符添加到函数名称缓冲区
+<span class="nc" id="L164">                stringBuilder.append(aChar);</span>
+                // 如果当前是函数的名字，就将函数起始索引继续移动，将函数名字部分的索引去除
+<span class="nc" id="L166">                start.push(start.pop() + 1);</span>
+<span class="nc bnc" id="L167" title="All 4 branches missed.">            } else if (b &amp;&amp; aChar == ConstantRegion.LEFT_BRACKET) {</span>
+<span class="nc" id="L168">                count += 1;</span>
+<span class="nc bnc" id="L169" title="All 6 branches missed.">            } else if (b &amp;&amp; aChar == ConstantRegion.RIGHT_BRACKET &amp;&amp; --count == 0) {</span>
+                // 如果是函数结束，就将函数的终止点索引添加到栈
+<span class="nc" id="L171">                b = false;</span>
+<span class="nc" id="L172">                end.push(i);</span>
+                // 将函数的名称添加到栈
+<span class="nc" id="L174">                names.push(stringBuilder.toString());</span>
+                // 清理名称缓冲区
+<span class="nc" id="L176">                stringBuilder.delete(0, stringBuilder.length());</span>
+<span class="nc bnc" id="L177" title="All 4 branches missed.">            } else if (!b &amp;&amp; aChar != ConstantRegion.EMPTY) {</span>
+                // 其他情况就直接将字符添加到公式缓冲区中
+<span class="nc" id="L179">                formulaBuilder.append(aChar);</span>
+            }
+        }
+<span class="nc" id="L182">    }</span>
+
+    /**
+     * 检查公式格式是否正确，如果不正确就会抛出一个异常
+     * &lt;p&gt;
+     * Check whether the formula format is correct. If not, an exception will be thrown
+     *
+     * @param string 需要被判断格式的数学运算公式
+     *               &lt;p&gt;
+     *               Mathematical operation formula of the format to be judged
+     */
+    @Override
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public void check(String string) throws WrongFormat {
+<span class="nc bnc" id="L196" title="All 4 branches missed.">        if (this.StartSharedPool &amp;&amp; this.isCache(string)) {</span>
+<span class="nc" id="L197">            return;</span>
+        }
+        // 准备函数元数据缓冲区
+<span class="nc" id="L200">        Stack&lt;Integer&gt; start = new Stack&lt;&gt;();</span>
+<span class="nc" id="L201">        Stack&lt;Integer&gt; end = new Stack&lt;&gt;();</span>
+<span class="nc" id="L202">        Stack&lt;String&gt; names = new Stack&lt;&gt;();</span>
+        // 准备公式缓冲区
+<span class="nc" id="L204">        StringBuilder stringBuilder = new StringBuilder(string.length());</span>
+        // 开始进行公式函数元数据提取
+<span class="nc" id="L206">        FunctionParameterExtraction(string, start, end, names, stringBuilder);</span>
+        // 判断是否全部一致
+<span class="nc" id="L208">        int size1 = start.size();</span>
+<span class="nc" id="L209">        int size2 = end.size();</span>
+<span class="nc bnc" id="L210" title="All 4 branches missed.">        if (size1 == size2 &amp;&amp; size1 == names.size()) {</span>
+            // 检查无误后，判断是否启动共享池，如果启动了的话，将格式化中的没有问题的数据提供给共享池
+<span class="nc bnc" id="L212" title="All 2 branches missed.">            if (StartSharedPool) {</span>
+                // 更新共享池所属公式 TODO 这里是需要将函数的元素复制下 因为共享池中的栈需要用来计算!
+<span class="nc" id="L214">                ShareHashMap.put(string, new FunctionExpression(string, this.getName(), (Stack&lt;Integer&gt;) start.clone(), (Stack&lt;Integer&gt;) end.clone(), names));</span>
+            }
+<span class="nc bnc" id="L216" title="All 4 branches missed.">            while (!(start.isEmpty() || end.isEmpty())) {</span>
+                // 如果一致，就进行函数内部每一个公式的检查 这里首先将函数中的每一个公式切割出来
+<span class="nc bnc" id="L218" title="All 2 branches missed.">                for (String s : StrUtils.splitByChar(string.substring(start.pop(), end.pop()), ConstantRegion.COMMA)) {</span>
+                    // 将每一个公式进行检查
+<span class="nc" id="L220">                    BRACKETS_CALCULATION_2.check(s);</span>
+<span class="nc" id="L221">                }</span>
+            }
+            // 如果函数没有问题就检查整个公式
+<span class="nc" id="L224">            BRACKETS_CALCULATION_2.check(stringBuilder.toString());</span>
+        } else {
+<span class="nc" id="L226">            throw new WrongFormat(&quot;函数可能缺少起始或结束括号，没有正常的闭环。\nThe function may lack a start or end bracket, and there is no normal closed loop\nMissing function bracket logarithm: &quot; + Math.abs(size2 - size1));</span>
+        }
+<span class="nc" id="L228">    }</span>
+
+    /**
+     * 计算一个数学表达式，并将计算细节与计算结果存储到数值结果集中。
+     * &lt;p&gt;
+     * Compute a mathematical expression and store the calculation details and results in the numerical result set.
+     *
+     * @param Formula        被计算的表达式，要求返回值是一个数值。
+     *                       &lt;p&gt;
+     *                       The returned value of the evaluated expression is required to be a numeric value.
+     * @param formatRequired 是否需要被格式化，用于确保公式格式正确。
+     *                       &lt;p&gt;
+     *                       Whether it needs to be formatted to ensure that the formula format is correct.
+     * @return 数值结果集对象，其中保存着每一步的操作数据，以及最终结果数值
+     * &lt;p&gt;
+     * Numerical result set object, which stores the operation data of each step and the final result value
+     */
+    @Override
+    public CalculationNumberResults calculation(String Formula, boolean formatRequired) {
+<span class="nc bnc" id="L247" title="All 2 branches missed.">        if (StrUtils.IsANumber(Formula)) {</span>
+<span class="nc" id="L248">            return new CalculationNumberResults(0, StrUtils.stringToDouble(Formula), Formula);</span>
+        }
+<span class="nc" id="L250">        boolean equals = this.StartSharedPool;</span>
+<span class="nc" id="L251">        FunctionExpression objects = null;</span>
+<span class="nc bnc" id="L252" title="All 2 branches missed.">        if (equals) {</span>
+<span class="nc" id="L253">            final CalculationNumberResults calculationNumberResults = this.ShareResultsHashMap.get(Formula);</span>
+<span class="nc bnc" id="L254" title="All 2 branches missed.">            if (calculationNumberResults != null) {</span>
+<span class="nc" id="L255">                return calculationNumberResults;</span>
+            }
+<span class="nc" id="L257">            objects = this.ShareHashMap.get(Formula);</span>
+<span class="nc bnc" id="L258" title="All 2 branches missed.">            equals = objects != null;</span>
+        }
+        // 准备编译对象
+        FunctionExpression functionExpression;
+        // 开始进行函数计算，首先判断是否启用了共享池 以及身份是否正确，确保两个公式是同一个
+<span class="nc bnc" id="L263" title="All 2 branches missed.">        if (equals) {</span>
+<span class="nc" id="L264">            functionExpression = objects;</span>
+        } else {
+<span class="nc" id="L266">            functionExpression = FunctionExpression.compile(Formula, this.Name);</span>
+        }
+        // 开始计算
+<span class="nc bnc" id="L269" title="All 2 branches missed.">        final CalculationNumberResults calculation = Mathematical_Expression.Options.isUseBigDecimal() ? functionExpression.calculationBigDecimalsCache(false) : functionExpression.calculationCache(false);</span>
+<span class="nc bnc" id="L270" title="All 2 branches missed.">        if (this.StartSharedPool) {</span>
+<span class="nc" id="L271">            this.ShareResultsHashMap.put(Formula, calculation);</span>
+        }
+<span class="nc" id="L273">        return calculation;</span>
+    }
+
+    @Override
+    public LogResults explain(String Formula, boolean formatRequired) {
+<span class="nc" id="L278">        return this.explain(Formula, formatRequired, true, &quot;start&quot; + System.currentTimeMillis());</span>
+    }
+
+    /**
+     * 格式化一个数学表达式，并将计算细节与计算结果存储到数值结果集中。
+     *
+     * @param Formula        被计算的表达式
+     * @param formatRequired 是否需要格式
+     * @param isFirstLayer   是否是第一曾
+     * @param s3             引导
+     * @return 可以被格式化的结果
+     */
+    public LogResults explain(String Formula, boolean formatRequired, boolean isFirstLayer, String s3) {
+        Stack&lt;Integer&gt; start;
+        Stack&lt;Integer&gt; end;
+        Stack&lt;String&gt; names;
+<span class="nc" id="L294">        StringBuilder stringBuilder = new StringBuilder(Formula);</span>
+        // 开始进行函数计算，首先判断是否启用了共享池 以及身份是否正确，确保两个公式是同一个
+<span class="nc" id="L296">        start = new Stack&lt;&gt;();</span>
+<span class="nc" id="L297">        end = new Stack&lt;&gt;();</span>
+<span class="nc" id="L298">        names = new Stack&lt;&gt;();</span>
+<span class="nc" id="L299">        FunctionParameterExtraction(Formula, start, end, names);</span>
+        // 启用标记
+<span class="nc" id="L301">        final LogResults logResults = new LogResults(s3);</span>
+<span class="nc" id="L302">        logResults.setNameJoin(false);</span>
+<span class="nc" id="L303">        logResults.setPrefix(s3 + &quot;(\&quot;&quot; + Formula + &quot;\&quot;)&quot;);</span>
+        // 开始计算，首先迭代所有函数的公式与函数的名字，计算出来函数的结果
+<span class="nc bnc" id="L305" title="All 2 branches missed.">        while (!start.isEmpty()) {</span>
+<span class="nc" id="L306">            int pop1 = start.pop();</span>
+<span class="nc" id="L307">            int pop2 = end.pop();</span>
+<span class="nc" id="L308">            String pop = names.pop();</span>
+            // 通过函数名字获取函数对象
+<span class="nc" id="L310">            final ManyToOneNumberFunction functionByName = CalculationManagement.getFunctionByName(pop);</span>
+            // 通过函数索引获取实参
+            // 提前计算substring，避免重复计算
+<span class="nc" id="L313">            String subFormula = Formula.substring(pop1, pop2);</span>
+<span class="nc" id="L314">            final String s1 = functionByName.getName() + ConstantRegion.LEFT_BRACKET;</span>
+<span class="nc" id="L315">            String newPop = s3 + pop.hashCode() + &quot;(\&quot;&quot; + pop + &quot;\&quot;)&quot;;</span>
+<span class="nc" id="L316">            DataObj dataObj = (DataObj) logResults.get(newPop);</span>
+<span class="nc bnc" id="L317" title="All 2 branches missed.">            if (dataObj == null) {</span>
+<span class="nc" id="L318">                dataObj = new DataObj(newPop);</span>
+<span class="nc" id="L319">                logResults.put(newPop, dataObj);</span>
+            }
+            // 使用ArrayList收集结果，以便于添加和转换为数组
+<span class="nc" id="L322">            ArrayList&lt;Double&gt; results = new ArrayList&lt;&gt;();</span>
+
+<span class="nc" id="L324">            StringBuilder stringBuilder1 = new StringBuilder();</span>
+
+<span class="nc" id="L326">            final String s4 = subFormula.hashCode() + &quot;:layer&quot;;</span>
+<span class="nc" id="L327">            dataObj.setPrefix(s4 + &quot;(\&quot;&quot; + subFormula + &quot;\&quot;)&quot;);</span>
+<span class="nc bnc" id="L328" title="All 2 branches missed.">            for (String s : StrUtils.splitByCharWhereNoB(subFormula, ConstantRegion.COMMA)) {</span>
+<span class="nc" id="L329">                LogResults explain = this.explain(s, false, false, s4);</span>
+<span class="nc bnc" id="L330" title="All 2 branches missed.">                if (!StrUtils.IsANumber(s)) {</span>
+<span class="nc" id="L331">                    dataObj.put(s4, explain);</span>
+                }
+<span class="nc" id="L333">                results.add((Double) explain.getResult());</span>
+<span class="nc" id="L334">                stringBuilder1.append(results).append(',');</span>
+<span class="nc" id="L335">            }</span>
+
+            // 将ArrayList转换为double[]数组，这一步在内部已经优化过
+<span class="nc" id="L338">            double[] resultArray = results.stream().mapToDouble(Double::doubleValue).toArray();</span>
+
+            // 最后替换字符串内容 functionByName
+<span class="nc" id="L341">            final String s = String.valueOf(functionByName.run(resultArray));</span>
+<span class="nc" id="L342">            stringBuilder.replace(pop1 - pop.length() - 1, pop2 + 1, s);</span>
+<span class="nc" id="L343">            final String s2 = s3 + pop + pop1 + '_' + pop2;</span>
+<span class="nc" id="L344">            final DataObj dataObj1 = new DataObj(s2);</span>
+<span class="nc" id="L345">            dataObj1.setPrefix(s2 + &quot;(\&quot;&quot; + s1 + subFormula + ConstantRegion.RIGHT_BRACKET + &quot;\&quot;)\n&quot; + s2 + &quot;_r(\&quot;&quot; + s1 + stringBuilder1 + ConstantRegion.RIGHT_BRACKET + &quot;\&quot;)&quot;);</span>
+<span class="nc" id="L346">            dataObj1.put(s2 + &quot;_r&quot;, s);</span>
+<span class="nc" id="L347">            dataObj.put(dataObj1);</span>
+<span class="nc" id="L348">        }</span>
+<span class="nc" id="L349">        final LogResults explain = BRACKETS_CALCULATION_2.explain(stringBuilder.toString(), formatRequired);</span>
+<span class="nc bnc" id="L350" title="All 2 branches missed.">        if (isFirstLayer) {</span>
+<span class="nc" id="L351">            logResults.put(explain);</span>
+        }
+<span class="nc" id="L353">        logResults.setResult(explain.getResult());</span>
+<span class="nc" id="L354">        return logResults;</span>
+    }
+
+    @Override
+    public FunctionExpression compile(String Formula, boolean formatRequired) {
+<span class="nc" id="L359">        return FunctionExpression.compile(Formula, this.Name);</span>
+    }
+
+    @Override
+    public FunctionExpression compileBigDecimal(String Formula, boolean formatRequired) {
+<span class="nc" id="L364">        return this.compile(Formula, formatRequired);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

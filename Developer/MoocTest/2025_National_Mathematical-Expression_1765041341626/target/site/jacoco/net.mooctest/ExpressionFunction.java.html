@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ExpressionFunction.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Mathematical-Expression</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">ExpressionFunction.java</span></div><h1>ExpressionFunction.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * 表达式函数，通过解析数学函数表达式操作解析出来的函数对象
+ * &lt;p&gt;
+ * Expression function, a function object parsed by parsing mathematical function expression operations
+ *
+ * @author zhao
+ */
+public class ExpressionFunction extends ManyToOneNumberFunction {
+
+    /**
+     * 参数提取器
+     */
+<span class="nc" id="L25">    final static Pattern pattern = Pattern.compile(ConstantRegion.REGULAR_PURE_LETTER + &quot;(?!\\()&quot;);</span>
+<span class="nc" id="L26">    private final static long serialVersionUID = &quot;ExpressionFunction&quot;.hashCode();</span>
+    private final Calculation functionFormulaCalculation;
+    private final List&lt;String&gt; expression;
+    private final List&lt;Integer&gt; indexList;
+    private final int paramSize;
+    private final String f;
+
+    /**
+     * 使用已解析好的函数元数据构建一个函数对象
+     *
+     * @param functionFormulaCalculation 计算时需要使用的函数计算组件
+     * @param parsedSignature            解析好的函数信息对象
+     */
+    protected ExpressionFunction(Calculation functionFormulaCalculation, ParsedSignature parsedSignature) {
+<span class="nc" id="L40">        super(parsedSignature.getName());</span>
+<span class="nc" id="L41">        this.f = parsedSignature.toString();</span>
+<span class="nc" id="L42">        this.functionFormulaCalculation = functionFormulaCalculation;</span>
+<span class="nc" id="L43">        this.expression = Arrays.asList(parsedSignature.getParamNames());</span>
+<span class="nc" id="L44">        this.paramSize = this.expression.size();</span>
+<span class="nc" id="L45">        this.indexList = Collections.emptyList();</span>
+<span class="nc" id="L46">    }</span>
+
+    /**
+     * 构建一个函数对象
+     *
+     * @param functionFormulaCalculation 函数计算组件
+     * @param name                       函数名字
+     * @param expression                 函数的所有形参
+     * @param paramSize                  函数的参数个数
+     * @param indexList                  函数的参数索引 元素是形参索引，元素索引是在表达式中参数的顺序
+     * @param f                          函数的字符串对象
+     * @throws WrongFormat 如果函数表达式的格式有错误，则抛出此异常;If the format of the function expression is incorrect, throw this exception
+     */
+    protected ExpressionFunction(Calculation functionFormulaCalculation, String name, List&lt;String&gt; expression, int paramSize, List&lt;Integer&gt; indexList, String f) throws WrongFormat {
+<span class="nc" id="L60">        super(name);</span>
+<span class="nc" id="L61">        this.f = f;</span>
+<span class="nc" id="L62">        this.functionFormulaCalculation = functionFormulaCalculation;</span>
+<span class="nc" id="L63">        this.expression = expression;</span>
+<span class="nc" id="L64">        this.paramSize = paramSize;</span>
+<span class="nc" id="L65">        this.indexList = indexList;</span>
+        // 开始进行检查
+<span class="nc" id="L67">        this.functionFormulaCalculation.check(this.explain(new double[this.paramSize]));</span>
+<span class="nc" id="L68">    }</span>
+
+    /**
+     * 解析表达式，得到函数对象
+     *
+     * @param expression 表达式字符串
+     * @return 解析出来的函数对象
+     * @throws WrongFormat 如果函数表达式的格式有错误，则抛出此异常;If the format of the function expression is incorrect, throw this exception
+     */
+    public static ExpressionFunction parse(String expression) throws WrongFormat {
+        // 获取到函数的形参部分 以及 函数的表达式部分
+<span class="nc" id="L79">        final ArrayList&lt;String&gt; arrayList = StrUtils.splitByChar(expression, '=');</span>
+        // 判断是否为函数格式
+<span class="nc bnc" id="L81" title="All 2 branches missed.">        if (arrayList.size() != 2) {</span>
+<span class="nc" id="L82">            throw new UnsupportedOperationException(&quot;您的表达式不属于函数，期望的格式：【函数名】(参数1,参数2) = 数学表达式&quot;);</span>
+        }
+        // 解析函数名
+<span class="nc" id="L85">        String functionName = null;</span>
+        // 解析参数名列表
+<span class="nc" id="L87">        ArrayList&lt;String&gt; params = null;</span>
+        // 获取参数名
+<span class="nc" id="L89">        final String trim = arrayList.get(0);</span>
+<span class="nc" id="L90">        final int lastIndex = trim.length() - 1;</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        for (int i = 0; i &lt; trim.length(); i++) {</span>
+<span class="nc" id="L92">            final char c = trim.charAt(i);</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">            if (c == ConstantRegion.LEFT_BRACKET) {</span>
+<span class="nc" id="L94">                functionName = trim.substring(0, i);</span>
+<span class="nc" id="L95">                continue;</span>
+            }
+<span class="nc bnc" id="L97" title="All 2 branches missed.">            if (c == ConstantRegion.RIGHT_BRACKET) {</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">                if (functionName == null) {</span>
+<span class="nc" id="L99">                    throw new WrongFormat(&quot;请您将函数名字写上!!!&quot;);</span>
+                }
+<span class="nc" id="L101">                params = StrUtils.splitByChar(trim.substring(functionName.length() + 1, lastIndex), ',');</span>
+            }
+        }
+        // 检查表达式
+<span class="nc" id="L105">        final Calculation instance = Mathematical_Expression.getInstance(Mathematical_Expression.functionFormulaCalculation2);</span>
+<span class="nc" id="L106">        final String string = arrayList.get(1);</span>
+        // 准备其它表达式容器
+<span class="nc" id="L108">        final ArrayList&lt;String&gt; arrayList1 = new ArrayList&lt;&gt;();</span>
+        // params 形参参数
+        // arrayList1 操作符列表
+        // 开始查找所有的参数在公式中的排序位置 找到之后使用 位置做为索引 使用参数形参位置做为索引
+        // 例如 f(x) = x + 1 * x 构建的就是 [0, 0]
+        // 首先提取出所有的操作数
+<span class="nc" id="L114">        final ArrayList&lt;Integer&gt; arrayList2 = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L115">        int backEnd = 0;</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">        if (params != null) {</span>
+<span class="nc" id="L117">            final Matcher matcher = pattern.matcher(string);</span>
+            // 查找到函数的形参参数位置
+<span class="nc bnc" id="L119" title="All 2 branches missed.">            while (matcher.find()) {</span>
+                // 找到之后就提取出来
+<span class="nc" id="L121">                final String group = matcher.group();</span>
+                // 判断是否为参数位
+<span class="nc" id="L123">                final int i = params.indexOf(group);</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">                if (i &gt;= 0) {</span>
+                    // 将参数位之前的表达式追加到 list 中
+<span class="nc" id="L126">                    final String substring = string.substring(backEnd, matcher.start()).trim();</span>
+<span class="nc" id="L127">                    backEnd = matcher.end();</span>
+<span class="nc" id="L128">                    arrayList1.add(substring);</span>
+                    // 代表找到了一个操作数 将这个形参位置追加到 arrayList2
+<span class="nc" id="L130">                    arrayList2.add(i);</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">                } else if (!StrUtils.IsANumber(group)) {</span>
+                    // 不是数值且不是形参，看看是不是函数名字
+<span class="nc bnc" id="L133" title="All 2 branches missed.">                    if (matcher.end() &gt;= string.length()) {</span>
+                        // 不用判断了 这个不是函数 因为长度不够 直接返回错误
+<span class="nc" id="L135">                        throw new WrongFormat(&quot;Unknown formal parameter [&quot; + group + &quot;] comes from [&quot; + string + &quot;].&quot;);</span>
+                    }
+<span class="nc" id="L137">                    final String s = group + string.charAt(matcher.end());</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">                    if (!CalculationManagement.isFunctionExist(s)) {</span>
+                        // 也不是函数名字 直接返回错误信息
+<span class="nc" id="L140">                        throw new WrongFormat(&quot;Unknown formal parameter [&quot; + group + &quot; or &quot; + s + &quot;] comes from [&quot; + string + &quot;].&quot;);</span>
+                    }
+                }
+<span class="nc" id="L143">            }</span>
+            // 最后再追加一次
+<span class="nc" id="L145">            final String trim1 = string.substring(backEnd).trim();</span>
+<span class="nc" id="L146">            arrayList1.add(trim1);</span>
+<span class="nc" id="L147">        } else {</span>
+<span class="nc" id="L148">            params = new ArrayList&lt;&gt;();</span>
+        }
+        // 开始进行构建
+<span class="nc bnc" id="L151" title="All 2 branches missed.">        if (functionName == null) {</span>
+<span class="nc" id="L152">            throw new WrongFormat(&quot;您的函数名提取失败，可能是格式错误，正确的格式示例:sum(a, b)，您的格式：&quot; + trim);</span>
+        }
+<span class="nc" id="L154">        return new ExpressionFunction(instance, functionName, arrayList1, params.size(), arrayList2, expression);</span>
+    }
+
+    public static ManyToOneNumberFunction readFrom(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException {
+<span class="nc" id="L158">        return (ManyToOneNumberFunction) objectInputStream.readObject();</span>
+    }
+
+    /**
+     * @return 函数期望接收的参数数量。
+     * &lt;p&gt;
+     * The number of parameters that the function expects to receive.
+     */
+    public int getParamSize() {
+<span class="nc" id="L167">        return this.paramSize;</span>
+    }
+
+    /**
+     * 函数的运行逻辑实现，在这里是所有数学表达式统一的计算方法！
+     * &lt;p&gt;
+     * The implementation of the running logic of the function is the unified calculation method for all mathematical expressions here!
+     *
+     * @param numbers 这里是函数的数据输入对象，由框架向这里传递数据输入参数
+     *                &lt;p&gt;
+     *                This is the data input object for the function, and the framework passes the data input parameters here
+     * @return 这里是数据经过函数转换之后的数据
+     * &lt;p&gt;
+     * Here is the data after function conversion
+     */
+    @Override
+    public double run(double... numbers) {
+<span class="nc" id="L184">        return ((CalculationNumberResults) this.functionFormulaCalculation.calculation(this.explain(numbers), false)).getResult();</span>
+    }
+
+    /**
+     * 解释计算表达式，我们可以在这里传递一些参数，这些参数将做为函数的输入参数，在这里返回的就是函数带有数值的内部表达式
+     * &lt;p&gt;
+     * Explain the calculation expression. We can pass some parameters here, which will be used as input parameters for the function. Here, we return the internal expression of the function with numerical values
+     *
+     * @param numbers 这里是函数的数据输入对象，由框架向这里传递数据输入参数
+     *                &lt;p&gt;
+     *                This is the data input object for the function, and the framework passes the data input parameters here
+     * @return 这里是数据经过函数转换之后的带有参数的表达式数据，用于构建数学表达式的！
+     * &lt;p&gt;
+     * This is the expression data with parameters after function conversion, used to construct mathematical expressions!
+     */
+    public String explain(double... numbers) {
+<span class="nc bnc" id="L200" title="All 2 branches missed.">        if (numbers.length != this.getParamSize()) {</span>
+<span class="nc" id="L201">            throw new UnsupportedOperationException(&quot;参数不正确，期望参数数量为：&quot; + this.paramSize + &quot;，实际参数数量为：&quot; + numbers.length + &quot; error =&gt; &quot; + Arrays.toString(numbers));</span>
+        }
+        // 开始进行参数替换
+<span class="nc" id="L204">        final StringBuilder stringBuilder = new StringBuilder();</span>
+<span class="nc" id="L205">        int index = 0;</span>
+<span class="nc bnc" id="L206" title="All 2 branches missed.">        for (Integer integer : this.indexList) {</span>
+<span class="nc" id="L207">            stringBuilder.append(this.expression.get(index++)).append(numbers[integer]);</span>
+<span class="nc" id="L208">        }</span>
+<span class="nc bnc" id="L209" title="All 2 branches missed.">        if (this.expression.size() &gt; index) {</span>
+<span class="nc" id="L210">            stringBuilder.append(this.expression.get(index));</span>
+        }
+        // 开始替换参数
+<span class="nc" id="L213">        return stringBuilder.toString();</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L218">        return this.f;</span>
+    }
+
+    public void saveTo(ObjectOutputStream objectOutput) throws IOException {
+<span class="nc" id="L222">        objectOutput.writeObject(this);</span>
+<span class="nc" id="L223">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

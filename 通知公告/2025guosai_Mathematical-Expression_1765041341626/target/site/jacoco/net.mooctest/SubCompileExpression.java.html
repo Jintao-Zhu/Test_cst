@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SubCompileExpression.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Mathematical-Expression</a> &gt; <a href="index.source.html" class="el_package">net.mooctest</a> &gt; <span class="el_source">SubCompileExpression.java</span></div><h1>SubCompileExpression.java</h1><pre class="source lang-java linenums">package net.mooctest;
+
+/**
+ * 带有深层编译的表达式对象，通常情况下，当我们的表达式对象需要1次以上的编译才可以运行的情况下，其就需要实现此类！
+ * &lt;p&gt;
+ * Expression objects with deep compilation typically need to be implemented when our expression object requires more than one compilation to run!
+ *
+ * @author zhao
+ */
+public abstract class SubCompileExpression extends NameExpression {
+
+<span class="nc" id="L12">    public final static BracketsCalculation2 BRACKETS_CALCULATION_2 = BracketsCalculation2.getInstance(CalculationManagement.BRACKETS_CALCULATION_2_NAME);</span>
+
+    public SubCompileExpression(String expression, String calculationName) {
+<span class="nc" id="L15">        super(expression, calculationName);</span>
+<span class="nc" id="L16">    }</span>
+
+    /**
+     * 开始进行深层编译操作，经过深层编译后返回的表达式对象将会被直接做为运行对象。
+     * &lt;p&gt;
+     * Start the deep compilation operation, and the expression object returned after deep compilation will be directly used as the runtime object.
+     *
+     * @param isCopy 在计算操作进行的时候，如果您期望可以重负使用用此表达式的编译的类的所有数据，您需要在这里设置为 true；
+     *               若不设置为 true 则表达式内部的一些栈数据将会消失，这可能导致此表达式的一些操作失去作用。
+     *               &lt;p&gt;
+     *               When performing a calculation operation, if you expect to be able to load all the data of the compiled class using this expression, you need to set it to true here;
+     *               If not set to true, some stack data inside the expression will disappear, which may cause some operations of this expression to become ineffective.
+     * @return 经过深层编译后的表达式对象。
+     * &lt;p&gt;
+     * The expression object after deep compilation.
+     */
+    public abstract NameExpression subCompile(boolean isCopy);
+
+    /**
+     * 开始进行深层编译操作，经过深层编译后返回的表达式对象将会被直接做为运行对象。
+     * &lt;p&gt;
+     * Start the deep compilation operation, and the expression object returned after deep compilation will be directly used as the runtime object.
+     *
+     * @param isCopy 在计算操作进行的时候，如果您期望可以重负使用用此表达式的编译的类的所有数据，您需要在这里设置为 true；
+     *               若不设置为 true 则表达式内部的一些栈数据将会消失，这可能导致此表达式的一些操作失去作用。
+     *               &lt;p&gt;
+     *               When performing a calculation operation, if you expect to be able to load all the data of the compiled class using this expression, you need to set it to true here;
+     *               If not set to true, some stack data inside the expression will disappear, which may cause some operations of this expression to become ineffective.
+     * @return 经过深层编译后的表达式对象。
+     * &lt;p&gt;
+     * The expression object after deep compilation.
+     */
+    public abstract NameExpression subCompileBigDecimals(boolean isCopy);
+
+    /**
+     * @return 用户计算是否需要编译！
+     */
+    public abstract boolean notNeedSubCompile();
+
+    @Override
+    public CalculationResults calculation(boolean isCopy) {
+<span class="nc bnc" id="L57" title="All 2 branches missed.">        if (notNeedSubCompile()) {</span>
+<span class="nc" id="L58">            return BRACKETS_CALCULATION_2.calculation(this.getExpressionStr());</span>
+        }
+<span class="nc" id="L60">        return this.subCompile(isCopy).calculationCache(isCopy);</span>
+    }
+
+    @Override
+    public CalculationResults calculationBigDecimals(boolean isCopy) {
+<span class="nc bnc" id="L65" title="All 2 branches missed.">        if (notNeedSubCompile()) {</span>
+<span class="nc" id="L66">            return BRACKETS_CALCULATION_2.calculation(this.getExpressionStr());</span>
+        }
+<span class="nc" id="L68">        return this.subCompileBigDecimals(isCopy).calculationBigDecimalsCache(isCopy);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
